@@ -1,0 +1,9 @@
+steps:
+  - name: always true
+    command: true
+    plugins:
+      docker#v1.3.0:
+        image: alpine
+    agents:
+      queue: ops
+
