@@ -1,6 +1,6 @@
 steps:
   - name: build-iri-oracle8
-    command: 'GIT_COMMIT=$(git rev-parse HEAD) && docker build -f Dockerfile -t iotacafe/iri-dev:$GIT_COMMIT .'
+    command: GIT_COMMIT=$(git rev-parse HEAD) && docker build -f Dockerfile -t iotacafe/iri-dev:$GIT_COMMIT .
     plugins:
        docker#v1.4.0:
          image: "docker:latest"
