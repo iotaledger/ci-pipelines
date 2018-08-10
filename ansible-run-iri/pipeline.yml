@@ -8,7 +8,7 @@ steps:
 
   - block: ":dog: woof"
 
-    name: push-to-sdjnet
+    name: push-to-spamnet
     command: ansible-playbook -i hosts.ini site.yml --limit spamnet
     plugins:
        docker#v1.4.0:
@@ -22,7 +22,7 @@ steps:
        docker#v1.4.0:
          image: sadjy/ansible
 
-  - block: 
+  - block: "Push to mainnet: confirmation required."
     prompt: "Push to mainnet?"
 
   - name: push-to-mainnet
