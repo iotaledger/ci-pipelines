@@ -4,9 +4,6 @@ steps:
     plugins:
        docker#v1.4.0:
          image: sadjy/ansible
-         mounts:
-          - /buildkite/builds/buildkiteagent03-kite02-iota-cafe/iota-foundation/ops-ansible-run/:/ops-ansible-run/
-         workdir: /ops-ansible-run/
 
 #  - block: ":dog: woof"
 
