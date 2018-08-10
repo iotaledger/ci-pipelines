@@ -1,5 +1,7 @@
 steps:
   - name: push-to-sdjnet
+    agents:
+      queue: sdj
     command: ansible-playbook -i hosts.ini site.yml --limit sdjnet
     plugins:
        docker#v1.4.0:
