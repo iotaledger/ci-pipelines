@@ -1,0 +1,32 @@
+steps:
+  - name: push-to-sdjnet
+    command: ansible-playbook -i hosts.ini site.yml --limit sdjnet
+    plugins:
+       docker#v1.4.0:
+         image: sadjy/ansible
+
+
+  - block: ":dog: woof"
+
+    name: push-to-sdjnet
+    command: ansible-playbook -i hosts.ini site.yml --limit spamnet
+    plugins:
+       docker#v1.4.0:
+         image: sadjy/ansible
+
+  - wait
+
+  - name: push-to-devnet
+    command: ansible-playbook -i hosts.ini site.yml --limit devnet
+    plugins:
+       docker#v1.4.0:
+         image: sadjy/ansible
+
+  - block: 
+    prompt: "Push to mainnet?"
+
+  - name: push-to-mainnet
+    command: ansible-playbook -i hosts.ini site.yml --limit mainnet
+    plugins:
+       docker#v1.4.0:
+         image: sadjy/ansible
