@@ -2,10 +2,12 @@ steps:
   - name: push-to-sdjnet
     agents:
       queue: sdj
-    command: ansible-playbook -i hosts.ini site.yml --limit sdjnet
+    command: ansible-playbook -i hosts.ini site.yml --limit sdjnet --check 
     plugins:
        docker#v1.4.0:
-         image: "sadjy/ansible"
+         image: "sadjy/ansible" 
+         mounts:
+          - .:/ops-ansible
 
 #  - block: ":dog: woof"
 
