@@ -7,7 +7,7 @@ steps:
        docker#v1.4.0:
          image: "sadjy/ansible" 
          mounts:
-          - ../ops-ansible:/ops-ansible
+          - "$(pwd)":/ops-ansible
 
 #  - block: ":dog: woof"
 
