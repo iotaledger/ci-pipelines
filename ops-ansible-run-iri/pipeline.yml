@@ -5,7 +5,7 @@ steps:
     command: ansible-playbook -i hosts.ini site.yml --limit sdjnet
     plugins:
        docker#v1.4.0:
-         image: ansible/ansible
+         image: "sadjy/ansible"
 
 #  - block: ":dog: woof"
 
