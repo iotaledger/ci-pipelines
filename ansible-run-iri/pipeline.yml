@@ -8,13 +8,14 @@ steps:
          image: "sadjy/ansible" 
          shell: "/bin/sh -e -c"
          
-#  - block: ":dog: woof"
+#  - block: "Block 1"
 
 #    name: push-to-spamnet
 #    command: ansible-playbook -i hosts.ini site.yml --limit spamnet
 #    plugins:
 #       docker#v1.4.0:
 #         image: sadjy/ansible
+#         shell: "/bin/sh -e -c"
 
 #  - wait
 
@@ -23,6 +24,7 @@ steps:
 #    plugins:
 #       docker#v1.4.0:
 #         image: sadjy/ansible
+#         shell: "/bin/sh -e -c"
 
 #  - block: "Push to mainnet: confirmation required."
 #    prompt: "Push to mainnet?"
@@ -31,4 +33,5 @@ steps:
 #    command: ansible-playbook -i hosts.ini site.yml --limit mainnet
 #    plugins:
 #       docker#v1.4.0:
-#        image: sadjy/ansible
+#         image: sadjy/ansible
+#         shell: "/bin/sh -e -c"
