@@ -4,6 +4,7 @@ steps:
     plugins:
        docker#v1.3.0:
          image: "docker:latest"
+         shell: "/bin/sh -e -c"
     agents:
       queue: dev
 
