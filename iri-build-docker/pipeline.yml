@@ -9,6 +9,4 @@ steps:
  #     queue: dev
 
   - name: build-step-1
-    command: echo $BUILDKITE_COMMIT
-    agents:
-      queue: sdj
+    command: echo $BUILDKITE_COMMIT && echo $GIT_COMMIT
