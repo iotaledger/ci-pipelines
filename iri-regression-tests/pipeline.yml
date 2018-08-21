@@ -1,11 +1,10 @@
 steps:
   - name: 
-    # Temporary
     command: 'echo $IRI_BUILD_NUMBER' 
     plugins:
       docker#v1.4.0:
         image: "docker:latest"
         shell: "/bin/sh -e -c"        
     agents:
-      queue: sdj
+      queue: ops
 

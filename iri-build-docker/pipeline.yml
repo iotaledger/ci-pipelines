@@ -3,9 +3,6 @@ steps:
     command: 
       - 'docker build -f Dockerfile -t iotacafe/iri-dev:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
       - 'docker push iotacafe/iri-dev:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
-      - 'echo ${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
-#      env:
-#        GIT_COMMIT: '$(git rev-parse HEAD)'
     plugins:
        docker#v1.4.0:
          image: "docker:latest"
@@ -14,7 +11,7 @@ steps:
           - /var/run/docker.sock:/var/run/docker.sock
           - /conf/docker/.docker:$HOME/.docker
     agents:
-      queue: sdj
+      queue: ops
 
   - trigger: "iri-regression-tests"
     build:
