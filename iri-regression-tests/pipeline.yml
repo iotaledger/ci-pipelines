@@ -1,6 +1,7 @@
 steps:
   - name: 
-    command: 'echo {GIT_COMMIT:0:7}-{$BUILDKITE_BUILD_NUMBER}' 
+    # Temporary
+    command: 'echo ${GIT_COMMIT:0:7}-$BUILDKITE_TRIGGERED_FROM_BUILD_ID' 
     plugins:
       docker#v1.4.0:
         image: "docker:latest"
