@@ -1,12 +1,17 @@
 steps:
- # - name: build-iri-oracle8
- #   command: 'docker build -f Dockerfile -t iotacafe/iri-dev:$GIT_COMMIT .'
- #   plugins:
- #      docker#v1.3.0:
- #        image: "docker:latest"
- #        shell: "/bin/sh -e -c"
- #   agents:
- #     queue: dev
+  - name: build-iri-oracle8
+    command: 
+      - echo $BUILDKITE_COMMIT
+      - 'GIT_COMMIT=$(git rev-parse HEAD)' 
+#      - 'docker build -f Dockerfile -t iotacafe/iri-dev:${GIT_COMMIT:0:7}-{$BUILDKITE_BUILD_NUMBER} .'
+#      - 'docker push iotacafe/iri-dev:${GIT_COMMIT:0:7}-{$BUILDKITE_BUILD_NUMBER}'
+      - 'echo $GIT_COMMIT'
+      - 'echo ${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
+    plugins:
+       docker#v1.4.0:
+         image: "docker:latest"
+         shell: "/bin/sh -e -c"
+    agents:
+      queue: dev
 
-  - name: build-step-1
-    command: echo $BUILDKITE_COMMIT && echo $GIT_COMMIT
+  - trigger: "iri-regression-tests"

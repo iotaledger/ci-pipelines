@@ -1,9 +1,10 @@
 steps:
-  - name: always true
-    command: true
+  - name: 
+    command: 'echo {GIT_COMMIT:0:7}-{$BUILDKITE_BUILD_NUMBER}' 
     plugins:
-      docker#v1.3.0:
-        image: alpine
+      docker#v1.4.0:
+        image: "docker:latest"
+        shell: "/bin/sh -e -c"        
     agents:
-      queue: ops
+      queue: sdj
 
