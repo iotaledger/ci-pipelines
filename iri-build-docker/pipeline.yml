@@ -10,3 +10,5 @@ steps:
 
   - name: build-step-1
     command: echo $BUILDKITE_COMMIT
+    agents:
+      queue: sdj
