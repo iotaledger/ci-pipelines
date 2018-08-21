@@ -11,6 +11,6 @@ steps:
          image: "docker:latest"
          shell: "/bin/sh -e -c"
     agents:
-      queue: dev
+      queue: sdj
 
   - trigger: "iri-regression-tests"
