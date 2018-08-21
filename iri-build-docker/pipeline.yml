@@ -1,10 +1,12 @@
 steps:
-  - name: build-iri-oracle8
-    command: 'docker build -f Dockerfile -t iotacafe/iri-dev:$GIT_COMMIT .'
-    plugins:
-       docker#v1.3.0:
-         image: "docker:latest"
-         shell: "/bin/sh -e -c"
-    agents:
-      queue: dev
+ # - name: build-iri-oracle8
+ #   command: 'docker build -f Dockerfile -t iotacafe/iri-dev:$GIT_COMMIT .'
+ #   plugins:
+ #      docker#v1.3.0:
+ #        image: "docker:latest"
+ #        shell: "/bin/sh -e -c"
+ #   agents:
+ #     queue: dev
 
+  - name: build-step-1
+    command: echo $BUILDKITE_COMMIT
