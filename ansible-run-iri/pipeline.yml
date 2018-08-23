@@ -1,6 +1,6 @@
 steps:
   - name: push-to-sdjnet
-    command: ansible-playbook -i hosts.ini playbooks/sdj.yml --limit sdj02.iota.sadj.co
+    command: ansible-playbook -i hosts.ini playbooks/mainnet.yml --limit sdj01.mainnet.iota.sadj.co
     plugins:
       docker#v1.4.0:
         image: "sadjy/ansible" 
