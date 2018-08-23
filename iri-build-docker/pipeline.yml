@@ -13,6 +13,8 @@ steps:
     agents:
       queue: ops
 
+  - wait
+
   - trigger: "iri-regression-tests"
     build:
       env:
