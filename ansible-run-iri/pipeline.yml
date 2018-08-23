@@ -2,7 +2,7 @@ steps:
   - name: push-to-sdjnet
     agents:
       queue: sdj
-    command: ansible-playbook -i hosts.ini site.yml --limit sdjnet
+    command: ansible-playbook -i hosts.ini playbooks/sdj.yml --limit sdj02.iota.sadj.co
     plugins:
        docker#v1.4.0:
          image: "sadjy/ansible" 
