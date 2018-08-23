@@ -5,9 +5,9 @@ steps:
       docker#v1.4.0:
         image: "sadjy/ansible" 
         shell: "/bin/sh -e -c"
-        mounts:
-          - /var/run/docker.sock:/var/run/docker.sock
-          - /conf/docker/.docker:$HOME/.docker   
+#        mounts:
+#          - /var/run/docker.sock:/var/run/docker.sock
+#          - /conf/docker/.docker:$HOME/.docker   
         environment:
           - DOCKER_VAULT_TOKEN
     agents:
