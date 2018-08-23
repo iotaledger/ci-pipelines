@@ -3,7 +3,7 @@ steps:
     command: ansible-playbook -i hosts.ini playbooks/sdj.yml --limit sdj02.iota.sadj.co
     plugins:
       docker#v1.4.0:
-        image: "ansible:latest" 
+        image: "sadjy/ansible" 
         shell: "/bin/sh -e -c"
         mounts:
           - /var/run/docker.sock:/var/run/docker.sock
