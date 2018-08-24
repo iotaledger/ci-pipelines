@@ -5,11 +5,11 @@ steps:
       docker#v1.4.0:
         image: "sadjy/ansible-run" 
         shell: "/bin/sh -e -c"
-#        mounts:
+        mounts:
 #          - /var/run/docker.sock:/var/run/docker.sock
-#          - /conf/docker/.docker:$HOME/.docker   
-        environment:
-          - DOCKER_VAULT_TOKEN
+          - /conf/vault/orphan_token:/orphan_token   
+#        environment:
+#          - DOCKER_VAULT_TOKEN
     agents:
       queue: sdj
 #  - block: "Block 1"
