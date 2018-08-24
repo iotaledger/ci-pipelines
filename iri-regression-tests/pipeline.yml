@@ -1,10 +1,13 @@
 steps:
-  - name: 
-    command: 'echo $IRI_BUILD_NUMBER' 
-    plugins:
-      docker#v1.4.0:
-        image: "docker:latest"
-        shell: "/bin/sh -e -c"        
+  - name: aaa
+    command: "exit 0"
     agents:
       queue: ops
-
+    retry:
+      automatic: false
+      manual: true
+  - wait
+  - name: bbb
+    command: "echo The command passed"
+    agents:
+      queue: ops
