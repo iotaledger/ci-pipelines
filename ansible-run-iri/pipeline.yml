@@ -1,17 +1,17 @@
 steps:
-  - name: push-to-sdjnet
-    command: ansible-playbook -i hosts.ini playbooks/mainnet.yml --limit sdj01.mainnet.iota.sadj.co
-    plugins:
-      docker#v1.4.0:
-        image: "sadjy/ansible-run" 
-        shell: "/bin/sh -e -c"
-        mounts:
+##  - name: push-to-sdjnet
+ ##   command: ansible-playbook -i hosts.ini playbooks/mainnet.yml --limit sdj01.mainnet.iota.sadj.co
+##    plugins:
+##      docker#v1.4.0:
+##        image: "sadjy/ansible-run" 
+##       shell: "/bin/sh -e -c"
+##        mounts:
 #          - /var/run/docker.sock:/var/run/docker.sock
-          - /conf/vault/orphan_token:/orphan_token   
+##          - /conf/vault/orphan_token:/orphan_token   
 #        environment:
 #          - DOCKER_VAULT_TOKEN
-    agents:
-      queue: sdj
+##    agents:
+##      queue: sdj
 #  - block: "Block 1"
 
 #    name: push-to-spamnet
@@ -39,3 +39,17 @@ steps:
 #       docker#v1.4.0:
 #         image: sadjy/ansible
 #         shell: "/bin/sh -e -c"
+
+  - name: push-to-sdjnet
+    command: echo 'hi'
+    plugins:
+      docker#v1.4.0:
+        image: "sadjy/ansible-run" 
+        shell: "/bin/sh -e -c"
+    agents:
+      queue: sdj
+
+  - trigger: "iri-regression-tests"
+    build:
+      env:
+        IRI_BUILD_NUMBER: ${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER
