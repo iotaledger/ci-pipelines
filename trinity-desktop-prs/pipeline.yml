@@ -11,5 +11,5 @@ steps:
       queue: dev
     plugins:
       docker#v1.4.0:
-        image: "rajivshah/trinity-desktop-ci"
+        image: "iotacafe/trinity-desktop-ci:1b7a246-4"
         always-pull: true

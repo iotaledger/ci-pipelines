@@ -12,5 +12,5 @@ steps:
       queue: dev
     plugins:
       docker#v1.4.0:
-        image: "rajivshah/trinity-mobile-ci"
+        image: "iotacafe/trinity-mobile-ci:1b7a246-2"
         always-pull: true
