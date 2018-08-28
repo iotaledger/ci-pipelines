@@ -2,8 +2,6 @@ steps:
   - label: ":inbox_tray: Download and install dependencies"
     command:
       # Based on https://github.com/why-jay/osx-init/blob/master/install.sh
-      # Install Xcode Command Line tools
-      - "curl -sL https://raw.githubusercontent.com/timsutton/osx-vm-templates/ce8df8a7468faa7c5312444ece1b977c1b2f77a4/scripts/xcode-cli-tools.sh | bash"
       # Install Homebrew
       - "ruby -e '$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)'"
       # Install NodeJS and Yarn
@@ -28,3 +26,20 @@ steps:
       queue: mac
     env:
       WIN_CSC_LINK: "./cert.p12"
+
+  - wait: ~
+    continue_on_failure: true
+    # We want to clean up the workspace even if the build failed
+
+  - label: "Clean up workspace"
+    command:
+      # Uninstall Electron
+      "yarn global remove electron"
+      # Clean the Yarn cache
+      "yarn cache clean"
+      # Uninstall NodeJS and Yarn
+      "brew uninstall yarn && brew install node@8"
+      # Uninstall Homebrew
+      "ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
+    agents:
+      queue: mac
