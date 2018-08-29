@@ -7,3 +7,5 @@ steps:
        docker#v1.4.0:
          image: "sadjy/ansible"
          shell: "/bin/sh -e -c"
+         mounts:
+           - /conf/ssh:$HOME/.ssh
