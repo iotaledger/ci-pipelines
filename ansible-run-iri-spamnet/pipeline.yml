@@ -1,0 +1,9 @@
+steps:
+  - name: push-to-spamnet
+    agents:
+      queue: ops
+    command: ansible-playbook -i hosts.ini playbooks/iri.yml -e iota_network=spamnet --check
+    plugins:
+       docker#v1.4.0:
+         image: "sadjy/ansible"
+         shell: "/bin/sh -e -c"
