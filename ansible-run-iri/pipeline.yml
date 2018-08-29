@@ -3,11 +3,11 @@ steps:
     command: ansible-playbook -i hosts.ini playbooks/mainnet.yml --limit sdj01.mainnet.iota.sadj.co
     plugins:
       docker#v1.4.0:
-        image: "sadjy/ansible-run" 
+        image: "sadjy/ansible-run:sdjnet" 
         shell: "/bin/sh -e -c"
         mounts:
 #          - /var/run/docker.sock:/var/run/docker.sock
-          - /conf/vault/orphan_token:/orphan_token   
+          - /orphan_token:/orphan_token   
 #        environment:
 #          - DOCKER_VAULT_TOKEN
     agents:
