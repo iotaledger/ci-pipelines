@@ -4,10 +4,7 @@ steps:
     plugins:
       docker#v1.4.0:
         image: "sadjy/ansible-run" 
-        shell: "/bin/sh -e -c"
-        mounts:
-#          - /var/run/docker.sock:/var/run/docker.sock
-          - /orphan_token:/orphan_token   
+        shell: "/bin/sh -e -c" 
         environment:
           - VAULT_TOKEN
           - VAULT_ADDR
