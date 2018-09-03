@@ -1,15 +1,21 @@
 steps:
   - name: push-to-sdjnet
-    command: ansible-playbook -i hosts.ini playbooks/mainnet.yml --limit sdj01.mainnet.iota.sadj.co
+    command: ansible-playbook -i hosts.ini playbooks/mainnet.yml --limit iri.sdjnet
     plugins:
       docker#v1.4.0:
-        image: "sadjy/ansible-run:sdjnet" 
+        image: "sadjy/ansible-run" 
         shell: "/bin/sh -e -c"
         mounts:
 #          - /var/run/docker.sock:/var/run/docker.sock
           - /orphan_token:/orphan_token   
-#        environment:
-#          - DOCKER_VAULT_TOKEN
+        environment:
+          - VAULT_TOKEN
+          - VAULT_ADDR
+          - SSH_CLIENT_SIGN_ADDR
+          - SSH_HOST_SIGN_ADDR
+          - VAULT_TOKEN_CREAT_ADDR
+          - BUILDKITE_COMMAND
+
     agents:
       queue: sdj
 #  - block: "Block 1"
