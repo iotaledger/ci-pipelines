@@ -10,7 +10,7 @@ steps:
           - VAULT_ADDR
           - SSH_CLIENT_SIGN_ADDR
           - SSH_HOST_SIGN_ADDR
-          - VAULT_TOKEN_CREAT_ADDR
+          - VAULT_TOKEN_CREATE_ADDR
           - BUILDKITE_COMMAND
 
     agents:
