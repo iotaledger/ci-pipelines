@@ -10,7 +10,7 @@ steps:
         volumes:
           - './workdir:/workdir'
         config:
-          - docker-compose.yml
+          - ci-pipelines/iri-regression-tests/docker-compose.yml
     agents:
       queue: sdj
 
@@ -27,6 +27,6 @@ steps:
         volumes:
           - './workdir:/workdir'
         config:
-          - docker-compose.yml
+          - ci-pipelines/iri-regression-tests/docker-compose.yml
     agents:
       queue: sdj
