@@ -1,13 +1,32 @@
 steps:
-  - name: aaa
-    command: "exit 0"
+  - name: Step 1
+    command:
+      - pwd 
+      - ls -al
+      - echo 'aaaa' >> test1.txt
+    plugins:
+      docker-compose#v2.5.1:
+        run: app
+        volumes:
+          - './workdir:/workdir'
+        config:
+          - docker-compose.yml
     agents:
-      queue: ops
-    retry:
-      automatic: false
-      manual: true
-  - wait
-  - name: bbb
-    command: "echo The command passed"
+      queue: sdj
+
+
+
+  - name: Step 2
+    command:
+      - pwd 
+      - ls -al
+      - cat test1.txt
+    plugins:
+      docker-compose#v2.5.1:
+        run: app
+        volumes:
+          - './workdir:/workdir'
+        config:
+          - docker-compose.yml
     agents:
-      queue: ops
+      queue: sdj
