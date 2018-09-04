@@ -3,5 +3,5 @@ services:
   app:
     image: debian
     working_dir: /workdir
-    volumes:
-      - ./workdir:/workdir
+#    volumes:
+#      - ./workdir:/workdir

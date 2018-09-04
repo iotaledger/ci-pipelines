@@ -1,9 +1,9 @@
 steps:
   - name: Step 1
     command:
+      - echo 'aaaa' >> test1.txt
       - pwd 
       - ls -al
-      - echo 'aaaa' >> test1.txt
     plugins:
       docker-compose#v2.5.1:
         run: app
@@ -11,6 +11,7 @@ steps:
           - './workdir:/workdir'
         config:
           - ci-pipelines/iri-regression-tests/docker-compose.yml
+        leave-volumes: true
     agents:
       queue: sdj
 
