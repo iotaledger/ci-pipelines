@@ -1,7 +1,6 @@
 steps:
   - name: "Cleanup /cache mount"
     command:
-      - ls -lR
       - rm -rf /cache/*
     agents:
       queue: ops
@@ -89,66 +88,21 @@ steps:
           - /cache-iri-regression-tests:/cache
           - /conf:/conf:ro
   - wait
-  - name: "Run Aloe for tests/features/machine1"
-    command:
-      - source /cache/iri-regression-venv/bin/activate
-      - cd PythonRegression
-      - |
-        for machine_dir in tests/features/machine?; do
-          cp -v /cache/\$machine_dir/output.yml \$machine_dir/
-        done
-      - |
-        find tests/features/machine1 -type f -name "*.feature" -exec basename {} \; >/cache/machine1.features
-        FEATURES=\$(tr "\n" " " </cache/machine1.features)
-        aloe \$FEATURES -v --nologcapture --where tests/features/machine1
+  - name: "Generate dynamic Aloe steps"
+    command: 
+      - cd ci-pipelines/iri-regression-tests/
+      - ./aloe-steps-create.sh > /cache/aloe-steps.yml
+      - buildkite-agent pipeline upload < /cache/aloe-steps.yml
     agents:
       queue: ops
     plugins:
       docker#v1.4.0:
-        image: "python:2-alpine"
+        image: "busybox"
         shell: /bin/sh -c
+        mount-buildkite-agent: true
         mounts:
           - /cache-iri-regression-tests:/cache
-  - name: "Run Aloe for tests/features/machine2"
-    command:
-      - source /cache/iri-regression-venv/bin/activate
-      - cd PythonRegression
-      - |
-        for machine_dir in tests/features/machine?; do
-          cp -v /cache/\$machine_dir/output.yml \$machine_dir/
-        done
-      - |
-        find tests/features/machine2 -type f -name "*.feature" -exec basename {} \; >/cache/machine2.features
-        FEATURES=\$(tr "\n" " " </cache/machine2.features)
-        aloe \$FEATURES -v --nologcapture --where tests/features/machine2
-    agents:
-      queue: ops
-    plugins:
-      docker#v1.4.0:
-        image: "python:2-alpine"
-        shell: /bin/sh -c
-        mounts:
-          - /cache-iri-regression-tests:/cache
-  - name: "Run Aloe for tests/features/machine3"
-    command:
-      - source /cache/iri-regression-venv/bin/activate
-      - cd PythonRegression
-      - |
-        for machine_dir in tests/features/machine?; do
-          cp -v /cache/\$machine_dir/output.yml \$machine_dir/
-        done
-      - |
-        find tests/features/machine3 -type f -name "*.feature" -exec basename {} \; >/cache/machine3.features
-        FEATURES=\$(tr "\n" " " </cache/machine3.features)
-        aloe \$FEATURES -v --nologcapture --where tests/features/machine3
-    agents:
-      queue: ops
-    plugins:
-      docker#v1.4.0:
-        image: "python:2-alpine"
-        shell: /bin/sh -c
-        mounts:
-          - /cache-iri-regression-tests:/cache
+          - /etc/ssl/certs:/etc/ssl/certs:ro
   - wait: ~
     continue_on_failure: true
   - name: "Teardown cluster"
