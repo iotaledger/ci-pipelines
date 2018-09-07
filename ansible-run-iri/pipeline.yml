@@ -6,12 +6,14 @@ steps:
         image: "sadjy/ansible-run" 
         shell: "/bin/sh -e -c" 
         environment:
-          - VAULT_TOKEN
+#          - VAULT_TOKEN
           - VAULT_ADDR
           - SSH_CLIENT_SIGN_ADDR
           - SSH_HOST_SIGN_ADDR
-          - VAULT_TOKEN_CREATE_ADDR
-          - BUILDKITE_COMMAND
+#          - VAULT_TOKEN_CREATE_ADDR
+#          - BUILDKITE_COMMAND
+          - DOCKER_VAULT_TOKEN
+          - OP_NW
 
     agents:
       queue: sdj
