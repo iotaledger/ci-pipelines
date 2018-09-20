@@ -1,6 +1,6 @@
 steps:
   - name: push-to-sdjnet
-    command: buildkite-agent artifact upload "/opt/bigting.txt" s3://sadjy-test/$BUILDKITE_JOB_ID
+    command: echo hi
 ##    plugins:
 ##      docker#v1.4.0:
 ##        image: "sadjy/ansible-run" 
@@ -14,6 +14,8 @@ steps:
 #          - BUILDKITE_COMMAND
 ##          - DOCKER_VAULT_TOKEN
 ##          - OP_NW
+    artifact-paths:
+      - /opt/bigting.txt
 
     agents:
       queue: sdj
