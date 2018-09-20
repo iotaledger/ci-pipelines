@@ -15,7 +15,7 @@ steps:
 ##          - DOCKER_VAULT_TOKEN
 ##          - OP_NW
     artifact_paths:
-      - /opt/bigting.txt
+      - /conf/bigting.txt
 
     agents:
       queue: sdj
