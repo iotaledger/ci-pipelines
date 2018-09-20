@@ -14,7 +14,7 @@ steps:
 #          - BUILDKITE_COMMAND
 ##          - DOCKER_VAULT_TOKEN
 ##          - OP_NW
-    artifact-paths:
+    artifact_paths:
       - /opt/bigting.txt
 
     agents:
