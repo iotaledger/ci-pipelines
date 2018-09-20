@@ -1,19 +1,19 @@
 steps:
   - name: push-to-sdjnet
-    command: ansible-playbook -i hosts.ini playbooks/mainnet.yml --limit iri.sdjnet
-    plugins:
-      docker#v1.4.0:
-        image: "sadjy/ansible-run" 
-        shell: "/bin/sh -e -c" 
-        environment:
+    command: buildkite-agent artifact upload "/opt/bigting.txt" s3://sadjy-test/$BUILDKITE_JOB_ID
+##    plugins:
+##      docker#v1.4.0:
+##        image: "sadjy/ansible-run" 
+##        shell: "/bin/sh -e -c" 
+##        environment:
 #          - VAULT_TOKEN
-          - VAULT_ADDR
-          - SSH_CLIENT_SIGNER_ADDR
-          - SSH_HOST_SIGNER_ADDR
+##          - VAULT_ADDR
+##          - SSH_CLIENT_SIGNER_ADDR
+##          - SSH_HOST_SIGNER_ADDR
 #          - VAULT_TOKEN_CREATE_ADDR
 #          - BUILDKITE_COMMAND
-          - DOCKER_VAULT_TOKEN
-          - OP_NW
+##          - DOCKER_VAULT_TOKEN
+##          - OP_NW
 
     agents:
       queue: sdj
