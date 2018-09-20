@@ -39,3 +39,13 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+  - name: "coding style checker"
+    command: ./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
