@@ -1,4 +1,15 @@
 steps:
+  - name: "coding style checker"
+    command: ./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - wait
   - name: "bazel test opt"
     command: bazel test -c opt --test_output=all //...
     agents:
@@ -31,16 +42,6 @@ steps:
           - /cache:/cache
   - name: "bazel test bootlin i686 toolchains"
     command: bazel test --crosstool_top='@iota_toolchains//tools/x86-i686--glibc--bleeding-edge-2018.07-1:toolchain' --cpu=i686 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain //...
-    agents:
-      queue: dev
-    plugins:
-      docker#v1.3.0:
-        image: "th0br0/iota-buildenv:x86_64"
-        mounts:
-          - /conf:/conf
-          - /cache:/cache
-  - name: "coding style checker"
-    command: ./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
     agents:
       queue: dev
     plugins:
