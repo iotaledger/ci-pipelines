@@ -5,7 +5,7 @@ steps:
       - "cd src/shared && yarn && cd ../.."
       - "cd src/desktop && npm install"
       - "./bugsnag.sh && node bugsnag.js"
-      - "npm run build && electron-builder -mwl"
+      - "npm run build && npm run compile:mac && npm run compile:linux && npm run compile:win"
     agents:
       queue: mac
     env:
