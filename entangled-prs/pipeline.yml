@@ -10,6 +10,26 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - wait
+  - name: "TE=1 bazel test opt"
+    command: bazel test -c opt --test_output=all --define trit_encoding=1 //...
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - name: "TE=1 bazel test debug"
+    command: bazel test -c dbg --test_output=all --define trit_encoding=1 //...
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
   - name: "TE=3 bazel test opt"
     command: bazel test -c opt --test_output=all --define trit_encoding=3 //...
     agents:
@@ -22,6 +42,46 @@ steps:
           - /cache:/cache
   - name: "TE=3 bazel test debug"
     command: bazel test -c dbg --test_output=all --define trit_encoding=3 //...
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - name: "TE=4 bazel test opt"
+    command: bazel test -c opt --test_output=all --define trit_encoding=4 //...
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - name: "TE=4 bazel test debug"
+    command: bazel test -c dbg --test_output=all --define trit_encoding=4 //...
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - name: "TE=5 bazel test opt"
+    command: bazel test -c opt --test_output=all --define trit_encoding=5 //...
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - name: "TE=5 bazel test debug"
+    command: bazel test -c dbg --test_output=all --define trit_encoding=5 //...
     agents:
       queue: dev
     plugins:
