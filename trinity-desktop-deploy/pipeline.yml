@@ -10,14 +10,7 @@ steps:
       queue: mac
     env:
       WIN_CSC_LINK: "./cert.p12"
-
-  - label: ":amazon-s3: Upload artifacts to Amazon S3"
-    command:
-      - "cd out"
-      - "buildkite-agent artifact upload "builder-effective-config.yaml" s3://$S3_BUCKET/$BUILDKITE_JOB_ID"
-      - "buildkite-agent artifact upload "latest*" s3://$S3_BUCKET/$BUILDKITE_JOB_ID"
-      - "buildkite-agent artifact upload "trinity-desktop*" s3://$S3_BUCKET/$BUILDKITE_JOB_ID"
-    agents:
-      queue: mac
-    env:
-      S3_BUCKET: "bucket_name"
+    artifact_paths:
+      - "out/builder-effective-config.yaml"
+      - "latest*"
+      - "trinity-desktop*"
