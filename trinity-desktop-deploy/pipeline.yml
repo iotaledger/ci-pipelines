@@ -5,12 +5,10 @@ steps:
       - "cd src/shared && yarn && cd ../.."
       - "cd src/desktop && npm install"
       - "./bugsnag.sh && node bugsnag.js"
-      - "npm run build && npm run compile:mac && npm run compile:linux && npm run compile:win"
+      - "npm run build && ./node_modules/.bin/electron-builder -mwl"
     agents:
       queue: mac
-    env:
-      WIN_CSC_LINK: "./cert.p12"
     artifact_paths:
       - "out/builder-effective-config.yaml"
-      - "latest*"
-      - "trinity-desktop*"
+      - "out/latest*"
+      - "out/trinity-desktop*"
