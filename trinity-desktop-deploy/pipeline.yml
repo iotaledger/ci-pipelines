@@ -4,8 +4,8 @@ steps:
       - "yarn"
       - "cd src/shared && yarn && cd ../.."
       - "cd src/desktop && npm install"
-      - "./bugsnag.sh && node bugsnag.js"
-      - "npm run build && ./node_modules/.bin/electron-builder -mwl"
+      - "./bugsnag.sh && npm run build && node bugsnag.js"
+      - "./node_modules/.bin/electron-builder -mwl"
     agents:
       queue: mac
     artifact_paths:
