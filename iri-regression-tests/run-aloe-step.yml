@@ -6,7 +6,7 @@
         cp -v /cache/tests/features/machineNUM/output.yml tests/features/machineNUM
         find tests/features/machineNUM -type f -name "*.feature" -exec basename {} \; >/cache/machineNUM.features
         FEATURES=\$(tr "\n" " " </cache/machineNUM.features)
-        aloe \$FEATURES -v --nologcapture --where tests/features/machineNUM
+        aloe \$FEATURES --verbose --nologcapture --where tests/features/machineNUM
     agents:
       queue: ops
     plugins:
