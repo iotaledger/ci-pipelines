@@ -109,7 +109,7 @@ steps:
     command:
       - cd /cache/tiab
       - source venv/bin/activate
-      - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config
+      - if [ -z "$KEEP_CLUSTER" ]; then python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config; fi
     agents:
       queue: ops
     plugins:
