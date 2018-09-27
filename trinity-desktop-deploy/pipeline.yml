@@ -9,6 +9,6 @@ steps:
     agents:
       queue: mac
     artifact_paths:
-      - "out/builder-effective-config.yaml"
-      - "out/latest*"
-      - "out/trinity-desktop*"
+      - "src/desktop/out/builder-effective-config.yaml"
+      - "src/desktop/out/latest*"
+      - "src/desktop/out/trinity-desktop*"
