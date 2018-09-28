@@ -25,9 +25,7 @@ steps:
       queue: sdj
 
   - name: Step 2
-    command: 
-      - cat file.txt
-      - ls -al
+    command: ls -al
     agents:
       queue: sdj
 
