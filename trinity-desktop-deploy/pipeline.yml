@@ -8,6 +8,9 @@ steps:
       - "security unlock-keychain -p $$BUILDKITE_KEYCHAIN_PASSWORD BuildkiteKeychain.keychain && security set-key-partition-list -S apple-tool:,apple: -s -k $$BUILDKITE_KEYCHAIN_PASSWORD BuildkiteKeychain.keychain"
       - "./node_modules/.bin/electron-builder -mwl"
       - "security lock-keychain BuildkiteKeychain.keychain"
+      - "cd out"
+      - "echo $$GPG_CONTACT_IOTA_ORG_PASSPHRASE | gpg --pinentry-mode loopback --batch --passphrase-fd 0 --armor --detach-sign --default-key contact@iota.org trinity-desktop*.AppImage"
+      - "for i in `ls trinity-desktop*` ; do shasum -a 256 $$i | awk {'print $$1'} > $$i.sha256 ; done"
     agents:
       queue: mac
     artifact_paths:
