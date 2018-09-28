@@ -1,9 +1,9 @@
 steps:
   - name: Step 1
     command: 
-      - echo OK1
-      - ./idonotexist
-      - echo OK2
+      - "echo OK1"
+      - "./idonotexist"
+      - "echo OK2"
 ##    plugins:
 ##      docker#v1.4.0:
 ##        image: "sadjy/ansible-run" 
