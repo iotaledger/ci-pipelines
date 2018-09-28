@@ -5,7 +5,7 @@ steps:
       - "cd src/shared && yarn && cd ../.."
       - "cd src/desktop && npm install"
       - "./bugsnag.sh && npm run build && node bugsnag.js"
-      - "security unlock-keychain -p $BUILDKITE_KEYCHAIN_PASSWORD BuildkiteKeychain.keychain && security set-key-partition-list -S apple-tool:,apple: -s -k $BUILDKITE_KEYCHAIN_PASSWORD BuildkiteKeychain.keychain"
+      - "security unlock-keychain -p $$BUILDKITE_KEYCHAIN_PASSWORD BuildkiteKeychain.keychain && security set-key-partition-list -S apple-tool:,apple: -s -k $$BUILDKITE_KEYCHAIN_PASSWORD BuildkiteKeychain.keychain"
       - "./node_modules/.bin/electron-builder -mwl"
       - "security lock-keychain BuildkiteKeychain.keychain"
     agents:
