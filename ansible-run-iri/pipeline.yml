@@ -1,6 +1,9 @@
 steps:
   - name: Step 1
-    command: echo hi
+    command: 
+      - echo OK1
+      - ./idonotexist
+      - echo OK2
 ##    plugins:
 ##      docker#v1.4.0:
 ##        image: "sadjy/ansible-run" 
@@ -14,8 +17,6 @@ steps:
 #          - BUILDKITE_COMMAND
 ##          - DOCKER_VAULT_TOKEN
 ##          - OP_NW
-    artifact_paths:
-      - /conf/bigting.txt
     agents:
       queue: sdj
 
