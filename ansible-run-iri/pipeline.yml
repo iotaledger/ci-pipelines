@@ -20,12 +20,12 @@ steps:
       queue: sdj
 
   - name: Step 2
-    command: pwd
+    command: pwd && echo 'hey' > file.txt && ls -al 
     agents:
       queue: sdj
 
-  - name: Step 2
-    command: pwd
+  - name: Step 2b
+    command: pwd && ls -al 
     agents:
       queue: sdj
 
