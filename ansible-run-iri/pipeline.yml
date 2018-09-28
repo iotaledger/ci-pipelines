@@ -20,12 +20,12 @@ steps:
       queue: sdj
 
   - name: Step 2
-    command: echo hey
+    command: echo hey > file.txt
     agents:
       queue: sdj
 
   - name: Step 3
-    command: echo hmm
+    command: cat file.txt && ls -al
     agents:
       queue: sdj
     plugins:
