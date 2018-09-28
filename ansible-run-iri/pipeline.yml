@@ -28,6 +28,8 @@ steps:
     command: pwd && ls -al 
     agents:
       queue: sdj
+    env:
+      BUILDKITE_CLEAN_CHECKOUT: false
 
   - name: Step 3
     command: echo hmm
