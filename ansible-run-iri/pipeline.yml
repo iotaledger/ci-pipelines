@@ -24,8 +24,13 @@ steps:
     agents:
       queue: sdj
 
-  - name: Step 3
+  - name: Step 2
     command: cat file.txt && ls -al
+    agents:
+      queue: sdj
+
+  - name: Step 3
+    command: echo hmm
     agents:
       queue: sdj
     plugins:
