@@ -1,5 +1,5 @@
 steps:
-  - name: push-to-sdjnet
+  - name: Step 1
     command: echo hi
 ##    plugins:
 ##      docker#v1.4.0:
@@ -16,9 +16,32 @@ steps:
 ##          - OP_NW
     artifact_paths:
       - /conf/bigting.txt
-
     agents:
       queue: sdj
+
+  - name: Step 2
+    command: echo hey
+    agents:
+      queue: sdj
+
+  - name: Step 3
+    command: echo hmm
+    agents:
+      queue: sdj
+    plugins:
+      docker#v1.4.0:
+        image: "alpine" 
+        shell: "/bin/sh -e -c" 
+
+  - name: Step 4
+    command: echo hiya
+    agents:
+      queue: sdj
+    plugins:
+      docker#v1.4.0:
+        image: "alpine" 
+        shell: "/bin/sh -e -c" 
+
 #  - block: "Block 1"
 
 #    name: push-to-spamnet
