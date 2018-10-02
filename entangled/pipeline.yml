@@ -10,27 +10,27 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - wait
-  - name: "bazel test opt ASAN"
-    command: bazel test -c opt --test_output=all --config asan --define trit_encoding=1 //...
-    agents:
-      queue: dev
-    plugins:
-      docker#v1.3.0:
-        image: "th0br0/iota-buildenv:x86_64"
-        mounts:
-          - /conf:/conf
-          - /cache:/cache
-  - name: "bazel test dbg ASAN"
-    command: bazel test -c dbg --test_output=all --config asan --define trit_encoding=1 //...
-    agents:
-      queue: dev
-    plugins:
-      docker#v1.3.0:
-        image: "th0br0/iota-buildenv:x86_64"
-        mounts:
-          - /conf:/conf
-          - /cache:/cache
-  - name: "bazel test opt TSAN"
+#  - name: "TE=1 bazel test opt ASAN"
+#    command: bazel test -c opt --test_output=all --config asan --define trit_encoding=1 //...
+#    agents:
+#      queue: dev
+#    plugins:
+#      docker#v1.3.0:
+#        image: "th0br0/iota-buildenv:x86_64"
+#        mounts:
+#          - /conf:/conf
+#          - /cache:/cache
+#  - name: "TE=1 bazel test dbg ASAN"
+#    command: bazel test -c dbg --test_output=all --config asan --define trit_encoding=1 //...
+#    agents:
+#      queue: dev
+#    plugins:
+#      docker#v1.3.0:
+#        image: "th0br0/iota-buildenv:x86_64"
+#        mounts:
+#          - /conf:/conf
+#          - /cache:/cache
+  - name: "TE=1 bazel test opt TSAN"
     command: bazel test -c opt --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
@@ -40,7 +40,7 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
-  - name: "bazel test dbg TSAN"
+  - name: "TE=1 bazel test dbg TSAN"
     command: bazel test -c dbg --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
@@ -50,7 +50,7 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
-  - name: "bazel test opt UBSAN"
+  - name: "TE=1 bazel test opt UBSAN"
     command: bazel test -c opt --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
@@ -60,7 +60,7 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
-  - name: "bazel test dbg UBSAN"
+  - name: "TE=1 bazel test dbg UBSAN"
     command: bazel test -c dbg --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
