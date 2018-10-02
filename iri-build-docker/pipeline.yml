@@ -16,11 +16,13 @@ steps:
   - wait
 
   - name: push-jar-iri-oracle8
-    artifact_paths: /iri/target/iri-*
+    artifact_paths: ./out
+    command:
+      - 'mkdir out && cp /iri/target/iri-* ./out'
     plugins:
        docker#v1.4.0:
          image: "iotacafe/iri-dev:$BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER"
-         entrypoint: /bin/true
+         shell: "/bin/sh -e -c"
     agents:
       queue: ops
 
