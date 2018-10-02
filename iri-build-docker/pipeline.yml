@@ -13,6 +13,8 @@ steps:
     agents:
       queue: ops
 
+  - wait
+
   - name: push-jar-iri-oracle8
     artifact_paths: /iri/target/iri-*
     plugins:
