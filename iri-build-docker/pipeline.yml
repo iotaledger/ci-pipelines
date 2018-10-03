@@ -1,11 +1,12 @@
 steps:
   - name: build-iri-oracle8
-    artifact_paths: ./iri-*.jar
+    artifact_paths: "target/*"
     command: 
       - 'docker build -f Dockerfile -t iotacafe/iri-dev:$BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
       - 'docker push iotacafe/iri-dev:$BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
       - 'docker run --name iri-dev-$BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER --entrypoint true iotacafe/iri-dev:$BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
-      - 'docker cp iri-dev-$BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER:/iri/target/iri-*.jar .'
+      - 'docker cp iri-dev-$BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER:/iri/target .'
+      - 'mv target/iri-*.jar target/iri.jar'
     plugins:
        docker#v1.4.0:
          image: "docker:latest"
