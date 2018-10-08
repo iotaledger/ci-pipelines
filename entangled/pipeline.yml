@@ -10,8 +10,32 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - wait
-  - name: "TE=1 bazel test opt"
-    command: bazel test -c opt --test_output=all --define trit_encoding=1 //...
+  - name: "TE=1 bazel test opt ASAN"
+    command: bazel test -c opt --test_output=all --config asan --define trit_encoding=1 //...
+    agents:
+      queue: dev
+    plugins:
+      https://github.com/th0br0/docker-buildkite-plugin#cap_add_2:
+        image: "th0br0/iota-buildenv:x86_64"
+        capabilities:
+          - SYS_PTRACE
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - name: "TE=1 bazel test dbg ASAN"
+    command: bazel test -c dbg --test_output=all --config asan --define trit_encoding=1 //...
+    agents:
+      queue: dev
+    plugins:
+      https://github.com/th0br0/docker-buildkite-plugin#cap_add_2:
+        image: "th0br0/iota-buildenv:x86_64"
+        capabilities:
+          - SYS_PTRACE
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - name: "TE=1 bazel test opt TSAN"
+    command: bazel test -c opt --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
     plugins:
@@ -20,8 +44,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
-  - name: "TE=1 bazel test debug"
-    command: bazel test -c dbg --test_output=all --define trit_encoding=1 //...
+  - name: "TE=1 bazel test dbg TSAN"
+    command: bazel test -c dbg --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
     plugins:
@@ -30,6 +54,27 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+  - name: "TE=1 bazel test opt UBSAN"
+    command: bazel test -c opt --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - name: "TE=1 bazel test dbg UBSAN"
+    command: bazel test -c dbg --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
+    agents:
+      queue: dev
+    plugins:
+      docker#v1.3.0:
+        image: "th0br0/iota-buildenv:x86_64"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - wait
   - name: "TE=3 bazel test opt"
     command: bazel test -c opt --test_output=all --define trit_encoding=3 //...
     agents:
