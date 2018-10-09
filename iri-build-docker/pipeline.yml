@@ -22,6 +22,7 @@ steps:
   - wait
 
   - trigger: "iri-regression-tests"
+    async: true
     build:
       env:
         IRI_BUILD_NUMBER: $BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER
