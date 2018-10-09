@@ -1,6 +1,12 @@
 steps:
   - name: "coding style checker"
-    command: ./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
+    command:
+      # clang-format check
+      - "./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'"
+      # cpplint check
+      - "./hooks/scripts/cpplint"
+      # buildifier check
+      - "./hooks/scripts/buildifier_check"
     agents:
       queue: dev
     plugins:
