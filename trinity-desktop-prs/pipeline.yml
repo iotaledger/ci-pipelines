@@ -3,10 +3,10 @@ steps:
     command:
       - "yarn"
       - "cd src/shared && yarn && cd ../.."
-      - "cd src/desktop && yarn && cd ../.."
+      - "cd src/desktop && npm install && cd ../.."
       - "cd src/shared && yarn audit && cd ../desktop && yarn audit && cd ../.."
       - "yarn lint:shared && yarn lint:desktop"
-      - "cd src/desktop && yarn build"
+      - "cd src/desktop && npm run build"
     agents:
       queue: dev
     plugins:
