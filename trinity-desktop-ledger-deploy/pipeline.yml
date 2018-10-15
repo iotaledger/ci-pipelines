@@ -7,6 +7,8 @@ steps:
       - "./bugsnag.sh && npm run build && node bugsnag.js"
       - "./node_modules/.bin/electron-builder -mwl --publish=never"
       - "cd out"
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: false
     agents:
       queue: mac
     artifact_paths:
