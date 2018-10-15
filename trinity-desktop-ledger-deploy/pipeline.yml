@@ -1,0 +1,15 @@
+steps:
+  - label: ":hammer_and_wrench: Build for all platforms"
+    command:
+      - "yarn"
+      - "cd src/shared && yarn && cd ../.."
+      - "cd src/desktop && npm install"
+      - "./bugsnag.sh && npm run build && node bugsnag.js"
+      - "./node_modules/.bin/electron-builder -mwl --publish=never"
+      - "cd out"
+    agents:
+      queue: mac
+    artifact_paths:
+      - "src/desktop/out/builder-effective-config.yaml"
+      - "src/desktop/out/latest*"
+      - "src/desktop/out/trinity-desktop*"
