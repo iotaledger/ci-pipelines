@@ -64,7 +64,7 @@ steps:
         ERROR=0
         for machine_dir in tests/features/machine?; do
           mkdir -p /cache/\$machine_dir/
-          python /cache/tiab/create_cluster.py -i iotacafe/iri-dev:$IRI_BUILD_NUMBER -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -d
+          python /cache/tiab/create_cluster.py -i iotacafe/iri-dev:$IRI_BUILD_NUMBER -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -n buildkite -d
           if [ \$? -ne 0 ]; then
             ERROR=1
             python /workdir/ci-pipelines/iri-regression-tests/print-logs.py /cache/\$machine_dir/output.yml
@@ -104,7 +104,7 @@ steps:
     command:
       - cd /cache/tiab
       - source venv/bin/activate
-      - if [ -z "$KEEP_CLUSTER" ]; then python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config; fi
+      - if [ -z "$KEEP_CLUSTER" ]; then python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite; fi
     agents:
       queue: ops
     plugins:
