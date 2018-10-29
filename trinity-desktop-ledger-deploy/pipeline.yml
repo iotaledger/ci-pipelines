@@ -5,7 +5,7 @@ steps:
       - "cd src/shared && yarn && cd ../.."
       - "cd src/desktop && npm install"
       - "./bugsnag.sh && npm run build && node bugsnag.js"
-      - "npm run compile:mac"
+      - "./node_modules/.bin/electron-builder --mac --x64 --publish=never"
       - "cd out"
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: false
@@ -22,8 +22,12 @@ steps:
       - "cd src/shared && yarn && cd ../.."
       - "cd src/desktop && npm install"
       - "./bugsnag.sh && npm run build && node bugsnag.js"
-      - "npm run compile:linux"
+      - "./node_modules/.bin/electron-builder --linux --x64 --publish=never"
       - "cd out"
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "node:8.12.0-jessie"
+         shell: "/bin/sh -e -c"
     agents:
       queue: dev
     artifact_paths:
@@ -37,7 +41,7 @@ steps:
       - "cd src/shared && yarn && cd ../.."
       - "cd src/desktop && npm install"
       - "./bugsnag.sh && npm run build && node bugsnag.js"
-      - "npm run compile:win"
+      - "./node_modules/.bin/electron-builder --win --x64 --publish=never"
       - "cd out"
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: false
