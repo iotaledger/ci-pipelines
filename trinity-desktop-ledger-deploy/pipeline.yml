@@ -28,6 +28,8 @@ steps:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "node:8.12.0-jessie"
          shell: "/bin/sh -e -c"
+         mounts:
+           - /conf/ssh/trinity-desktop-ledger:/root/.ssh
     agents:
       queue: dev
     artifact_paths:
