@@ -1,16 +1,48 @@
 steps:
-  - label: ":hammer_and_wrench: Build for all platforms"
+  - label: ":hammer_and_wrench: Build for macOS platform"
     command:
       - "yarn"
       - "cd src/shared && yarn && cd ../.."
       - "cd src/desktop && npm install"
       - "./bugsnag.sh && npm run build && node bugsnag.js"
-      - "./node_modules/.bin/electron-builder -mwl --publish=never"
+      - "npm run compile:mac"
       - "cd out"
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: false
     agents:
       queue: mac
+    artifact_paths:
+      - "src/desktop/out/builder-effective-config.yaml"
+      - "src/desktop/out/latest*"
+      - "src/desktop/out/trinity-desktop*"
+
+  - label: ":hammer_and_wrench: Build for Linux platform"
+    command:
+      - "yarn"
+      - "cd src/shared && yarn && cd ../.."
+      - "cd src/desktop && npm install"
+      - "./bugsnag.sh && npm run build && node bugsnag.js"
+      - "npm run compile:linux"
+      - "cd out"
+    agents:
+      queue: dev
+    artifact_paths:
+      - "src/desktop/out/builder-effective-config.yaml"
+      - "src/desktop/out/latest*"
+      - "src/desktop/out/trinity-desktop*"
+
+  - label: ":hammer_and_wrench: Build for Windows platform"
+    command:
+      - "yarn"
+      - "cd src/shared && yarn && cd ../.."
+      - "cd src/desktop && npm install"
+      - "./bugsnag.sh && npm run build && node bugsnag.js"
+      - "npm run compile:win"
+      - "cd out"
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: false
+    agents:
+      queue: gem1-windows-vm
     artifact_paths:
       - "src/desktop/out/builder-effective-config.yaml"
       - "src/desktop/out/latest*"
