@@ -39,12 +39,7 @@ steps:
 
   - label: ":hammer_and_wrench: Build for Windows platform"
     command:
-      - "yarn"
-      - "cd src/shared && yarn && cd ../.."
-      - "cd src/desktop && npm install"
-      - "./bugsnag.sh && npm run build && node bugsnag.js"
-      - "./node_modules/.bin/electron-builder --win --x64 --publish=never"
-      - "cd out"
+      - "yarn && cd src/shared && yarn && cd ../.. && cd src/desktop && npm install && bugsnag.sh && npm run build && node bugsnag.js && ./node_modules/.bin/electron-builder --win --x64 --publish=never && cd out"
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: false
     agents:
