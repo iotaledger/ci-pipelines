@@ -29,7 +29,7 @@ steps:
          image: "node:8.12.0-jessie"
          shell: "/bin/sh -e -c"
          mounts:
-           - /conf/ssh/trinity-desktop-ledger:/root/.ssh
+           - /conf/ssh:/root/.ssh
     agents:
       queue: dev
     artifact_paths:
