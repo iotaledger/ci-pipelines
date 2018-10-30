@@ -33,6 +33,7 @@ steps:
          shell: "/bin/sh -e -c"
          environment:
            - BUGSNAG_KEY
+           - GPG_CONTACT_IOTA_ORG_PASSPHRASE
          mounts:
            - /conf/ssh:/root/.ssh
            - /conf/gnupg:/root/.gnupg
