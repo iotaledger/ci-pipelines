@@ -11,4 +11,4 @@ steps:
       queue: dev
     plugins:
       docker#v1.4.0:
-        image: "iotacafe/trinity-desktop-ci:583b99c-6"
+        image: "iotacafe/trinity-desktop-ci:3ab6202-7"

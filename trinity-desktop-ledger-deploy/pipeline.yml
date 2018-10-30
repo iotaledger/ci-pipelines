@@ -26,7 +26,7 @@ steps:
       - "cd out"
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-         image: "node:8.12.0-jessie"
+         image: "iotacafe/trinity-desktop-ci:3ab6202-7"
          shell: "/bin/sh -e -c"
          mounts:
            - /conf/ssh:/root/.ssh
