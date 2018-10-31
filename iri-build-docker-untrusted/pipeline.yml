@@ -9,3 +9,9 @@ steps:
        - build-iri-oracle8.log
      agents:
        queue: dev
+
+  - trigger: iri-push-docker-trusted
+    async: true
+    build:
+      env:
+        ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
