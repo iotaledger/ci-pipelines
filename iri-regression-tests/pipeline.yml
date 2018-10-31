@@ -1,7 +1,8 @@
 steps:
-  - name: "Cleanup /cache mount"
+  - name: "Cleanup /cache mount and remove k8s pods older than 1 day"
     command:
       - rm -rf /cache/*
+      - for i in `kubectl get pods -n buildkite -o json | jq -r ".items[] | select ( .status.startTime | fromdateiso8601 < $$(date +%s -D '-1 days')) | .metadata.name"`; do echo kubectl -n buildkite delete po $i ; done
     agents:
       queue: ops
     plugins:
