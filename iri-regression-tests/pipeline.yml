@@ -1,8 +1,7 @@
 steps:
-  - name: "Cleanup /cache mount and remove k8s pods older than 1 day"
+  - name: "Cleanup /cache mount"
     command:
       - rm -rf /cache/*
-      - for i in `kubectl get pods -n buildkite -o json | jq -r ".items[] | select ( .status.startTime | fromdateiso8601 < $$(date +%s -D '-1 days')) | .metadata.name"`; do echo kubectl -n buildkite delete po $i ; done
     agents:
       queue: ops
     plugins:
@@ -11,6 +10,16 @@ steps:
         shell: /bin/sh -c
         mounts:
           - /cache-iri-regression-tests:/cache
+  - name: "Remove k8s pods older than 1 day"
+    command:
+      - for i in `kubectl get pods -n buildkite -o json | jq -r ".items[] | select ( .status.startTime | fromdateiso8601 < $$(date +%s -D '-1 days')) | .metadata.name"`; do echo kubectl -n buildkite delete po $i ; done
+    agents:
+      queue: ops
+    plugins:
+      docker#v1.4.0:
+        image: "iotacafe/kubectl:c93be62-2"
+        shell: /bin/sh -c
+
   - wait
   - name: "Checkout TIAB"
     command:
