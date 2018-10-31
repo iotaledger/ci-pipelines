@@ -8,6 +8,7 @@ steps:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "docker:latest"
          shell: "/bin/sh -e -c"
+         mount-buildkite-agent: true
          mounts:
           - /var/run/docker.sock:/var/run/docker.sock
           - /conf/docker/.docker:$HOME/.docker

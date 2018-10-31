@@ -10,6 +10,8 @@ steps:
      agents:
        queue: dev
 
+   - wait
+
    - trigger: iri-push-docker-trusted
      async: true
      build:
