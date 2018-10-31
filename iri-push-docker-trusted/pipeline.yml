@@ -5,8 +5,8 @@ steps:
   - name: push-iri-oracle8
     command: 
       - mkdir -p target && buildkite-agent artifact download target/iri-oracle8.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
-      - 'docker build -f ci-pipelines/$BUILDKITE_PIPELINE_SLUG/Dockerfile -t iotacafe/iri-dev:$IRI_BUILD_NUMBER . | tee build-iri-oracle8.log'
-      - 'docker push iotacafe/iri-dev:$IRI_BUILD_NUMBER | tee -a build-iri-oracle8.log'
+      - 'docker build -f ci-pipelines/$BUILDKITE_PIPELINE_SLUG/Dockerfile -t iotacafe/iri-dev:$IRI_BUILD_NUMBER .'
+      - 'docker push iotacafe/iri-dev:$IRI_BUILD_NUMBER'
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "docker:latest"
