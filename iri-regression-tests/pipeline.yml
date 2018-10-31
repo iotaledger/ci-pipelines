@@ -18,7 +18,7 @@ steps:
     plugins:
       docker#v1.4.0:
         image: "iotacafe/kubectl:c93be62-2"
-        entrypoint: /bin/sh -c
+        entrypoint: /bin/sh
 
   - wait
   - name: "Checkout TIAB"
