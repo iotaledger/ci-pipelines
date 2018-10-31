@@ -10,8 +10,8 @@ steps:
      agents:
        queue: dev
 
-  - trigger: iri-push-docker-trusted
-    async: true
-    build:
-      env:
-        ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
+   - trigger: iri-push-docker-trusted
+     async: true
+     build:
+       env:
+         ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
