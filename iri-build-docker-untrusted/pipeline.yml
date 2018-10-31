@@ -6,6 +6,7 @@ steps:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
      artifact_paths:
        - target/iri-oracle8.jar
+       - docker/entrypoint.sh
        - build-iri-oracle8.log
      agents:
        queue: dev
