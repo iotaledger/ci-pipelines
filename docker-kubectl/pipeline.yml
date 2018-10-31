@@ -1,0 +1,15 @@
+steps:
+  - name: build-docker-kubectl
+    command: 
+      - 'cd docker-kubectl && docker build -f Dockerfile -t iotacafe/kubectl:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
+      - 'docker push iotacafe/kubectl:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
+    plugins:
+       docker#v1.4.0:
+         image: "docker:latest"
+         shell: "/bin/sh -e -c"
+         mounts:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /conf/docker/.docker:$HOME/.docker
+    agents:
+      queue: ops
+
