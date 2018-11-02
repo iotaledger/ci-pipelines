@@ -10,3 +10,5 @@ steps:
         image: "busybox"
         shell: /bin/sh -c
         mount-buildkite-agent: true
+        environment:
+          - TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
