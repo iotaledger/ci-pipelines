@@ -1,0 +1,22 @@
+steps:
+  - block: select-buildkite-build-id
+    prompt: "Fill out the details for release"
+    fields: 
+      - text: "Release Number"
+        key: "release-number"
+        required: true
+      - text: "Buildkite Build ID to release"
+        key: "release-buildkite-build-id"
+        required: true
+        hint: "Input the BUILDKITE_BUILD_ID to release"
+  - name: release-trinity-desktop
+    command:
+      - mkdir publish && buildkite-agent artifact download src/desktop/out publish --build $$(buildkite-agent meta-data get release-buildkite-build-id)
+      - find publish
+    agents:
+      queue: ops
+    plugins:
+      docker#v1.4.0:
+        image: "busybox"
+        shell: /bin/sh -c
+        mount-buildkite-agent: true
