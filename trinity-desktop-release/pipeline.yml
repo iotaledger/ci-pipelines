@@ -7,7 +7,7 @@ steps:
       queue: ops
     plugins:
       docker#v1.4.0:
-        image: "busybox"
+        image: "alpine:3.8"
         shell: /bin/sh -c
         mount-buildkite-agent: true
         environment:
