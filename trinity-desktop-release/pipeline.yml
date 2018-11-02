@@ -4,7 +4,7 @@ steps:
       - echo $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID && mkdir publish && buildkite-agent artifact download src/desktop/out/* publish --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - find publish
     agents:
-      queue: dev
+      queue: ops
     plugins:
       docker#v1.4.0:
         image: "docker:latest"
