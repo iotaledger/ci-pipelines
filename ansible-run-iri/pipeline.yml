@@ -2,7 +2,7 @@ steps:
   - name: Step 1
     command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --limit iri02.spamnet.iota.cafe --check
     plugins:
-      docker#v2.0.0:
+      - docker#v2.0.0:
         image: "sadjy/ansible-run" 
         shell: "/bin/sh -e -c" 
         environment:
