@@ -3,8 +3,8 @@ steps:
     command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --limit iri02.spamnet.iota.cafe --check
     plugins:
       - docker#v2.0.0:
-        image: "sadjy/ansible-run" 
-        shell: "/bin/sh -e -c" 
+        image: "sadjy/ansible-run"
+        always-pull: true
         environment:
           - SSH_CLIENT_SIGNER_ADDR
           - SSH_HOST_SIGNER_ADDR
