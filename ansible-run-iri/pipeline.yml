@@ -1,79 +1,13 @@
 steps:
   - name: Step 1
-    command: 
-      - "echo OK1"
-      - "./idonotexist"
-      - "echo OK2"
-##    plugins:
-##      docker#v1.4.0:
-##        image: "sadjy/ansible-run" 
-##        shell: "/bin/sh -e -c" 
-##        environment:
-#          - VAULT_TOKEN
-##          - VAULT_ADDR
-##          - SSH_CLIENT_SIGNER_ADDR
-##          - SSH_HOST_SIGNER_ADDR
-#          - VAULT_TOKEN_CREATE_ADDR
-#          - BUILDKITE_COMMAND
-##          - DOCKER_VAULT_TOKEN
-##          - OP_NW
-    agents:
-      queue: sdj
-
-  - name: Step 2
-    command: pwd && echo 'hey' > file.txt && ls -al 
-    agents:
-      queue: sdj
-
-  - name: Step 2b
-    command: pwd && ls -al 
-    agents:
-      queue: sdj
-    env:
-      BUILDKITE_CLEAN_CHECKOUT: false
-
-  - name: Step 3
-    command: echo hmm
-    agents:
-      queue: sdj
+    command: ansible-playbook 
     plugins:
-      docker#v1.4.0:
-        image: "alpine" 
+      docker#v2.0.0:
+        image: "sadjy/ansible-run" 
         shell: "/bin/sh -e -c" 
-
-  - name: Step 4
-    command: echo hiya
+        environment:
+          - SSH_CLIENT_SIGNER_ADDR
+          - SSH_HOST_SIGNER_ADDR
+          - DOCKER_VAULT_TOKEN
     agents:
-      queue: sdj
-    plugins:
-      docker#v1.4.0:
-        image: "alpine" 
-        shell: "/bin/sh -e -c" 
-
-#  - block: "Block 1"
-
-#    name: push-to-spamnet
-#    command: ansible-playbook -i hosts.ini site.yml --limit spamnet
-#    plugins:
-#       docker#v1.4.0:
-#         image: sadjy/ansible
-#         shell: "/bin/sh -e -c"
-
-#  - wait
-
-#  - name: push-to-devnet
-#    command: ansible-playbook -i hosts.ini site.yml --limit devnet
-#    plugins:
-#       docker#v1.4.0:
-#         image: sadjy/ansible
-#         shell: "/bin/sh -e -c"
-
-#  - block: "Push to mainnet: confirmation required."
-#    prompt: "Push to mainnet?"
-
-#  - name: push-to-mainnet
-#    command: ansible-playbook -i hosts.ini site.yml --limit mainnet
-#    plugins:
-#       docker#v1.4.0:
-#         image: sadjy/ansible
-#         shell: "/bin/sh -e -c"
+      queue: ops
