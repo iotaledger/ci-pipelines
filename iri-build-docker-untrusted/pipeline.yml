@@ -1,6 +1,4 @@
 steps:
-   - block: "Approve PR"
-
    - name: build-iri-oracle8
      command: mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8.jar && java -version && java -version | tee -a build-iri-oracle8.log
      plugins:
