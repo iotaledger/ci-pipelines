@@ -10,9 +10,16 @@ steps:
         shell: /bin/sh -c
         mounts:
           - /cache-iri-regression-tests:/cache
-
   - wait
-
+  - name: "Checkout IRI revision"
+    command:
+      - checkout \$IRI_GIT_COMMIT
+    agents:
+      queue: ops
+    plugins:
+      docker#v1.4.0:
+        image: "alpine/git"
+        shell: false
   - name: "Checkout TIAB"
     command:
       - clone --depth 1 https://github.com/iotaledger/tiab.git /cache/tiab
@@ -46,7 +53,7 @@ steps:
       - pip install virtualenv
       - virtualenv /cache/iri-regression-venv
       - source /cache/iri-regression-venv/bin/activate
-      - cd PythonRegression
+      - cd python-regression
       - pip install -e .
     agents:
       queue: ops
@@ -61,7 +68,7 @@ steps:
     command:
       - cd /cache/tiab
       - source venv/bin/activate
-      - cd /workdir/PythonRegression
+      - cd /workdir/python-regression
       - |
         ERROR=0
         for machine_dir in tests/features/machine?; do
