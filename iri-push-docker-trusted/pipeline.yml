@@ -23,5 +23,5 @@ steps:
     async: true
     build:
       env:
-        IRI_BUILD_NUMBER
-        IRI_GIT_COMMIT
+      - IRI_BUILD_NUMBER
+      - IRI_GIT_COMMIT
