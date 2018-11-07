@@ -24,3 +24,4 @@ steps:
     build:
       env:
         IRI_BUILD_NUMBER
+        IRI_GIT_COMMIT
