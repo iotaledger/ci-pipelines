@@ -1,7 +1,7 @@
 steps:
   - name: build-trinity-desktop-ci
     command: 
-      - 'cd trinity-desktop-ci && docker build -f Dockerfile -t iotacafe/trinity-desktop-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
+      - 'docker build -f Dockerfile -t iotacafe/trinity-desktop-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
       - 'docker push iotacafe/trinity-desktop-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
     plugins:
        docker#v1.4.0:

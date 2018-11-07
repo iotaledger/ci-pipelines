@@ -1,7 +1,7 @@
 steps:
   - name: build-trinity-mobile-ci
     command: 
-      - 'cd trinity-mobile-ci && docker build -f Dockerfile -t iotacafe/trinity-mobile-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
+      - 'docker build -f Dockerfile -t iotacafe/trinity-mobile-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
       - 'docker push iotacafe/trinity-mobile-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
     plugins:
        docker#v1.4.0:
