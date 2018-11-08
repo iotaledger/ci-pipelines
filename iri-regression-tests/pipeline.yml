@@ -13,7 +13,7 @@ steps:
   - wait
   - name: "Checkout IRI revision"
     command:
-      - checkout $$IRI_GIT_COMMIT
+      - checkout $IRI_GIT_COMMIT
     agents:
       queue: ops
     plugins:
