@@ -63,7 +63,7 @@ steps:
       - pip install virtualenv
       - virtualenv /cache/iri-regression-venv
       - source /cache/iri-regression-venv/bin/activate
-      - cd python-regression
+      - cd /workdir/python-regression
       - pip install -e .
     agents:
       queue: ops
