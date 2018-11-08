@@ -6,7 +6,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "docker:latest"
         shell: /bin/sh -c
         mount-buildkite-agent: true

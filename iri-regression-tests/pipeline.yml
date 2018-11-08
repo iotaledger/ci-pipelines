@@ -5,7 +5,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "busybox"
         shell: /bin/sh -c
         mounts:
@@ -17,7 +17,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "alpine/git"
         shell: false
   - name: "Checkout TIAB"

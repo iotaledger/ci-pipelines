@@ -10,7 +10,7 @@ steps:
       - 'docker cp iri-dev-$BUILDKITE_BRANCH-${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER:/iri/target . | tee -a build-iri-oracle8.log'
       - 'mv target/iri-*.jar target/iri.jar | tee -a build-iri-oracle8.log'
     plugins:
-       docker#v1.4.0:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "docker:latest"
          shell: "/bin/sh -e -c"
          mounts:

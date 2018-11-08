@@ -4,7 +4,7 @@ steps:
     agents:
       queue: dev
     plugins:
-      docker#v1.3.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "th0br0/iota-buildenv:x86_64"
         mounts:
           - /conf:/conf
@@ -14,7 +14,7 @@ steps:
     agents:
       queue: dev
     plugins:
-      docker#v1.3.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "th0br0/iota-buildenv:x86_64"
         mounts:
           - /conf:/conf
@@ -24,7 +24,7 @@ steps:
     agents:
       queue: dev
     plugins:
-      docker#v1.3.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "th0br0/iota-buildenv:x86_64"
         mounts:
           - /conf:/conf
