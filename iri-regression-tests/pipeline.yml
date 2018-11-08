@@ -26,7 +26,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "alpine/git"
         shell: false
         mounts:
@@ -42,7 +42,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
@@ -58,7 +58,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
@@ -85,7 +85,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
@@ -100,7 +100,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "busybox"
         shell: /bin/sh -c
         mount-buildkite-agent: true
@@ -117,7 +117,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      docker#v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
