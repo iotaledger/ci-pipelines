@@ -1,15 +1,17 @@
 steps:
   - name: ansible-run
     command: 
-      - 'ls -al'
-      - 'docker build -f Dockerfile -t iotacafe/ansible-run:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
-      - 'docker push iotacafe/ansible-run:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
+      - "ls -al"
+      - "docker build -f Dockerfile -t iotacafe/ansible-run:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER ."
+      - "docker push iotacafe/ansible-run:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER"
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "docker:latest"
-         mounts:
-          - /var/run/docker.sock:/var/run/docker.sock
-          - /conf/docker/.docker:$HOME/.docker
+         volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          - "/conf/docker/.docker:$HOME/.docker"
+          - ".:/run"
+         workdir: /run
     agents:
       queue: ops
 
