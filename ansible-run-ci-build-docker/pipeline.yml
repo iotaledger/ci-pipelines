@@ -1,6 +1,7 @@
 steps:
   - name: ansible-run
     command: 
+      - 'ls -al'
       - 'docker build -f Dockerfile -t iotacafe/ansible-run:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
       - 'docker push iotacafe/ansible-run:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
     plugins:
