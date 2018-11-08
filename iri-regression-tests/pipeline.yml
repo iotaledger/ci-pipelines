@@ -11,16 +11,18 @@ steps:
         mounts:
           - /cache-iri-regression-tests:/cache
   - wait
-  - name: "Checkout IRI revision"
+  - name: "Clone IRI"
     command:
-      - checkout $IRI_GIT_COMMIT
+      - clone $BUILDKITE_REPO /cache/iri
     agents:
       queue: ops
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "alpine/git"
         shell: false
-  - name: "Checkout TIAB"
+        mounts:
+          - /cache-iri-regression-tests:/cache
+  - name: "Clone TIAB"
     command:
       - clone --depth 1 https://github.com/iotaledger/tiab.git /cache/tiab
     agents:
@@ -29,6 +31,20 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "alpine/git"
         shell: false
+        mounts:
+          - /cache-iri-regression-tests:/cache
+  - wait
+  - name: "Checkout IRI revision"
+    command:
+      - apk add git
+      - cd /cache/iri
+      - git checkout $IRI_GIT_COMMIT
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "alpine"
+        shell: /bin/sh -c
         mounts:
           - /cache-iri-regression-tests:/cache
   - wait
@@ -53,7 +69,7 @@ steps:
       - pip install virtualenv
       - virtualenv /cache/iri-regression-venv
       - source /cache/iri-regression-venv/bin/activate
-      - cd python-regression
+      - cd /cache/iri/python-regression
       - pip install -e .
     agents:
       queue: ops
@@ -68,7 +84,7 @@ steps:
     command:
       - cd /cache/tiab
       - source venv/bin/activate
-      - cd /workdir/python-regression
+      - cd /cache/iri/python-regression
       - |
         ERROR=0
         for machine_dir in tests/features/machine?; do
