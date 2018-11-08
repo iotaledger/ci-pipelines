@@ -1,8 +1,34 @@
 steps:
-  - name: Step 1
-    command: ls -al && ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --limit iri02.spamnet.iota.cafe --check
+  - name: Spamnet run
+    command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --limit spamnet --check
     plugins:
-      - docker#v2.0.0:
+      - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "sadjy/ansible-run"
+         always-pull: true
+         environment:
+          - SSH_CLIENT_SIGNER_ADDR
+          - SSH_HOST_SIGNER_ADDR
+          - DOCKER_VAULT_TOKEN
+    agents:
+      queue: ops
+
+  - name: Devnet run
+    command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --limit devnet --check
+    plugins:
+      - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "sadjy/ansible-run"
+         always-pull: true
+         environment:
+          - SSH_CLIENT_SIGNER_ADDR
+          - SSH_HOST_SIGNER_ADDR
+          - DOCKER_VAULT_TOKEN
+    agents:
+      queue: ops
+
+  - name: Mainnet run
+    command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --limit mainnet --check
+    plugins:
+      - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "sadjy/ansible-run"
          always-pull: true
          environment:
