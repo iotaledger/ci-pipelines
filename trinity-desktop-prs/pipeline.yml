@@ -10,5 +10,5 @@ steps:
     agents:
       queue: dev
     plugins:
-      docker#v2.0.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/trinity-desktop-ci:38ef883-8"
