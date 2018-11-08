@@ -11,6 +11,16 @@ steps:
         mounts:
           - /cache-iri-regression-tests:/cache
   - wait
+  - name: "Fetch IRI tree"
+    command:
+      - fetch
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "alpine/git"
+        shell: false
+  - wait
   - name: "Checkout IRI revision"
     command:
       - checkout $IRI_GIT_COMMIT
