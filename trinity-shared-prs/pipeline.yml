@@ -1,0 +1,13 @@
+steps:
+  - label: ":pipeline: Run Trinity Shared (PRs) pipeline"
+    command:
+      - "yarn"
+      - "yarn deps:shared"
+      - "cd src/shared && yarn audit && cd ../.."
+      - "yarn lint:shared"
+      - "cd src/shared && yarn test && cd ../.."
+    agents:
+      queue: dev
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: "node:8.12-stretch"
