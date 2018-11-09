@@ -1,7 +1,7 @@
   - name: "Run Aloe for tests/features/machineNUM"
     command:
       - source /cache/iri-regression-venv/bin/activate
-      - cd PythonRegression
+      - cd /cache/iri/python-regression
       - |
         cp -v /cache/tests/features/machineNUM/output.yml tests/features/machineNUM
         find tests/features/machineNUM -type f -name "*.feature" -exec basename {} \; >/cache/machineNUM.features
