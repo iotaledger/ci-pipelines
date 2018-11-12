@@ -4,7 +4,7 @@ steps:
       - "yarn"
       - "yarn deps:shared"
       - "yarn deps:mobile"
-      - "cd src/mobile && yarn audit && cd ../.."
+      - "cd src/mobile && yarn auditjs && cd ../.."
       - "yarn lint:mobile"
       - "cd src/mobile && yarn test && cd ../.."
       - "cd src/mobile && react-native bundle --entry-file index.js --platform android --bundle-output android/main.jsbundle --dev true"
