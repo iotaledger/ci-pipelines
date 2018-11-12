@@ -1,14 +1,15 @@
 steps:
   - name: release-trinity-desktop
     command:
-      - echo $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID && mkdir publish && buildkite-agent artifact download src/desktop/out/* publish --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - find publish
+      - mkdir tmp $$TRINITY_RELEASE_VERSION && buildkite-agent artifact download src/desktop/out/* tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID && find tmp -type f -exec mv {} $$TRINITY_RELEASE_VERSION \;
     agents:
       queue: ops
+    artifact_paths:
+      - "$TRINITY_RELEASE_VERSION/*"
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "docker:latest"
-        shell: /bin/sh -c
         mount-buildkite-agent: true
         environment:
           - TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+          - TRINITY_RELEASE_VERSION
