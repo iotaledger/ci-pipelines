@@ -139,3 +139,9 @@ steps:
         mounts:
           - /cache-iri-regression-tests:/cache
           - /conf:/conf:ro
+
+  - trigger: "ansible-run-iri"
+    build:
+      env:
+        IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
+#        IRI_GIT_COMMIT: $IRI_GIT_COMMIT

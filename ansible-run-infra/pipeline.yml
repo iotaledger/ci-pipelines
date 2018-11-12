@@ -1,0 +1,13 @@
+steps:
+  - name: Spamnet run
+    command: ansible-playbook -i hosts.ini playbooks/base-ubuntu.yml --limit infra --check
+    plugins:
+      - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "iotacafe/ansible-run:latest"
+         always-pull: true
+         environment:
+          - SSH_CLIENT_SIGNER_ADDR
+          - SSH_HOST_SIGNER_ADDR
+          - DOCKER_VAULT_TOKEN
+    agents:
+      queue: ops
