@@ -43,6 +43,7 @@ steps:
       - "src/desktop/out/builder-effective-config.yaml"
       - "src/desktop/out/latest*"
       - "src/desktop/out/trinity-desktop*"
+      - "src/desktop/package.json"
 
   - label: ":hammer_and_wrench: Build for Windows platform"
     command:
