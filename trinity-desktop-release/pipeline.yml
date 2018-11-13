@@ -1,15 +1,23 @@
 steps:
   - name: release-trinity-desktop
     command:
-      - mkdir tmp $$TRINITY_RELEASE_VERSION && buildkite-agent artifact download src/desktop/out/* tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID && find tmp -type f -exec mv {} $$TRINITY_RELEASE_VERSION \;
+      - mkdir tmp
+      - buildkite-agent artifact download src/desktop/out/packages.json tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - mkdir -p releases/$(cat src/desktop/out/package.json | jq .version --raw-output)
+      - buildkite-agent artifact download src/desktop/out/*.yml tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download src/desktop/out/*.zip tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download src/desktop/out/*.AppImage tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download *.exe tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download latest.yml tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - find tmp -type f -name latest.yml -exec mv {} releases \;
+      - find tmp -type f -exec mv {} releases/$(cat src/desktop/out/package.json | jq .version --raw-output) \;
     agents:
       queue: ops
     artifact_paths:
-      - "$TRINITY_RELEASE_VERSION/*"
+      - "releases/*"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: "docker:latest"
+        image: "iotacafe/jq:latest"
         mount-buildkite-agent: true
         environment:
           - TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-          - TRINITY_RELEASE_VERSION
