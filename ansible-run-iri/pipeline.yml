@@ -1,6 +1,9 @@
 steps:
+  - block: "Push to spamnet"
+    prompt: "Push build $IRI_BUILD_NUMBER to spamnet?"
+
   - name: Spamnet run
-    command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --extra-vars "iri_img_name=iotacafe/iri-dev iri_img_version=$IRI_BUILD_NUMBER"--limit spamnet --check
+    command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --extra-vars "iri_img_name=iotacafe/iri-dev iri_img_version=$IRI_BUILD_NUMBER" --limit spamnet --check
     plugins:
       - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/ansible-run:latest"
@@ -13,6 +16,7 @@ steps:
       queue: ops
 
   - block: "Push to devnet"
+    prompt: "Push build $IRI_BUILD_NUMBER to devnet?"
 
   - name: Devnet run
     command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --extra-vars "iri_img_name=iotacafe/iri-dev iri_img_version=$IRI_BUILD_NUMBER" --limit devnet --check
@@ -28,6 +32,7 @@ steps:
       queue: ops
 
   - block: "Push to mainnet"
+    prompt: "Push build $IRI_BUILD_NUMBER to mainnet?"
 
   - name: Mainnet run
     command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --extra-vars "iri_img_name=iotacafe/iri-dev iri_img_version=$IRI_BUILD_NUMBER" --limit mainnet --check
