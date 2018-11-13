@@ -50,6 +50,6 @@ steps:
     agents:
       queue: trusted-windows-vm1
     artifact_paths:
-      - "src/desktop/out/builder-effective-config.yaml"
-      - "src/desktop/out/latest*"
-      - "src/desktop/out/trinity-desktop*"
+      - "src\desktop\out\builder-effective-config.yaml"
+      - "src\desktop\out\latest*"
+      - "src\desktop\out\trinity-desktop*"
