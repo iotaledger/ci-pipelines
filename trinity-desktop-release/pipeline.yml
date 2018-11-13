@@ -23,3 +23,4 @@ steps:
         environment:
           - TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
           - AWS_REGION: eu-central-1
+          - AWS_DEFAULT_REGION: eu-central-1
