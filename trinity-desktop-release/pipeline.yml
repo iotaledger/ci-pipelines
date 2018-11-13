@@ -22,3 +22,4 @@ steps:
         mount-buildkite-agent: true
         environment:
           - TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+          - AWS_REGION: eu-central-1
