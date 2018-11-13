@@ -17,8 +17,9 @@ steps:
     artifact_paths:
       - "releases/*"
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "alpine:3.8"
+        shell: /bin/sh -c
         mount-buildkite-agent: true
         environment:
           - TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
