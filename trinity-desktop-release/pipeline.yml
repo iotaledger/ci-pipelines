@@ -3,7 +3,7 @@ steps:
     command:
       - apk add --no-cache jq ca-certificates
       - mkdir tmp
-      - buildkite-agent artifact download src/desktop/out/packages.json tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download src/desktop/out/package.json tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - mkdir -p releases/$(cat src/desktop/out/package.json | jq .version --raw-output)
       - buildkite-agent artifact download src/desktop/out/*.yml tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download src/desktop/out/*.zip tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
