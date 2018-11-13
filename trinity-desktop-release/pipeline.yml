@@ -11,12 +11,13 @@ steps:
       - buildkite-agent artifact download src/desktop/out/*.AppImage tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download *.exe tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download latest.yml tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - find tmp -type f -name latest.yml -exec mv {} releases \;
-      - find tmp -type f -exec mv {} releases/$(cat tmp/src/desktop/package.json | jq .version --raw-output) \;
+      - find tmp -type f -name latest.yml -exec mv -v {} releases \;
+      - find tmp -type f -exec mv -v {} releases/$(cat tmp/src/desktop/package.json | jq .version --raw-output) \;
     agents:
       queue: ops
     artifact_paths:
       - "releases/*"
+      - "releases/**/*"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "alpine:3.8"
