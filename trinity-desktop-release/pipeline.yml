@@ -1,6 +1,7 @@
 steps:
   - name: release-trinity-desktop
     command:
+      - apk add --no-cache jq
       - mkdir tmp
       - buildkite-agent artifact download src/desktop/out/packages.json tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - mkdir -p releases/$(cat src/desktop/out/package.json | jq .version --raw-output)
@@ -17,7 +18,7 @@ steps:
       - "releases/*"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: "iotacafe/jq:latest"
+        image: "alpine:3.8"
         mount-buildkite-agent: true
         environment:
           - TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
