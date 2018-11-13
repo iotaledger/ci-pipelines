@@ -2,17 +2,14 @@ steps:
   - name: release-trinity-desktop
     command:
       - apk add --no-cache jq ca-certificates
-      - mkdir tmp
+      - mkdir tmp releases
       - echo Downloading artifacts from build ID $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - buildkite-agent artifact download src/desktop/package.json tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - mkdir -p releases/$(cat tmp/src/desktop/package.json | jq .version --raw-output)
       - buildkite-agent artifact download src/desktop/out/*.yml tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download src/desktop/out/*.zip tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download src/desktop/out/*.AppImage tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download *.exe tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download latest.yml tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - find tmp -type f -name "*.yml" -exec mv -v {} releases \;
-      - find tmp -type f -exec mv -v {} releases/$(cat tmp/src/desktop/package.json | jq .version --raw-output) \;
+      - find tmp -type f -exec mv -v {} releases \;
     agents:
       queue: ops
     artifact_paths:
