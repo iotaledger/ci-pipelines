@@ -3,13 +3,14 @@ steps:
     command:
       - apk add --no-cache jq ca-certificates
       - mkdir tmp
-      - buildkite-agent artifact download src/desktop/package.json tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - echo Downloading artifacts from build ID $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download src/desktop/package.json tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - mkdir -p releases/$(cat src/desktop/package.json | jq .version --raw-output)
-      - buildkite-agent artifact download src/desktop/out/*.yml tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - buildkite-agent artifact download src/desktop/out/*.zip tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - buildkite-agent artifact download src/desktop/out/*.AppImage tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - buildkite-agent artifact download *.exe tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
-      - buildkite-agent artifact download latest.yml tmp --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download src/desktop/out/*.yml tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download src/desktop/out/*.zip tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download src/desktop/out/*.AppImage tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download *.exe tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download latest.yml tmp/ --build $$TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
       - find tmp -type f -name latest.yml -exec mv {} releases \;
       - find tmp -type f -exec mv {} releases/$(cat src/desktop/package.json | jq .version --raw-output) \;
     agents:
@@ -23,5 +24,6 @@ steps:
         environment:
           - TRINITY_DESKTOP_DEPLOY_BUILDKITE_BUILD_ID
           - BUILDKITE_S3_DEFAULT_REGION
-          - BUILDKITE_S3_ACCESS_KEY_ID
-          - BUILDKITE_S3_SECRET_ACCESS_KEY
+          - AWS_ACCESS_KEY_ID
+          - BUILDKITE_ARTIFACT_UPLOAD_DESTINATION
+          - AWS_SECRET_ACCESS_KEY
