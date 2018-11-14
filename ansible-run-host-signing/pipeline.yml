@@ -9,6 +9,7 @@ steps:
           - SSH_CLIENT_SIGNER_ADDR
           - SSH_HOST_SIGNER_ADDR
           - DOCKER_VAULT_TOKEN
+          - HOST_TOKEN
     agents:
       queue: ops
 
@@ -24,6 +25,7 @@ steps:
           - SSH_CLIENT_SIGNER_ADDR
           - SSH_HOST_SIGNER_ADDR
           - DOCKER_VAULT_TOKEN
+          - HOST_TOKEN
     agents:
       queue: ops
 
@@ -39,5 +41,6 @@ steps:
           - SSH_CLIENT_SIGNER_ADDR
           - SSH_HOST_SIGNER_ADDR
           - DOCKER_VAULT_TOKEN
+          - HOST_TOKEN
     agents:
       queue: ops
