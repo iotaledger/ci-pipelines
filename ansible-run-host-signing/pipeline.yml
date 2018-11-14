@@ -1,9 +1,9 @@
 steps:
-  - name: Signing devnet hosts
+  - name: Signing spamnet hosts
     command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit spamnet --check
     plugins:
       - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "iotacafe/ansible-run:latest"
+         image: "sadjy/ansible-run"
          always-pull: true
          environment:
           - SSH_CLIENT_SIGNER_ADDR
