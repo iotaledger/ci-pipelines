@@ -1,9 +1,9 @@
 steps:
   - name: Signing spamnet hosts
-    command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit spamnet --check
+    command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit spamnet
     plugins:
       - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "sadjy/ansible-run"
+         image: "iotacafe/ansible-run:latest"
          always-pull: true
          environment:
           - SSH_CLIENT_SIGNER_ADDR
@@ -15,7 +15,7 @@ steps:
 #  - block: "Push to devnet"
 
   - name: Signing devnet hosts
-    command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit devnet --check
+    command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit devnet
     plugins:
       - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/ansible-run:latest"
@@ -30,7 +30,7 @@ steps:
 #  - block: "Push to mainnet"
 
   - name: Signing mainnet hosts
-    command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit mainnet --check
+    command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit mainnet
     plugins:
       - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/ansible-run:latest"
