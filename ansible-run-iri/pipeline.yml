@@ -1,7 +1,4 @@
 steps:
-  - block: "Push to spamnet"
-    prompt: "Push build $IRI_BUILD_NUMBER to spamnet?"
-
   - name: Spamnet run
     command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --extra-vars "iri_img_name=iotacafe/iri-dev iri_img_version=$IRI_BUILD_NUMBER" --limit spamnet --check
     plugins:

@@ -6,7 +6,7 @@ steps:
       - buildkite-agent artifact download docker/entrypoint.sh docker/ --build $ARTIFACT_BUILDKITE_BUILD_ID && chmod +x docker/entrypoint.sh
       - 'docker build -f ci-pipelines/$BUILDKITE_PIPELINE_SLUG/Dockerfile -t iotacafe/iri-dev:$IRI_BUILD_NUMBER .'
       - 'docker push iotacafe/iri-dev:$IRI_BUILD_NUMBER'
-      - 'docker push iotacafe/iri-dev:latest'
+      - '[[ $IRI_BUILD_NUMBER = 3rd-party-pr-* ]] && docker push iotacafe/iri-dev:latest || true'
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "docker:latest"
