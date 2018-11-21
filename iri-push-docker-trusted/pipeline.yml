@@ -20,7 +20,7 @@ steps:
 
   - wait
 
-  - trigger: "iri-regression-tests"
+  - trigger: iri-regression-tests
     async: true
     build:
       env:

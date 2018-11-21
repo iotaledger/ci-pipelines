@@ -140,8 +140,8 @@ steps:
           - /cache-iri-regression-tests:/cache
           - /conf:/conf:ro
 
-  - trigger: "ansible-run-iri"
+  - trigger: ansible-run-iri
+    async: true
     build:
       env:
         IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
-#        IRI_GIT_COMMIT: $IRI_GIT_COMMIT
