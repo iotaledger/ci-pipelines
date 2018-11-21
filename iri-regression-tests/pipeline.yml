@@ -15,8 +15,8 @@ steps:
     command:
       - |
         apk add git
-        if [ ! -z "$BUILDKITE_PULL_REQUEST_REPO" ]; then
-          git clone "$BUILDKITE_PULL_REQUEST_REPO" /cache/iri
+        if [ ! -z "$IRI_BUILDKITE_PULL_REQUEST_REPO" ]; then
+          git clone "$IRI_BUILDKITE_PULL_REQUEST_REPO" /cache/iri
         else
           git clone $BUILDKITE_REPO /cache/iri
         fi
