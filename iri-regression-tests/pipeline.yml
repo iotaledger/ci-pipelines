@@ -13,13 +13,18 @@ steps:
   - wait
   - name: "Clone IRI"
     command:
-      - clone $BUILDKITE_REPO /cache/iri
+      - |
+        if [ ! -z "$BUILDKITE_PULL_REQUEST_REPO" ]; then
+          git clone "$BUILDKITE_PULL_REQUEST_REPO" /cache/iri
+        else
+          git clone $BUILDKITE_REPO /cache/iri
+        fi
     agents:
       queue: ops
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "alpine/git"
-        shell: false
+        shell: /bin/sh -c
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
   - name: "Clone TIAB"
@@ -36,14 +41,13 @@ steps:
   - wait
   - name: "Checkout IRI revision"
     command:
-      - apk add git
       - cd /cache/iri
       - git checkout $IRI_GIT_COMMIT
     agents:
       queue: ops
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-        image: "alpine"
+        image: "alpine/git"
         shell: /bin/sh -c
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
