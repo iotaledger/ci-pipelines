@@ -16,7 +16,6 @@ steps:
    - wait
 
    - trigger: iri-push-docker-trusted
-     async: true
      build:
        env:
          ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID

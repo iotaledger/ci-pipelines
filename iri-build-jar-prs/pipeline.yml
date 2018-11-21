@@ -16,9 +16,8 @@ steps:
    - wait
 
    - trigger: iri-push-docker-trusted
-     async: true
      build:
        env:
          ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
-         IRI_BUILD_NUMBER: 3rd-party-pr-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
+         IRI_BUILD_NUMBER: PR-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
          IRI_GIT_COMMIT: $GIT_COMMIT
