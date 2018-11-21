@@ -14,4 +14,4 @@
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
