@@ -9,7 +9,7 @@ steps:
         image: "busybox"
         shell: /bin/sh -c
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
   - wait
   - name: "Clone IRI"
     command:
@@ -21,7 +21,7 @@ steps:
         image: "alpine/git"
         shell: false
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
   - name: "Clone TIAB"
     command:
       - clone --depth 1 https://github.com/iotaledger/tiab.git /cache/tiab
@@ -32,7 +32,7 @@ steps:
         image: "alpine/git"
         shell: false
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
   - wait
   - name: "Checkout IRI revision"
     command:
@@ -46,7 +46,7 @@ steps:
         image: "alpine"
         shell: /bin/sh -c
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
   - wait
   - name: "Install TIAB dependencies"
     command:
@@ -62,7 +62,7 @@ steps:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
   - name: "Install iri-regression dependencies"
     command:
       - apk add gcc musl-dev libffi-dev openssl-dev
@@ -78,7 +78,7 @@ steps:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
   - wait
   - name: "Run TIAB against config.yml files"
     command:
@@ -105,7 +105,7 @@ steps:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
           - /conf:/conf:ro
   - wait
   - name: "Generate dynamic Aloe steps"
@@ -121,7 +121,7 @@ steps:
         shell: /bin/sh -c
         mount-buildkite-agent: true
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
           - /etc/ssl/certs:/etc/ssl/certs:ro
   - wait: ~
     continue_on_failure: true
@@ -137,5 +137,5 @@ steps:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
-          - /cache-iri-regression-tests:/cache
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
           - /conf:/conf:ro
