@@ -18,7 +18,7 @@ steps:
         if [ ! -z "$IRI_BUILDKITE_PULL_REQUEST_REPO" ]; then
           git clone "$IRI_BUILDKITE_PULL_REQUEST_REPO" /cache/iri
         else
-          git clone $BUILDKITE_REPO /cache/iri
+          git clone git://github.com/iotaledger/iri.git /cache/iri
         fi
     agents:
       queue: ops
