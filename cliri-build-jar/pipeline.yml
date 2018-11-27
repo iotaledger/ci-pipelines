@@ -1,0 +1,23 @@
+steps:
+   - name: build-cliri-oracle8
+     command: mvn integration-test -Dlogging-level=INFO && mv target/cliri*.jar target/cliri-oracle8.jar && java -version && java -version | tee -a build-cliri-oracle8.log
+     plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
+         mounts:
+           - /cache/.m2:/root/.m2
+     artifact_paths:
+       - target/cliri-oracle8.jar
+       - docker/entrypoint.sh
+       - build-cliri-oracle8.log
+     agents:
+       queue: dev
+
+   - wait
+
+   - trigger: cliri-push-docker-trusted
+     build:
+       env:
+         ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
+         IRI_BUILD_NUMBER: ${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
+         IRI_GIT_COMMIT: $GIT_COMMIT
