@@ -2,7 +2,7 @@ steps:
   - name: push-cliri-oracle8
     command: 
       - mkdir -p target docker
-      - buildkite-agent artifact download target/cliri-oracle8.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download target/iri-oracle8.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download docker/entrypoint.sh docker/ --build $ARTIFACT_BUILDKITE_BUILD_ID && chmod +x docker/entrypoint.sh
       - docker build -f ci-pipelines/$BUILDKITE_PIPELINE_SLUG/Dockerfile -t iotacafe/cliri-dev:$IRI_BUILD_NUMBER .
       - docker push iotacafe/cliri-dev:$IRI_BUILD_NUMBER
