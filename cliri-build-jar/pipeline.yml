@@ -11,8 +11,8 @@ steps:
        - docker/entrypoint.sh
        - build-cliri-oracle8.log
        - surefire-reports
-       - *-jvmRun*.dump
-       - *.dumpstream
+       - "*-jvmRun*.dump"
+       - "*.dumpstream"
      agents:
        queue: dev
 
