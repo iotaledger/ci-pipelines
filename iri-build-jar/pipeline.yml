@@ -10,6 +10,9 @@ steps:
        - target/iri-oracle8.jar
        - docker/entrypoint.sh
        - build-iri-oracle8.log
+       - surefire-reports
+       - *-jvmRun*.dump
+       - *.dumpstream
      agents:
        queue: dev
 
