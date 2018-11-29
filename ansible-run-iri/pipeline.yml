@@ -10,7 +10,7 @@ steps:
           - SSH_HOST_SIGNER_ADDR
           - DOCKER_VAULT_TOKEN
     agents:
-      queue: ops
+      queue: ops-ansible
 
   - block: "Push to devnet"
     prompt: "Push build $IRI_BUILD_NUMBER to devnet?"
@@ -26,7 +26,7 @@ steps:
           - SSH_HOST_SIGNER_ADDR
           - DOCKER_VAULT_TOKEN
     agents:
-      queue: ops
+      queue: ops-ansible
 
   - block: "Push to mainnet"
     prompt: "Push build $IRI_BUILD_NUMBER to mainnet?"
@@ -42,4 +42,4 @@ steps:
           - SSH_HOST_SIGNER_ADDR
           - DOCKER_VAULT_TOKEN
     agents:
-      queue: ops
+      queue: ops-ansible
