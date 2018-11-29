@@ -11,7 +11,7 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops
+      queue: ops-ansible
 
 #  - block: "Push to devnet"
 
@@ -27,7 +27,7 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops
+      queue: ops-ansible
 
 #  - block: "Push to mainnet"
 
@@ -43,4 +43,4 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops
+      queue: ops-ansible
