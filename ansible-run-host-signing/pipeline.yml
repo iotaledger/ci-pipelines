@@ -1,4 +1,18 @@
 steps:
+  - name: Signing zeronet hosts
+    command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit zeronet
+    plugins:
+      - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "iotacafe/ansible-run:latest"
+         always-pull: true
+         environment:
+          - SSH_CLIENT_SIGNER_ADDR
+          - SSH_HOST_SIGNER_ADDR
+          - DOCKER_VAULT_TOKEN
+          - HOST_TOKEN
+    agents:
+      queue: ops-ansible
+
   - name: Signing spamnet hosts
     command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit spamnet
     plugins:
