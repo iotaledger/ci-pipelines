@@ -29,7 +29,6 @@ steps:
       queue: ops
 
   - trigger: cliri-ansible-run
-    async: true
     build:
       env:
         IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER

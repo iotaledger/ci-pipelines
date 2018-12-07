@@ -1,7 +1,6 @@
 steps:
   - name: Zeronet run
-    command: >
-      ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml -e iri_img_name=iotacafe/cliri-dev -e '{ "iri_nodes": { "01": { "iri_img_version": $IRI_BUILD_NUMBER } } }' --limit iri.zeronet
+    command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml -e iri_img_name=iotacafe/cliri-dev -e iri_img_version=$IRI_BUILD_NUMBER --limit iri.zeronet
     plugins:
       - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/ansible-run:latest"
