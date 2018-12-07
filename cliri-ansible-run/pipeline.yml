@@ -1,0 +1,13 @@
+steps:
+  - name: Zeronet run
+    command: ansible-playbook -i hosts.ini playbooks/iri-node/iri.yml --extra-vars "iri_img_name=iotacafe/cliri-dev iri_img_version=$IRI_BUILD_NUMBER" --limit iri.zeronet --check
+    plugins:
+      - https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "iotacafe/ansible-run:latest"
+         always-pull: true
+         environment:
+          - SSH_CLIENT_SIGNER_ADDR
+          - SSH_HOST_SIGNER_ADDR
+          - DOCKER_VAULT_TOKEN
+    agents:
+      queue: ops-ansible
