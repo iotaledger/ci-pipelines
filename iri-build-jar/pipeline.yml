@@ -1,15 +1,15 @@
 steps:
    - name: build-iri-oracle8
-     command: mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8.jar && java -version && java -version | tee -a build-iri-oracle8.log
+     command: mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version | tee -a build-iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.log
      plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
          mounts:
            - /cache/.m2:/root/.m2
      artifact_paths:
-       - target/iri-oracle8.jar
+       - "target/iri-oracle8-*"
        - docker/entrypoint.sh
-       - build-iri-oracle8.log
+       - "build-iri-oracle8-*.log"
        - surefire-reports
        - "*-jvmRun*.dump"
        - "*.dumpstream"
