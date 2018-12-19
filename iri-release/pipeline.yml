@@ -28,7 +28,7 @@ steps:
         RELEASE_MAJOR=$(buildkite-agent meta-data get release-major)
         RELEASE_MINOR=$(buildkite-agent meta-data get release-minor)
         RELEASE_CANDIDATE_NUMBER=$(buildkite-agent meta-data get release-candidate-number)
-        echo Releasing ${RELEASE_MAJOR}.${RELEASE_MINOR}-RC${RELEASE_CANDIDATE_NUMBER}
+        echo Releasing $$RELEASE_MAJOR.$$RELEASE_MINOR-RC$$RELEASE_CANDIDATE_NUMBER
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "docker:latest"
@@ -46,7 +46,7 @@ steps:
         RELEASE_MAJOR=$(buildkite-agent meta-data get release-major)
         RELEASE_MINOR=$(buildkite-agent meta-data get release-minor)
         RELEASE_CANDIDATE_NUMBER=$(buildkite-agent meta-data get release-candidate-number)
-        echo Releasing Stable ${RELEASE_MAJOR}.${RELEASE_MINOR}-RELEASE
+        echo Releasing Stable $$RELEASE_MAJOR.$$RELEASE_MINOR-RELEASE
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "docker:latest"
