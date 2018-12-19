@@ -10,28 +10,28 @@ steps:
         required: false
         hint: "List of what's changed in this release"
 
-   - name: build-iri-oracle8
-     command: RELEASE_NAME=$(buildkite-agent meta-data get release-name) && mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8.jar && java -version && java -version | tee -a build-iri-oracle8.log
-     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
-         mounts:
-           - /cache/.m2:/root/.m2
-     artifact_paths:
-       - target/iri-oracle8.jar
-       - docker/entrypoint.sh
-       - build-iri-oracle8.log
-       - surefire-reports
-       - "*-jvmRun*.dump"
-       - "*.dumpstream"
-     agents:
-       queue: dev
+  - name: build-iri-oracle8
+    command: RELEASE_NAME=$(buildkite-agent meta-data get release-name) && mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8.jar && java -version && java -version | tee -a build-iri-oracle8.log
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
+        mounts:
+          - /cache/.m2:/root/.m2
+    artifact_paths:
+      - target/iri-oracle8.jar
+      - docker/entrypoint.sh
+      - build-iri-oracle8.log
+      - surefire-reports
+      - "*-jvmRun*.dump"
+      - "*.dumpstream"
+    agents:
+      queue: dev
 
-   - wait
+  - wait
 
-   - trigger: iri-push-docker-trusted
-     build:
-       env:
-         ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
-         IRI_BUILD_NUMBER: ${RELEASE_NAME}-${BUILDKITE_BUILD_ID:0:8}
-         IRI_GIT_COMMIT: $GIT_COMMIT
+  - trigger: iri-push-docker-trusted
+    build:
+      env:
+        ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
+        IRI_BUILD_NUMBER: ${RELEASE_NAME}-${BUILDKITE_BUILD_ID:0:8}
+        IRI_GIT_COMMIT: $GIT_COMMIT
