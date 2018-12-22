@@ -14,9 +14,9 @@ steps:
     agents:
       queue: ops
 
-   - wait
+  - wait
 
-   - trigger: documentation-deploy-site
-     build:
-       env:
-         DOCKERHUB_DOCUMENTATION_CONTAINER: iotacafe/documentation:${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
+  - trigger: documentation-deploy-site
+    build:
+      env:
+        DOCKERHUB_DOCUMENTATION_CONTAINER: iotacafe/documentation:${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
