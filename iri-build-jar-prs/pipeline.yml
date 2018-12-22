@@ -7,9 +7,9 @@ steps:
          mounts:
            - /cache/.m2:/root/.m2
      artifact_paths:
-       - target/iri-oracle8.jar
+       - "target/iri-oracle8-*"
        - docker/entrypoint.sh
-       - build-iri-oracle8.log
+       - "build-iri-oracle8-*.log"
        - surefire-reports
        - "*-jvmRun*.dump"
        - "*.dumpstream"
