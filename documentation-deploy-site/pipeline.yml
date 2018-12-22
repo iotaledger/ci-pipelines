@@ -2,7 +2,7 @@ steps:
   - name: build-and-push-documentation-container
     command: 
       - npm i -g now
-      - mkdir -p work repos
+      - rm -rf work repos && mkdir -p work repos
       - git clone https://github.com/iotaledger/documentation-markdown.git repos/documentation-markdown
       - apk add --no-cache rsync
       - cd repos/documentation-markdown && rsync -a -m --include='**/*.md' --include='*/' --exclude='*' . ../../work && cd ../../
