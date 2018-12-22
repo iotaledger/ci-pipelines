@@ -7,7 +7,7 @@ steps:
       - apt-get update && apt-get install -y rsync
       - cd repos/documentation-markdown && rsync -a -m --include='**/*.md' --include='*/' --exclude='*' . ../../work && cd ../../
       - cp documentation-deploy-site/Dockerfile work/
-      - sed -i.bak s/__DOCKERHUB_DOCUMENTATION_CONTAINER_PLACEHOLDER__/$$DOCKERHUB_DOCUMENTATION_CONTAINER/g work/Dockerfile
+      - sed -i.bak s/__DOCKERHUB_DOCUMENTATION_CONTAINER_PLACEHOLDER__/$DOCKERHUB_DOCUMENTATION_CONTAINER/g work/Dockerfile
       - cd work && now --token $$ZEIT_TOKEN deploy 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
