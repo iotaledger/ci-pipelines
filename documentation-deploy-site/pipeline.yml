@@ -4,7 +4,7 @@ steps:
       - npm i -g now
       - rm -rf work repos && mkdir -p work repos
       - git clone https://github.com/iotaledger/documentation-markdown.git repos/documentation-markdown
-      - apk add --no-cache rsync
+      - apt-get update && apt-get install -y rsync
       - cd repos/documentation-markdown && rsync -a -m --include='**/*.md' --include='*/' --exclude='*' . ../../work && cd ../../
       - cp documentation-deploy-site/Dockerfile work/
       - sed -i.bak s/__DOCKERHUB_DOCUMENTATION_CONTAINER_PLACEHOLDER__/$$DOCKERHUB_DOCUMENTATION_CONTAINER/g work/Dockerfile
