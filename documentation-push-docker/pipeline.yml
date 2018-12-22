@@ -1,7 +1,6 @@
 steps:
   - name: build-and-push-documentation-container
     command: 
-      - cd documentation
       - rm -rf docs
       - docker build -f Dockerfile -t iotacafe/documentation:${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8} .
       - docker push iotacafe/documentation:${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
