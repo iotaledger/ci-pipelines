@@ -13,3 +13,10 @@ steps:
           - /conf/docker/.docker:$HOME/.docker
     agents:
       queue: ops
+
+   - wait
+
+   - trigger: documentation-deploy-site
+     build:
+       env:
+         DOCKERHUB_DOCUMENTATION_CONTAINER: iotacafe/documentation:${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}

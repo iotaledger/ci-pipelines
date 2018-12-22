@@ -1,0 +1,19 @@
+steps:
+  - name: build-and-push-documentation-container
+    command: 
+      - npm i -g now
+      - mkdir -p work repos
+      - git clone https://github.com/iotaledger/documentation-markdown.git repos/documentation-markdown
+      - cd repos/documentation-markdown && rsync -a -m --include='**/*.md' --include='*/' --exclude='*' . ../../work && cd ../../
+      - sed -i.bak s/__DOCKERHUB_DOCUMENTATION_CONTAINER_PLACEHOLDER__/$$DOCKERHUB_DOCUMENTATION_CONTAINER/g work/Dockerfile
+      - cp documentation-deploy-site/Dockerfile work/
+      - cd work && now --token $$ZEIT_TOKEN deploy 
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "node:8.14.0-jessie"
+         shell: "/bin/sh -e -c"
+         mounts:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /conf/docker/.docker:$HOME/.docker
+    agents:
+      queue: ops
