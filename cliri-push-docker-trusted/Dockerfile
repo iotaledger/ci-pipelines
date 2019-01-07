@@ -1,4 +1,4 @@
-FROM iotacafe/java:oracle8u181.1.webupd8.1-1
+FROM iotacafe/java:oracle8u181.1.webupd8.1-1@sha256:21b0fb1e5b5be7cd239a742238f346e076a46dc0003670cd50f079780288773f
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         jq curl socat \
