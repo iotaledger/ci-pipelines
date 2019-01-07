@@ -11,4 +11,4 @@ steps:
       queue: dev
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: "iotacafe/trinity-desktop-ci:38ef883-8"
+        image: "iotacafe/trinity-desktop-ci:83304c4-9"
