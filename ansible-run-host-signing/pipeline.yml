@@ -11,7 +11,7 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops-ansible
+      queue: bes-ops-ansible
 
   - name: Signing spamnet hosts
     command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit spamnet
@@ -25,7 +25,7 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops-ansible
+      queue: bes-ops-ansible
 
 #  - block: "Push to devnet"
 
@@ -41,7 +41,7 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops-ansible
+      queue: bes-ops-ansible
 
 #  - block: "Push to mainnet"
 
@@ -57,4 +57,4 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops-ansible
+      queue: bes-ops-ansible
