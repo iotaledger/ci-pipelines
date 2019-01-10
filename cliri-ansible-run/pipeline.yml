@@ -10,4 +10,4 @@ steps:
           - SSH_HOST_SIGNER_ADDR
           - DOCKER_VAULT_TOKEN
     agents:
-      queue: ops-ansible
+      queue: aws-nano

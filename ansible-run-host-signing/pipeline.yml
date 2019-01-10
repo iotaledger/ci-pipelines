@@ -11,7 +11,7 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops-ansible
+      queue: aws-nano
 
   - wait: ~
 
@@ -27,7 +27,7 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops-ansible
+      queue: aws-nano
 
 #  - block: "Push to devnet"
   - wait: ~
@@ -44,7 +44,7 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops-ansible
+      queue: aws-nano
 
 #  - block: "Push to mainnet"
   - wait: ~
@@ -61,4 +61,4 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: ops-ansible
+      queue: aws-nano
