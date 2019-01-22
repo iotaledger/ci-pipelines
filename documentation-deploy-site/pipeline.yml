@@ -1,11 +1,11 @@
 steps:
   - name: build-and-push-documentation-container
     command: 
-      - npm i -g now
+      - npm i -g --unsafe-perm now
       - rm -rf work repos && mkdir -p work repos
       - git clone https://github.com/iotaledger/documentation-markdown.git repos/documentation-markdown
       - apt-get update && apt-get install -y rsync
-      - cd repos/documentation-markdown && rsync -a -m --include='**/*.md' --include='*/' --exclude='*' . ../../work && cd ../../
+      - cd repos/documentation-markdown && rsync -av -m --include='**/*.md' --include='*/' --exclude='*' . ../../work && cd ../../
       - cp documentation-deploy-site/Dockerfile work/
       - sed -i.bak s#__DOCKERHUB_DOCUMENTATION_CONTAINER_PLACEHOLDER__#$DOCKERHUB_DOCUMENTATION_CONTAINER#g work/Dockerfile
       - cd work && now --token $$ZEIT_TOKEN deploy -n documentation
