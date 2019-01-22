@@ -5,8 +5,8 @@ steps:
       - cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.json api/src/data/config.json
       - cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/now.json now.json
       - cd api
-      - sed -i.bak s#__DOCS-AWS-ACCESS-KEY-ID__#$$DOCS-AWS-ACCESS-KEY-ID#g ./api/src/data/config.json
-      - sed -i.bak s#__DOCS-AWS-SECRET-ACCESS-KEY__#$$DOCS-AWS-SECRET-ACCESS-KEY#g ./api/src/data/config.json
+      - sed -i.bak s#DOCS-AWS-ACCESS-KEY-ID#$$DOCS_AWS_ACCESS_KEY_ID#g ./api/src/data/config.json
+      - sed -i.bak s#DOCS-AWS-SECRET-ACCESS-KEY#$$DOCS_AWS_SECRET_ACCESS_KEY#g ./api/src/data/config.json
       - now --token $$ZEIT_TOKEN deploy --docker -n documentation-web
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
