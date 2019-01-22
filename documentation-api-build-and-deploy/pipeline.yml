@@ -1,0 +1,19 @@
+steps:
+  - name: zeit-build-and-deploy
+    command: 
+      - npm i -g --unsafe-perm now
+      - cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.json api/src/data/config.json
+      - cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/now.json now.json
+      - cd api
+      - sed -i.bak s#__DOCS-AWS-ACCESS-KEY-ID__#$$DOCS-AWS-ACCESS-KEY-ID#g ./api/src/data/config.json
+      - sed -i.bak s#__DOCS-AWS-SECRET-ACCESS-KEY__#$$DOCS-AWS-SECRET-ACCESS-KEY#g ./api/src/data/config.json
+      - now --token $$ZEIT_TOKEN deploy --docker -n documentation-web
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "docker:latest"
+         shell: "/bin/sh -e -c"
+         mounts:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /conf/docker/.docker:$HOME/.docker
+    agents:
+      queue: ops
