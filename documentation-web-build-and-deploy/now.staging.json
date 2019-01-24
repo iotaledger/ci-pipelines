@@ -1,0 +1,8 @@
+{
+    "version": 1,
+    "name": "iota-documentation",
+    "alias": "documentation.iota.works",
+    "static": {
+        "trailingSlash": false
+    }
+}
