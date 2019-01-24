@@ -10,10 +10,7 @@ steps:
       - now --platform-version 1 --token $$ZEIT_TOKEN --team iota deploy --docker -n documentation-api
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-         image: "docker:latest"
+         image: "node:8.12-stretch"
          shell: "/bin/sh -e -c"
-         mounts:
-          - /var/run/docker.sock:/var/run/docker.sock
-          - /conf/docker/.docker:$HOME/.docker
     agents:
       queue: ops
