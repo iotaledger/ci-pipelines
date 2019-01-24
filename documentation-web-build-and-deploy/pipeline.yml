@@ -6,7 +6,7 @@ steps:
         apt-get update && apt-get install -y rsync
         rm -rf docs && mkdir docs
         rm -rf tmp && mkdir -p tmp
-        git clone https://github.com/iotaledger/documentation-markdown.git tmp/documentation-markdown
+        git clone -b develop https://github.com/iotaledger/documentation-markdown.git tmp/documentation-markdown
         cd tmp/documentation-markdown && rsync -av -m --include='**/*.md' --include='*/' --exclude='*' . ../../docs && cd ../../
         rm -rf tmp
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/src/config.staging.json src/config.json
