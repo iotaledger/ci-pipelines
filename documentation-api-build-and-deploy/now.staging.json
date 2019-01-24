@@ -4,8 +4,8 @@
     "alias": "documentation-api.iota.works",
     "static": {
         "trailingSlash": false
-    }
-    "file": [
-     "src/data/config.json"
+    },
+    "files": [
+    "src/data/config.json"
     ]
 }

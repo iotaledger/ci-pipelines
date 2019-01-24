@@ -4,9 +4,9 @@
     "alias": "documentation.iota.works",
     "static": {
         "trailingSlash": false
-    }
-    "file": [
-     "docs",
-     "src/config.json"
+    },
+    "files": [
+    "docs",
+    "src/config.json"
     ]
 }
