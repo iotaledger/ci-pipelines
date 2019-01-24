@@ -5,4 +5,7 @@
     "static": {
         "trailingSlash": false
     }
+    "file": [
+     "src/data/config.json"
+    ]
 }
