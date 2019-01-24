@@ -9,7 +9,7 @@ steps:
         sed -i.bak s#DOCS-AWS-ACCESS-KEY-ID#\$DOCS_AWS_ACCESS_KEY_ID#g src/data/config.json
         sed -i.bak s#DOCS-AWS-SECRET-ACCESS-KEY#\$DOCS_AWS_SECRET_ACCESS_KEY#g src/data/config.json
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
-        NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-api | awk {'print \$2'}
+        NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-api | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias $NOW_SH_DEPLOYMENT_ID documentation-api.iota.works
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
