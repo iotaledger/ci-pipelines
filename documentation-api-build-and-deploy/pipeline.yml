@@ -1,5 +1,5 @@
 steps:
-  - name: zeit-build-and-deploy
+  - name: zeit-build-and-deploy-staging
     command: 
       - |
         npm i -g --unsafe-perm now
