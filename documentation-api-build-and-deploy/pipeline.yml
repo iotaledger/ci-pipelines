@@ -5,8 +5,8 @@ steps:
       - cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.json api/src/data/config.json
       - cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/now.json api/now.json
       - cd api
-      - sed -i.bak s#DOCS-AWS-ACCESS-KEY-ID#$$DOCS_AWS_ACCESS_KEY_ID#g ./api/src/data/config.json
-      - sed -i.bak s#DOCS-AWS-SECRET-ACCESS-KEY#$$DOCS_AWS_SECRET_ACCESS_KEY#g ./api/src/data/config.json
+      - sed -i.bak s#DOCS-AWS-ACCESS-KEY-ID#$$DOCS_AWS_ACCESS_KEY_ID#g src/data/config.json
+      - sed -i.bak s#DOCS-AWS-SECRET-ACCESS-KEY#$$DOCS_AWS_SECRET_ACCESS_KEY#g src/data/config.json
       - now --platform-version 1 --token $$ZEIT_TOKEN --team iota deploy --docker -n documentation-api
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
