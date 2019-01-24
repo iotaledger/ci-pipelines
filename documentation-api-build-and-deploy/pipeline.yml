@@ -3,8 +3,8 @@ steps:
     command: 
       - |
         npm i -g --unsafe-perm now
-        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.json api/src/data/config.json
-        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/now.json api/now.json
+        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.staging.json api/src/data/config.json
+        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/now.staging.json api/now.json
         cd api
         sed -i.bak s#DOCS-AWS-ACCESS-KEY-ID#\$DOCS_AWS_ACCESS_KEY_ID#g src/data/config.json
         sed -i.bak s#DOCS-AWS-SECRET-ACCESS-KEY#\$DOCS_AWS_SECRET_ACCESS_KEY#g src/data/config.json
