@@ -6,7 +6,6 @@
         "trailingSlash": false
     },
     "files": [
-    "docs",
-    "src/config.json"
+        "*"
     ]
 }

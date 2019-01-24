@@ -2,5 +2,6 @@
   "siteName": "IOTA Documentation",
   "siteRoot": "https://documentation.iota.works",
   "apiEndpoint": "https://documentation-api.iota.works",
-  "hotJarId": "1166153"
+  "hotJarId": "1166153",
+  "googleAnalyticsId": "UA-106048607-2"
 }
