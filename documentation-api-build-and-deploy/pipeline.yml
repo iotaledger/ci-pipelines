@@ -12,5 +12,9 @@ steps:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "node:8.12-stretch"
          shell: "/bin/sh -e -c"
+         environment:
+          - ZEIT_TOKEN
+          - DOCS_AWS_ACCESS_KEY_ID
+          - DOCS_AWS_SECRET_ACCESS_KEY
     agents:
       queue: ops
