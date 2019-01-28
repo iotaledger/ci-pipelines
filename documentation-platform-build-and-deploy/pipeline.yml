@@ -3,13 +3,13 @@ steps:
     command:
       - |
         npm i -g --unsafe-perm now
-        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.staging.json api/src/data/config.json
+        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.staging.json api/src/data/
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.staging.json api/now.json
-        sed -i.bak s#DOCS-STAGING-AWS-ACCESS-KEY-ID#\$DOCS_STAGING_AWS_ACCESS_KEY_ID#g api/src/data/config.json
-        sed -i.bak s#DOCS-STAGING-AWS-SECRET-ACCESS-KEY#\$DOCS_STAGING_AWS_SECRET_ACCESS_KEY#g api/src/data/config.json
+        sed -i.bak s#DOCS-STAGING-AWS-ACCESS-KEY-ID#\$DOCS_STAGING_AWS_ACCESS_KEY_ID#g api/src/data/config.staging.json
+        sed -i.bak s#DOCS-STAGING-AWS-SECRET-ACCESS-KEY#\$DOCS_STAGING_AWS_SECRET_ACCESS_KEY#g api/src/data/config.staging.json
         rm -rf ci-pipelines
         cd api
-        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
+        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy -e CONFIG_ID=staging --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-api | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias \$NOW_SH_DEPLOYMENT_ID docs-api.iota.works
     plugins:
@@ -28,10 +28,8 @@ steps:
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.staging.json src/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.staging.json now.json
-        sed -i.bak s#DOCS-PROD-AWS-ACCESS-KEY-ID#\$DOCS_PROD_AWS_ACCESS_KEY_ID#g api/src/data/config.json
-        sed -i.bak s#DOCS-PROD-AWS-SECRET-ACCESS-KEY#\$DOCS_PROD_AWS_SECRET_ACCESS_KEY#g api/src/data/config.json
         rm -rf ci-pipelines
-        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy --force --docker -n documentation-web -m BK_JOB_ID=$BUILDKITE_JOB_ID
+        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy CONFIG_ID=staging --force --docker -n documentation-web -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-web | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias \$NOW_SH_DEPLOYMENT_ID docs.iota.works
     plugins:
@@ -51,11 +49,13 @@ steps:
     command:
       - |
         npm i -g --unsafe-perm now
-        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.prod.json api/src/data/config.json
+        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.prod.json api/src/data/
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.prod.json api/now.json
+        sed -i.bak s#DOCS-PROD-AWS-ACCESS-KEY-ID#\$DOCS_PROD_AWS_ACCESS_KEY_ID#g api/src/data/config.prod.json
+        sed -i.bak s#DOCS-PROD-AWS-SECRET-ACCESS-KEY#\$DOCS_PROD_AWS_SECRET_ACCESS_KEY#g api/src/data/config.prod.json
         rm -rf ci-pipelines
         cd api
-        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
+        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy CONFIG_ID=prod --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-api | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias \$NOW_SH_DEPLOYMENT_ID docs-api.iota.org
     plugins:
@@ -75,7 +75,7 @@ steps:
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.prod.json src/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.prod.json now.json
         rm -rf ci-pipelines
-        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy --force --docker -n documentation-web -m BK_JOB_ID=$BUILDKITE_JOB_ID
+        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy CONFIG_ID=prod --force --docker -n documentation-web -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-web | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias \$NOW_SH_DEPLOYMENT_ID docs.iota.org
     plugins:
