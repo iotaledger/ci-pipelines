@@ -17,6 +17,8 @@ steps:
          image: "node:8.12-stretch"
          environment:
           - ZEIT_TOKEN
+          - DOCS_STAGING_AWS_ACCESS_KEY_ID
+          - DOCS_STAGING_AWS_SECRET_ACCESS_KEY
     agents:
       queue: ops
 
@@ -24,7 +26,7 @@ steps:
     command:
       - |
         rm -rf docs && mkdir -p docs
-        buildkite-agent artifact download ./**/* docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+        buildkite-agent artifact download "**/*.md" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.staging.json src/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.staging.json now.json
@@ -63,6 +65,8 @@ steps:
          image: "node:8.12-stretch"
          environment:
           - ZEIT_TOKEN
+          - DOCS_PROD_AWS_ACCESS_KEY_ID
+          - DOCS_PROD_AWS_SECRET_ACCESS_KEY
     agents:
       queue: ops
 
@@ -70,7 +74,7 @@ steps:
     command:
       - |
         rm -rf docs && mkdir -p docs
-        buildkite-agent artifact download ./**/* docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+        buildkite-agent artifact download "**/*.md" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.prod.json src/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.prod.json now.json
