@@ -2,6 +2,7 @@ steps:
   - name: api-build-and-deploy-staging
     command:
       - |
+        rm -rf ci-pipelines
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.staging.json api/src/data/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.staging.json api/now.json
@@ -20,7 +21,8 @@ steps:
   - name: web-build-and-deploy-staging
     command:
       - |
-        rm -rf docs
+        rm -rf ci-pipelines
+        rm -rf docs && mkdir -p docs
         buildkite-agent artifact download ./ docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.staging.json src/config.json
@@ -44,6 +46,7 @@ steps:
   - name: api-build-and-deploy-prod
     command:
       - |
+        rm -rf ci-pipelines
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.prod.json api/src/data/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.prod.json api/now.json
@@ -62,7 +65,8 @@ steps:
   - name: web-build-and-deploy-prod
     command:
       - |
-        rm -rf docs
+        rm -rf ci-pipelines
+        rm -rf docs && mkdir -p docs
         buildkite-agent artifact download ./ docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.prod.json src/config.json
