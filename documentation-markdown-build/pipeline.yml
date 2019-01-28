@@ -8,16 +8,16 @@ steps:
         cd tmp/ && rsync -av -m --include='**/*.md' --include='*/' --exclude='*' . ../docs && cd ../
         rm -rf tmp
     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "busybox"
     agents:
       queue: dev
-     artifact_paths:
-       - "docs/**"
+    artifact_paths:
+      - "docs/**"
 
-   - wait
+  - wait
 
-   - trigger: documentation-build-and-deploy
-     build:
-       env:
-         DOCS_MARKDOWN_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
+  - trigger: documentation-build-and-deploy
+    build:
+      env:
+        DOCS_MARKDOWN_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
