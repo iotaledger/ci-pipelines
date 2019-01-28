@@ -21,7 +21,7 @@ steps:
     command:
       - |
         rm -rf docs
-        buildkite-agent artifact download docs/ docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+        buildkite-agent artifact download ./ docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.staging.json src/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.staging.json now.json
@@ -63,7 +63,7 @@ steps:
     command:
       - |
         rm -rf docs
-        buildkite-agent artifact download docs/ docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+        buildkite-agent artifact download ./ docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.prod.json src/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.prod.json now.json
