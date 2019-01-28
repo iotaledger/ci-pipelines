@@ -1,7 +1,7 @@
 {
     "version": 1,
-    "name": "iota-documentation",
-    "alias": "documentation.iota.works",
+    "name": "documentation-web",
+    "alias": "docs.iota.org",
     "static": {
         "trailingSlash": false
     },

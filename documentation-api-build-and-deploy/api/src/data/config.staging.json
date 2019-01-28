@@ -1,8 +1,0 @@
-{
-    "dynamoDbConnection": {
-        "region": "eu-central-1",
-        "accessKeyId": "DOCS-AWS-ACCESS-KEY-ID",
-        "secretAccessKey": "DOCS-AWS-SECRET-ACCESS-KEY",
-        "dbTablePrefix": "docs-prod-"
-    }
-}

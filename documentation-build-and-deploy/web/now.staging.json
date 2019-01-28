@@ -1,0 +1,11 @@
+{
+    "version": 1,
+    "name": "documentation-web",
+    "alias": "docs.iota.works",
+    "static": {
+        "trailingSlash": false
+    },
+    "files": [
+        "./"
+    ]
+}

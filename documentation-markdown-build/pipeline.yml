@@ -1,0 +1,23 @@
+steps:
+  - name: build-documentation-markdown
+    command: 
+      - |
+        rm -rf ci-pipelines
+        rm -rf tmp && mkdir -p tmp && mv * tmp
+        rm -rf docs && mkdir -p docs
+        cd tmp/ && rsync -av -m --include='**/*.md' --include='*/' --exclude='*' . ../docs && cd ../
+        rm -rf tmp
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "busybox"
+    agents:
+      queue: dev
+     artifact_paths:
+       - "docs/**"
+
+   - wait
+
+   - trigger: documentation-build-and-deploy
+     build:
+       env:
+         DOCS_MARKDOWN_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
