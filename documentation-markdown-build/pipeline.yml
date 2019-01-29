@@ -9,7 +9,7 @@ steps:
     agents:
       queue: dev
     artifact_paths:
-      - "**/*.md"
+      - "**/*"
 
   - wait
 

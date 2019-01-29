@@ -33,7 +33,8 @@ steps:
           exit 1
         else
           echo Downloading documentation markdown from build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
-          buildkite-agent artifact download "**/*.md" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+          buildkite-agent artifact download "**/*" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+          buildkite-agent artifact download "*.*" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         fi
 
         npm i -g --unsafe-perm now
@@ -90,7 +91,8 @@ steps:
           exit 1
         else
           echo Downloading documentation markdown from build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
-          buildkite-agent artifact download "**/*.md" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+          buildkite-agent artifact download "**/*" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+          buildkite-agent artifact download "*.*" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         fi
 
         npm i -g --unsafe-perm now
