@@ -2,11 +2,13 @@ steps:
   - name: api-build-and-deploy-staging
     command:
       - |
+        rm -rf ci-pipelines && git clone https://github.com/iotaledger/ci-pipelines.git
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.staging.json api/src/data/
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.staging.json api/now.json
         sed -i.bak s#DOCS-STAGING-AWS-ACCESS-KEY-ID#\$DOCS_STAGING_AWS_ACCESS_KEY_ID#g api/src/data/config.staging.json
         sed -i.bak s#DOCS-STAGING-AWS-SECRET-ACCESS-KEY#\$DOCS_STAGING_AWS_SECRET_ACCESS_KEY#g api/src/data/config.staging.json
+        rm -rf ci-pipelines
         cd api
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy -e CONFIG_ID=staging --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-api | awk {'print \$2'})
@@ -25,10 +27,12 @@ steps:
     command:
       - |
         rm -rf docs && mkdir -p docs
+        rm -rf ci-pipelines && git clone https://github.com/iotaledger/ci-pipelines.git
         buildkite-agent artifact download "**/*.md" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.staging.json src/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.staging.json now.json
+        rm -rf ci-pipelines
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy CONFIG_ID=staging --force --docker -n documentation-web -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-web | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias \$NOW_SH_DEPLOYMENT_ID docs.iota.works
@@ -49,10 +53,12 @@ steps:
     command:
       - |
         npm i -g --unsafe-perm now
+        rm -rf ci-pipelines && git clone https://github.com/iotaledger/ci-pipelines.git
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.prod.json api/src/data/
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.prod.json api/now.json
         sed -i.bak s#DOCS-PROD-AWS-ACCESS-KEY-ID#\$DOCS_PROD_AWS_ACCESS_KEY_ID#g api/src/data/config.prod.json
         sed -i.bak s#DOCS-PROD-AWS-SECRET-ACCESS-KEY#\$DOCS_PROD_AWS_SECRET_ACCESS_KEY#g api/src/data/config.prod.json
+        rm -rf ci-pipelines
         cd api
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy CONFIG_ID=prod --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-api | awk {'print \$2'})
@@ -71,10 +77,12 @@ steps:
     command:
       - |
         rm -rf docs && mkdir -p docs
+        rm -rf ci-pipelines && git clone https://github.com/iotaledger/ci-pipelines.git
         buildkite-agent artifact download "**/*.md" docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         npm i -g --unsafe-perm now
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.prod.json src/config.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.prod.json now.json
+        rm -rf ci-pipelines
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy CONFIG_ID=prod --force --docker -n documentation-web -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-web | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias \$NOW_SH_DEPLOYMENT_ID docs.iota.org
