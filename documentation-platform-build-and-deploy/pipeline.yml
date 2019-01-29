@@ -37,10 +37,10 @@ steps:
         fi
 
         npm i -g --unsafe-perm now
-        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.staging.json src/
+        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.staging.json src/config.dev.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.staging.json now.json
         rm -rf ci-pipelines
-        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy -e CONFIG_ID=staging --force --docker -n documentation-web -m BK_JOB_ID=$BUILDKITE_JOB_ID
+        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy --force --docker -n documentation-web -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-web | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias \$NOW_SH_DEPLOYMENT_ID docs.iota.works
     plugins:
