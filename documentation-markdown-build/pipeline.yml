@@ -3,13 +3,17 @@ steps:
     command: 
       - |
         rm -rf ci-pipelines
+        rm -rf artifact-documentation-markdown && mkdir -p artifact-documentation-markdown
+        mv * artifact-documentation-markdown
+        cd artifact-documentation-markdown
+        tar xvfz ../documentation-markdown.tgz .
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "busybox"
     agents:
       queue: dev
     artifact_paths:
-      - "**/*"
+      - "documentation-markdown.tgz"
 
   - wait
 
