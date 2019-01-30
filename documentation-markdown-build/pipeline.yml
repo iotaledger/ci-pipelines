@@ -4,7 +4,7 @@ steps:
       - |
         rm -rf ci-pipelines
         rm -rf .git
-        tar xvfz documentation-markdown.tgz .
+        tar cvfz documentation-markdown.tgz .
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "busybox"
