@@ -3,33 +3,34 @@ steps:
     command:
       - |
         npm i -g --unsafe-perm now
-#        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.staging.json api/src/data/
-#        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.staging.json api/now.json
-        cp api/src/data/config.template.json api/src/data/config.staging.json
-#        sed -i.bak s#DOCS-STAGING-AWS-ACCESS-KEY-ID#\$DOCS_STAGING_AWS_ACCESS_KEY_ID#g api/src/data/config.staging.json
-#        sed -i.bak s#DOCS-STAGING-AWS-SECRET-ACCESS-KEY#\$DOCS_STAGING_AWS_SECRET_ACCESS_KEY#g api/src/data/config.staging.json
+#        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/src/data/config.staging.json src/data/
+#        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/now.staging.json now.json
+        cd api 
+        cp src/data/config.template.json src/data/config.staging.json
+#        sed -i.bak s#DOCS-STAGING-AWS-ACCESS-KEY-ID#\$DOCS_STAGING_AWS_ACCESS_KEY_ID#g src/data/config.staging.json
+#        sed -i.bak s#DOCS-STAGING-AWS-SECRET-ACCESS-KEY#\$DOCS_STAGING_AWS_SECRET_ACCESS_KEY#g src/data/config.staging.json
 #        rm -rf ci-pipelines
 #        cd api
 #        jq -c '.dynamoDbConnection .dbTablePrefix = $newValue' --arg newVal '$DB_TABLE_PREFIX' config.staging.json > tmp.$$.json && mv tmp.$$.json config.staging.json
         
         # provider
-        jq -r '.provider = $provider' --arg provider $IRI_NODE api/src/data/config.template.json > api/src/data/config.staging.json
+        jq -r '.provider = $provider' --arg provider $IRI_NODE src/data/config.template.json > src/data/config.staging.json
 
         # dynamoDbConnection
-        jq -r '.dynamoDbConnection .accessKeyId = $accessKeyId' --arg accessKeyId $CERT_AWS_ACCESS_KEY_ID api/src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json api/src/data/config.staging.json
-        jq -r '.dynamoDbConnection .secretKeyId = $secretKeyId' --arg secretKeyId $CERT_AWS_SECRET_ACCESS_KEY api/src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json api/src/data/config.staging.json
-        jq -r '.dynamoDbConnection .dbTablePrefix = $dbTablePrefix' --arg dbTablePrefix $DB_TABLE_PREFIX api/src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json api/src/data/config.staging.json
+        jq -r '.dynamoDbConnection .accessKeyId = $accessKeyId' --arg accessKeyId $CERT_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json src/data/config.staging.json
+        jq -r '.dynamoDbConnection .secretKeyId = $secretKeyId' --arg secretKeyId $CERT_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json src/data/config.staging.json
+        jq -r '.dynamoDbConnection .dbTablePrefix = $dbTablePrefix' --arg dbTablePrefix $DB_TABLE_PREFIX src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json src/data/config.staging.json
 
-        jq -r '.s3Connection .bucketPrefix = $bucketPrefix' --arg bucketPrefix $BUCKET_PREFIX api/src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json api/src/data/config.staging.json
-        jq -r '.mainBucket = $mainBucket' --arg mainBucket $MAIN_BUCKET api/src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json api/src/data/config.staging.json
+        jq -r '.s3Connection .bucketPrefix = $bucketPrefix' --arg bucketPrefix $BUCKET_PREFIX src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json src/data/config.staging.json
+        jq -r '.mainBucket = $mainBucket' --arg mainBucket $MAIN_BUCKET src/data/config.staging.json > tmp.$$.json && mv tmp.$$.json src/data/config.staging.json
         
         # version change
-        jq -r '.version = $version' --arg version '2' api/now.json > tmp.$$.json && mv tmp.$$.json api/now.json
+        jq -r '.version = $version' --arg version '2' now.json > tmp.$$.json && mv tmp.$$.json now.json
 
         # name change
-        jq -r '.name = $name' --arg name 'certification-api' api/now.json > tmp.$$.json && mv tmp.$$.json api/now.json
+        jq -r '.name = $name' --arg name 'certification-api' now.json > tmp.$$.json && mv tmp.$$.json now.json
         # alias change
-        jq -r '.alias = $alias' --arg alias $ALIAS api/now.json > tmp.$$.json && mv tmp.$$.json api/now.json
+        jq -r '.alias = $alias' --arg alias $ALIAS now.json > tmp.$$.json && mv tmp.$$.json now.json
 
         now --token $ZEIT_TOKEN --team iota deploy -e CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID
 #        now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy -e CONFIG_ID=staging --build-env CONFIG_ID=staging --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
