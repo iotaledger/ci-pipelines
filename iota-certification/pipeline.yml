@@ -23,7 +23,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "node:8.12-stretch"
         environment:
-          - IRI_NODE=https://altnodes.iota.cafe
+          - IRI_NODE=https://altnodes.devnet.iota.org
           - CERT_STAGING_AWS_ACCESS_KEY_ID
           - CERT_STAGING_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=certification-staging-
