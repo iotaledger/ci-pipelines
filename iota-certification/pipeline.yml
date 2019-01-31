@@ -5,7 +5,7 @@ steps:
       - npm i -g --unsafe-perm now
       - cd api 
       - jq -r '.provider = \$provider' --arg provider \$IRI_NODE src/data/config.template.json > src/data/config.staging.json
-      - jq -r '.mwm = \$mwm' --argjson mwm '9' src/data/config.staging.json > src/data/config.staging.json
+      - jq -r '.mwm = \$mwm' --argjson mwm '9' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .region = \$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .accessKeyId = \$accessKeyId' --arg accessKeyId \$CERT_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$CERT_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
