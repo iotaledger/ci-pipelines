@@ -25,7 +25,7 @@ steps:
           - IRI_NODE=https://altnodes.iota.cafe
           - CERT_STAGING_AWS_ACCESS_KEY_ID
           - CERT_STAGING_AWS_SECRET_ACCESS_KEY
-          - DB_TABLE_PREFIX=certification-api-staging-
+          - DB_TABLE_PREFIX=certification-staging-
           - BUCKET_PREFIX=certification-staging-
           - MAIN_BUCKET=main
           - AUTH_DOMAIN=https://certification.iota.works
