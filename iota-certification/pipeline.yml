@@ -36,7 +36,7 @@ steps:
       queue: ops
 
   - wait: ~
-  continue_on_failure: true
+    continue_on_failure: true
 
   - name: admin-build-and-deploy-staging
     command:
@@ -61,7 +61,7 @@ steps:
       queue: ops
 
   - wait: ~
-  continue_on_failure: true
+    continue_on_failure: true
 
   - name: client-build-and-deploy-staging
     command:
