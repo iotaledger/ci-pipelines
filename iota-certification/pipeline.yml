@@ -34,6 +34,8 @@ steps:
     agents:
       queue: ops
 
+  - wait
+
   - name: admin-build-and-deploy-staging
     command:
       - apt update && apt install jq -y
@@ -52,6 +54,8 @@ steps:
           - ZEIT_TOKEN
     agents:
       queue: ops
+
+  - wait
 
   - name: client-build-and-deploy-staging
     command:
