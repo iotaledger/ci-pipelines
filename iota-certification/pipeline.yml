@@ -3,16 +3,9 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-#        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/src/data/config.staging.json src/data/
-#        cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/now.staging.json now.json
       - cd api 
       - cp src/data/config.template.json src/data/config.staging.json
-#        sed -i.bak s#DOCS-STAGING-AWS-ACCESS-KEY-ID#\$DOCS_STAGING_AWS_ACCESS_KEY_ID#g src/data/config.staging.json
-#        sed -i.bak s#DOCS-STAGING-AWS-SECRET-ACCESS-KEY#\$DOCS_STAGING_AWS_SECRET_ACCESS_KEY#g src/data/config.staging.json
-#        rm -rf ci-pipelines
-#        cd api
-#        jq -c '.dynamoDbConnection .dbTablePrefix = $newValue' --arg newVal '$DB_TABLE_PREFIX' config.staging.json > tmp.json && mv tmp.json config.staging.json
-        
+
         # provider
       - jq -r '.provider = \$provider' --arg provider \$IRI_NODE src/data/config.template.json > src/data/config.staging.json
 
@@ -56,4 +49,4 @@ steps:
 #          - CONFIG_ID=staging
 
     agents:
-      queue: aws-nano
+      queue: ops
