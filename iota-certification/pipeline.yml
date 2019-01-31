@@ -4,47 +4,72 @@ steps:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
       - cd api 
-
-        # provider
       - jq -r '.provider = \$provider' --arg provider \$IRI_NODE src/data/config.template.json > src/data/config.staging.json
-
-        # dynamoDbConnection
       - jq -r '.dynamoDbConnection .region = \$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.dynamoDbConnection .accessKeyId = \$accessKeyId' --arg accessKeyId \$CERT_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.dynamoDbConnection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$CERT_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .accessKeyId = \$accessKeyId' --arg accessKeyId \$CERT_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$CERT_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .dbTablePrefix = \$dbTablePrefix' --arg dbTablePrefix \$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-
-       # S3 
       - jq -r '.s3Connection .region = \$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.s3Connection .accessKeyId = \$accessKeyId' --arg accessKeyId \$CERT_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.s3Connection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$CERT_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.s3Connection .accessKeyId = \$accessKeyId' --arg accessKeyId \$CERT_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.s3Connection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$CERT_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.s3Connection .bucketPrefix = \$bucketPrefix' --arg bucketPrefix \$BUCKET_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      
-       # main
       - jq -r '.mainBucket = \$mainBucket' --arg mainBucket \$MAIN_BUCKET src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.authenticateDomain = \$authenticateDomain' --arg authenticateDomain \$AUTH_DOMAIN src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-
-        # name change
       - jq -r '.name = \$name' --arg name 'certification-api' now.json > tmp.json && mv tmp.json now.json
-        # alias change
       - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
-
-      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
-
+      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
-         environment:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: "node:8.12-stretch"
+        environment:
           - IRI_NODE=https://altnodes.iota.cafe
-          - CERT_AWS_ACCESS_KEY_ID
-          - CERT_AWS_SECRET_ACCESS_KEY
+          - CERT_STAGING_AWS_ACCESS_KEY_ID
+          - CERT_STAGING_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=certification-api-staging-
           - BUCKET_PREFIX=certification-staging-
           - MAIN_BUCKET=main
           - AUTH_DOMAIN=https://certification.iota.works
           - ALIAS=certification-api.iota.works
           - ZEIT_TOKEN
-#          - CONFIG_ID=staging
-
     agents:
       queue: ops
+
+  - name: admin-build-and-deploy-staging
+    command:
+      - apt update && apt install jq -y
+      - npm i -g --unsafe-perm now
+      - cd admin
+      - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$IRI_NODE public/data/config.template.json > public/data/config.staging.json
+      - jq -r '.name = \$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
+      - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
+      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: "node:8.12-stretch"
+        environment:
+          - IRI_NODE=https://altnodes.iota.cafe
+          - ALIAS=certification-admin.iota.works
+          - ZEIT_TOKEN
+    agents:
+      queue: ops
+
+  - name: client-build-and-deploy-staging
+    command:
+      - apt update && apt install jq -y
+      - npm i -g --unsafe-perm now
+      - cd client
+      - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$IRI_NODE public/data/config.template.json > public/data/config.staging.json
+      - jq -r '.name = \$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
+      - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
+      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: "node:8.12-stretch"
+        environment:
+          - IRI_NODE=https://altnodes.iota.cafe
+          - ALIAS=certification.iota.works
+          - ZEIT_TOKEN
+    agents:
+      queue: ops
+
+
