@@ -31,7 +31,7 @@ steps:
       - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
 
 #      - now --token \$ZEIT_TOKEN --team iota deploy -e CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID
-      - now --team iota alias $(now --token \$_ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS --token \$ZEIT_TOKEN
+      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$_ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
@@ -49,4 +49,4 @@ steps:
 #          - CONFIG_ID=staging
 
     agents:
-      queue: ops
+      queue: aws-nano
