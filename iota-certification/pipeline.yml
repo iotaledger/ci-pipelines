@@ -4,7 +4,6 @@ steps:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
       - cd api 
-      - cp src/data/config.template.json src/data/config.staging.json
 
         # provider
       - jq -r '.provider = \$provider' --arg provider \$IRI_NODE src/data/config.template.json > src/data/config.staging.json
@@ -12,13 +11,13 @@ steps:
         # dynamoDbConnection
       - jq -r '.dynamoDbConnection .region = \$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .accessKeyId = \$accessKeyId' --arg accessKeyId \$CERT_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.dynamoDbConnection .secretAcessKey = \$secretAcessKey' --arg secretAcessKey \$CERT_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$CERT_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .dbTablePrefix = \$dbTablePrefix' --arg dbTablePrefix \$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
 
        # S3 
       - jq -r '.s3Connection .region = \$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.s3Connection .accessKeyId = \$accessKeyId' --arg accessKeyId \$CERT_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.s3Connection .secretAcessKey = \$secretAcessKey' --arg secretAcessKey \$CERT_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.s3Connection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$CERT_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.s3Connection .bucketPrefix = \$bucketPrefix' --arg bucketPrefix \$BUCKET_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       
        # main
@@ -30,7 +29,6 @@ steps:
         # alias change
       - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
 
-#      - now --token \$ZEIT_TOKEN --team iota deploy -e CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID
       - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
 
     plugins:
@@ -49,4 +47,4 @@ steps:
 #          - CONFIG_ID=staging
 
     agents:
-      queue: aws-nano
+      queue: ops
