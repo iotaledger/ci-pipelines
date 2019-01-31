@@ -44,7 +44,7 @@ steps:
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
       - jq -r '.name = \$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
       - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
-      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GIT_TOKEN=\$GITHUB_TOKEN -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\$GIT_TOKEN -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "node:8.12-stretch"
@@ -66,7 +66,7 @@ steps:
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
       - jq -r '.name = \$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
       - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
-      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GIT_TOKEN=\$GITHUB_TOKEN -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+      - now --token \$ZEIT_TOKEN --team iota alias $(now --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\$GIT_TOKEN -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "node:8.12-stretch"
