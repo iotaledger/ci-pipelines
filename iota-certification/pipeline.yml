@@ -96,7 +96,7 @@ steps:
       - jq -r '.s3Connection .bucketPrefix = \$bucketPrefix' --arg bucketPrefix \$BUCKET_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.mainBucket = \$mainBucket' --arg mainBucket \$MAIN_BUCKET src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.authenticateDomain = \$authenticateDomain' --arg authenticateDomain \$AUTH_DOMAIN src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - jq -r '.draftCertificates = \$draftCertificates' --arg draftCertificates 'false' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.draftCertificates = \$draftCertificates' --argjson draftCertificates 'false' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.name = \$name' --arg name 'certification-api' now.json > tmp.json && mv tmp.json now.json
 #      - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
       - now --token \$ZEIT_TOKEN --team iota alias $(now --regions sfo --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
