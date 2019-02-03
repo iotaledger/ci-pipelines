@@ -144,9 +144,6 @@ client_staging () {
 }
 
 client_prod () {
-  echo "  - block: \"Deploy LIVE\""
-  echo "    prompt: \"Deploy this build to production?\""
-
   echo "  - name: \"client-build-and-deploy-prod\""
   echo "    command:
       - apt update && apt install jq -y
