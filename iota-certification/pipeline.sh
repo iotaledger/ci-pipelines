@@ -37,7 +37,7 @@ api_staging () {
           - AUTH_DOMAIN=https://certification.iota.works
           - ALIAS=certification-api.iota.works
           - ZEIT_TOKEN" 
-  echo "    agent:
+  echo "    agents:
       queue: aws-nano"
 }
 
@@ -74,7 +74,7 @@ api_prod () {
           - AUTH_DOMAIN=https://certification.iota.org
           - ALIAS=certification-api.iota.org
           - ZEIT_TOKEN"
-  echo "    agent:
+  echo "    agents:
       queue: aws-nano"
 }
 
@@ -97,7 +97,7 @@ admin_staging () {
           - ALIAS=certification-admin.iota.works
           - ZEIT_TOKEN
           - GIT_TOKEN"
-  echo "    agent:
+  echo "    agents:
       queue: aws-nano"    
 }
 
@@ -118,7 +118,7 @@ admin_prod () {
                   - ALIAS=certification-admin.iota.org
                   - ZEIT_TOKEN
                   - GIT_TOKEN"
-  echo "    agent:
+  echo "    agents:
             queue: aws-nano"
 }
 
@@ -139,7 +139,7 @@ client_staging () {
                   - ALIAS=certification.iota.works
                   - ZEIT_TOKEN
                   - GIT_TOKEN"
-  echo "    agent:
+  echo "    agents:
             queue: aws-nano"
 }
 
@@ -163,7 +163,7 @@ client_prod () {
           - ALIAS=certification.iota.org
           - ZEIT_TOKEN
           - GIT_TOKEN"
-  echo "    agent:
+  echo "    agents:
       queue: aws-nano"
 }
 
