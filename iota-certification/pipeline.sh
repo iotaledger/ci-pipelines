@@ -7,23 +7,23 @@ echo "steps:"
 api_staging () {
   echo "  - name: \"api-build-and-deploy-staging\""
   echo "    command:
-            - apt update && apt install jq -y
-            - npm i -g --unsafe-perm now
-            - cd api 
-            - jq -r '.provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.staging.json
-            - jq -r '.mwm = \\\$mwm' --argjson mwm '9' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.s3Connection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.s3Connection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.s3Connection .bucketPrefix = \\\$bucketPrefix' --arg bucketPrefix \\\$BUCKET_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.mainBucket = \\\$mainBucket' --arg mainBucket \\\$MAIN_BUCKET src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.authenticateDomain = \\\$authenticateDomain' --arg authenticateDomain \\\$AUTH_DOMAIN src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-            - jq -r '.name = \\\$name' --arg name 'certification-api' now.json > tmp.json && mv tmp.json now.json
-            - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
+              - apt update && apt install jq -y
+              - npm i -g --unsafe-perm now
+              - cd api 
+              - jq -r '.provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.staging.json
+              - jq -r '.mwm = \\\$mwm' --argjson mwm '9' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.s3Connection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.s3Connection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.s3Connection .bucketPrefix = \\\$bucketPrefix' --arg bucketPrefix \\\$BUCKET_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.mainBucket = \\\$mainBucket' --arg mainBucket \\\$MAIN_BUCKET src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.authenticateDomain = \\\$authenticateDomain' --arg authenticateDomain \\\$AUTH_DOMAIN src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+              - jq -r '.name = \\\$name' --arg name 'certification-api' now.json > tmp.json && mv tmp.json now.json
+              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugin:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
@@ -44,23 +44,23 @@ api_staging () {
 api_prod () {
   echo "  - name: \"api-build-and-deploy-prod\""
   echo "    command:
-            - apt update && apt install jq -y
-            - npm i -g --unsafe-perm now
-            - cd api 
-            - jq -r '.provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.prod.json
-            - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.s3Connection .region = \\\$region' --arg region 'eu-central-1' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.s3Connection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.s3Connection .bucketPrefix = \\\$bucketPrefix' --arg bucketPrefix \\\$BUCKET_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.mainBucket = \\\$mainBucket' --arg mainBucket \\\$MAIN_BUCKET src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.authenticateDomain = \\\$authenticateDomain' --arg authenticateDomain \\\$AUTH_DOMAIN src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.draftCertificates = \\\$draftCertificates' --argjson draftCertificates 'false' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-            - jq -r '.name = \\\$name' --arg name 'certification-api' now.json > tmp.json && mv tmp.json now.json
-            - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
+              - apt update && apt install jq -y
+              - npm i -g --unsafe-perm now
+              - cd api 
+              - jq -r '.provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.prod.json
+              - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.s3Connection .region = \\\$region' --arg region 'eu-central-1' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.s3Connection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.s3Connection .bucketPrefix = \\\$bucketPrefix' --arg bucketPrefix \\\$BUCKET_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.mainBucket = \\\$mainBucket' --arg mainBucket \\\$MAIN_BUCKET src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.authenticateDomain = \\\$authenticateDomain' --arg authenticateDomain \\\$AUTH_DOMAIN src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.draftCertificates = \\\$draftCertificates' --argjson draftCertificates 'false' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+              - jq -r '.name = \\\$name' --arg name 'certification-api' now.json > tmp.json && mv tmp.json now.json
+              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
   echo "    plugin:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
@@ -82,14 +82,14 @@ api_prod () {
 admin_staging () {
   echo "  - name: \"admin-build-and-deploy-staging\""
   echo "    command:
-            - apt update && apt install jq -y
-            - npm i -g --unsafe-perm now
-            - cd admin
-            - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
-            - jq -r '.tangleExplorer .transactions = \\\$transactions' --arg transactions 'https://devnet.thetangle.org/transaction/:transactionHash' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
-            - jq -r '.tangleExplorer .bundles = \\\$bundles' --arg bundles 'https://devnet.thetangle.org/bundle/:bundleHash' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
-            - jq -r '.name = \\\$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
-            - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
+              - apt update && apt install jq -y
+              - npm i -g --unsafe-perm now
+              - cd admin
+              - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
+              - jq -r '.tangleExplorer .transactions = \\\$transactions' --arg transactions 'https://devnet.thetangle.org/transaction/:transactionHash' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
+              - jq -r '.tangleExplorer .bundles = \\\$bundles' --arg bundles 'https://devnet.thetangle.org/bundle/:bundleHash' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
+              - jq -r '.name = \\\$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
+              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
   echo "    plugin:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
@@ -105,12 +105,12 @@ admin_staging () {
 admin_prod () {
   echo "  - name: \"admin-build-and-deploy-prod\""
   echo "    command:
-            - apt update && apt install jq -y
-            - npm i -g --unsafe-perm now
-            - cd admin
-            - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
-            - jq -r '.name = \\\$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
-            - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
+              - apt update && apt install jq -y
+              - npm i -g --unsafe-perm now
+              - cd admin
+              - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
+              - jq -r '.name = \\\$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
+              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
   echo "    plugin:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
@@ -126,12 +126,12 @@ admin_prod () {
 client_staging () {
   echo "  - name: \"client-build-and-deploy-staging\""
   echo "    command:
-            - apt update && apt install jq -y
-            - npm i -g --unsafe-perm now
-            - cd client
-            - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
-            - jq -r '.name = \\\$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
-            - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
+              - apt update && apt install jq -y
+              - npm i -g --unsafe-perm now
+              - cd client
+              - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
+              - jq -r '.name = \\\$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
+              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugin:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
@@ -150,12 +150,12 @@ client_prod () {
 
   echo "  - name: \"client-build-and-deploy-prod\""
   echo "    command:
-            - apt update && apt install jq -y
-            - npm i -g --unsafe-perm now
-            - cd client
-            - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
-            - jq -r '.name = \\\$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
-            - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
+              - apt update && apt install jq -y
+              - npm i -g --unsafe-perm now
+              - cd client
+              - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
+              - jq -r '.name = \\\$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
+              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
   echo "    plugin:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
