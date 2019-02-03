@@ -33,7 +33,7 @@ steps:
           - ALIAS=certification-api.iota.works
           - ZEIT_TOKEN
     agents:
-      queue: ops
+      queue: aws-medium
 
   - name: admin-build-and-deploy-staging
     command:
@@ -55,7 +55,7 @@ steps:
           - ZEIT_TOKEN
           - GIT_TOKEN
     agents:
-      queue: ops
+      queue: aws-medium
 
   - name: client-build-and-deploy-staging
     command:
@@ -75,7 +75,7 @@ steps:
           - ZEIT_TOKEN
           - GIT_TOKEN
     agents:
-      queue: ops
+      queue: aws-medium
 
   - block: "Deploy LIVE"
     prompt: "Deploy this build to production?"
@@ -114,7 +114,7 @@ steps:
           - ALIAS=certification-api.iota.org
           - ZEIT_TOKEN
     agents:
-      queue: ops
+      queue: aws-medium
 
   - name: admin-build-and-deploy-prod
     command:
@@ -136,7 +136,7 @@ steps:
           - ZEIT_TOKEN
           - GIT_TOKEN
     agents:
-      queue: ops
+      queue: aws-medium
 
   - name: client-build-and-deploy-prod
     command:
@@ -156,4 +156,4 @@ steps:
           - ZEIT_TOKEN
           - GIT_TOKEN
     agents:
-      queue: ops
+      queue: aws-medium
