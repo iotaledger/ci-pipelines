@@ -6,8 +6,9 @@ steps:
       - 'docker tag iotacafe/trinity-mobile-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER iotacafe/trinity-mobile-ci:latest'
       - 'docker push iotacafe/trinity-mobile-ci:latest'
     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "docker:latest"
+         shell: "/bin/sh -e -c"
          mounts:
           - /var/run/docker.sock:/var/run/docker.sock
           - /conf/docker/.docker:$HOME/.docker
