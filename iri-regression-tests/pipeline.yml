@@ -116,8 +116,8 @@ steps:
   - wait
   - name: "Generate dynamic Aloe steps"
     command: 
-      - cd ci-pipelines/iri-regression-tests/
-      - ./aloe-steps-create.sh > /cache/aloe-steps.yml
+#      - cd ci-pipelines/iri-regression-tests/
+      - aloe-steps-create.sh > /cache/aloe-steps.yml
       - buildkite-agent pipeline upload < /cache/aloe-steps.yml
     agents:
       queue: ops
