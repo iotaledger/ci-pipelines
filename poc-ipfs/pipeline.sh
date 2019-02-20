@@ -23,7 +23,7 @@ api_staging () {
           - IRI_NODE=https://altnodes.devnet.iota.org:443
           - IPFS_NODE=https://ipfs.iota.cafe:443/api/v0
           - AUTH_TOKEN
-          - ALIAS=poc-ipfs-api.iota.works
+          - ALIAS=ipfs-api.iota.works
           - ZEIT_TOKEN" 
   echo "    agents:
       queue: aws-nano"
