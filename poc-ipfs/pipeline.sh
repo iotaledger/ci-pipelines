@@ -14,7 +14,7 @@ api_staging () {
       - jq -r '.node .mwm = \\\$mwm' --argjson mwm '9' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.ipfs .provider = \\\$provider' --arg provider \\\$IPFS_NODE src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.ipfs .token = \\\$token' --arg token \\\$AUTH_TOKEN src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.seed = \\\$seed' --arg seed '\\\$(cat /dev/urandom |tr -dc A-Z9|head -c${1:-81})' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.seed = \\\$seed' --arg seed \\\$(cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}) src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
