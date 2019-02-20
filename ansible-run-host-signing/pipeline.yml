@@ -11,9 +11,10 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: aws-medium
+      queue: aws-nano
 
   - wait: ~
+    continue_on_failure: true
 
   - name: Signing spamnet hosts
     command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit spamnet
@@ -27,10 +28,11 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: aws-medium
+      queue: aws-nano
 
 #  - block: "Push to devnet"
   - wait: ~
+    continue_on_failure: true
 
   - name: Signing devnet hosts
     command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit devnet
@@ -44,10 +46,11 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: aws-medium
+      queue: aws-nano
 
 #  - block: "Push to mainnet"
   - wait: ~
+    continue_on_failure: true
   
   - name: Signing mainnet hosts
     command: ansible-playbook -i hosts.ini playbooks/ssh-host-sign.yml --limit mainnet
@@ -61,4 +64,4 @@ steps:
           - DOCKER_VAULT_TOKEN
           - HOST_TOKEN
     agents:
-      queue: aws-medium
+      queue: aws-nano
