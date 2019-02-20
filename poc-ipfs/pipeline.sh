@@ -21,7 +21,7 @@ api_staging () {
         image: \"node:8.12-stretch\"
         environment:
           - IRI_NODE=https://altnodes.devnet.iota.org:443
-          - IPFS_NODE=https://ipfs.iota.cafe:443/api/v0
+          - IPFS_NODE=https://ipfs.iota.cafe:443/api/v0/
           - AUTH_TOKEN
           - ALIAS=ipfs-api.iota.works
           - ZEIT_TOKEN" 
