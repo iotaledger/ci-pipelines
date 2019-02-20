@@ -6,7 +6,6 @@ echo "steps:"
 
 api_staging () {
   echo "  - name: \"api-build-and-deploy-staging\""
-   cat /dev/urandom |tr -dc A-Z9|head -c${1:-81} 
   echo "    command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
