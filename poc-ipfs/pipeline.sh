@@ -42,7 +42,7 @@ client_staging () {
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
                 environment:
-                  - API_ENDPOINT=https://poc-ipfs-api.iota.works
+                  - API_ENDPOINT=https://ipfs-api.iota.works
                   - ALIAS=ipfs.iota.works
                   - ZEIT_TOKEN
                   - GIT_TOKEN"
