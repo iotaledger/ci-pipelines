@@ -124,6 +124,7 @@ steps:
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
 #      - jq -r '.tangleExplorer .transactions = \$transactions' --arg transactions 'https://devnet.thetangle.org/transaction/:transactionHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
 #      - jq -r '.tangleExplorer .bundles = \$bundles' --arg bundles 'https://devnet.thetangle.org/bundles/:bundleHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-5' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.name = \$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
 #      - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
       - now --token \$ZEIT_TOKEN --team iota alias $(now --regions sfo --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\$GIT_TOKEN -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
@@ -144,6 +145,7 @@ steps:
       - npm i -g --unsafe-perm now
       - cd client
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
+      - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-4' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.name = \$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
 #      - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
       - now --token \$ZEIT_TOKEN --team iota alias $(now --regions sfo --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\$GIT_TOKEN -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
