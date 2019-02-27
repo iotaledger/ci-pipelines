@@ -11,7 +11,6 @@ api_staging () {
       - npm i -g --unsafe-perm now
       - cd api 
       - jq -r '.eventBrite .oauthToken = \\\$oauthToken' --arg oauthToken \\\$OAUTH_TOKEN src/data/config.template.json > src/data/config.staging.json
-#      - jq -r '.node .mwm = \\\$mwm' --argjson mwm '9' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
