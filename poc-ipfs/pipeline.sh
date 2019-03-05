@@ -56,7 +56,7 @@ api_prod () {
       - npm i -g --unsafe-perm now
       - cd api 
       - jq -r '.node .provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.prod.json
-      - jq -r '.node .mwm = \\\$mwm' --argjson mwm '9' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.node .mwm = \\\$mwm' --argjson mwm '14' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.ipfs .provider = \\\$provider' --arg provider \\\$IPFS_NODE src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.ipfs .token = \\\$token' --arg token \\\$AUTH_TOKEN src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.seed = \\\$seed' --arg seed \\\$(cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}) src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
@@ -65,7 +65,7 @@ api_prod () {
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"node:8.12-stretch\"
         environment:
-          - IRI_NODE=https://altnodes.devnet.iota.org:443
+          - IRI_NODE=https://nodes.iota.cafe:443
           - IPFS_NODE=https://ipfs.iota.cafe:443/api/v0/
           - AUTH_TOKEN
           - ALIAS=ipfs-api.iota.org
@@ -81,6 +81,9 @@ client_prod () {
       - npm i -g --unsafe-perm now
       - cd client
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
+      - jq -r '.tangleExplorer .transactions = \\\$transactions' --arg transactions 'https://thetangle.org/transaction/:transactionHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.tangleExplorer .bundles = \\\$bundles' --arg bundles 'https://thetangle.org/bundle/:bundleHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-3' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
