@@ -49,7 +49,7 @@ steps:
           - ZEIT_TOKEN
           - SITE_ROOT=https://training.iota.works
           - API_ENDPOINT=https://training-api.works
-          - GOOGLE_TAG_ID=
+          - GOOGLE_TAG_ID="null"
           - GOOGLE_MAPS_KEY
           - GIT_TOKEN
     agents:
