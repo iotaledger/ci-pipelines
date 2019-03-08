@@ -33,7 +33,7 @@ steps:
       - npm i -g --unsafe-perm now
       - jq -r '.siteRoot = \$siteRoot' --arg siteRoot \$SITE_ROOT src/config.template.json > src/config.staging.json
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
-      - jq -r 'del(.hotJarId)' > tmp.json && mv tmp.json src/config.staging.json
+      - jq -r 'del(.hotJarId)' src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId \$GOOGLE_TAG_ID src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r '.googleMapsKey = \$googleMapsKey' --arg googleMapsKey \$GOOGLE_MAPS_KEY src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r '.name = \$name' --arg name 'iota-training' now.json > tmp.json && mv tmp.json now.json
