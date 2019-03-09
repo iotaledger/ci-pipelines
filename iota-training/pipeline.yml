@@ -50,8 +50,10 @@ steps:
           - SITE_ROOT=https://training.iota.works
           - API_ENDPOINT=https://training-api.works
           - GOOGLE_TAG_ID="null"
+          - ALIAS=training.iota.works
           - GOOGLE_MAPS_KEY
           - GIT_TOKEN
+
     agents:
       queue: aws-nano
 
