@@ -37,7 +37,7 @@ steps:
       - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId \$GOOGLE_TAG_ID src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r '.googleMapsKey = \$googleMapsKey' --arg googleMapsKey \$GOOGLE_MAPS_KEY src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r '.name = \$name' --arg name 'iota-training' now.json > tmp.json && mv tmp.json now.json
-      - git clone git@github.com:iotaledger/iota-training.git docs 
+      - git clone \$GIT_TOKEN@github.com:iotaledger/iota-training.git docs 
       - rm -r docs/.git*
       - now --token \$ZEIT_TOKEN --team iota alias $(now --regions sfo --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
 
