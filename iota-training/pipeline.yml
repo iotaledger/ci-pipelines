@@ -39,7 +39,7 @@ steps:
       - jq -r '.name = \$name' --arg name 'iota-training' now.json > tmp.json && mv tmp.json now.json
       - git clone https://\$GIT_TOKEN@github.com/iotaledger/iota-training docs 
       - rm -r docs/.git*
-      - ls -al && ls -al docs/
+      - ls -al && ls -al ./docs/site-settings/assets
       - now --token \$ZEIT_TOKEN --team iota alias $(now --regions sfo --token \$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
 
     plugins:
