@@ -30,6 +30,7 @@ steps:
   - name: web-build-and-deploy-staging
     command:
       - apt update && apt install jq -y
+      - npm cache clean --force 
       - npm i -g --unsafe-perm now
       - jq -r '.siteRoot = \$siteRoot' --arg siteRoot \$SITE_ROOT src/config.template.json > src/config.staging.json
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
