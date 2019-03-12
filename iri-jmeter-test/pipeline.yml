@@ -1,0 +1,109 @@
+steps:
+  - name: "Cleanup /cache mount"
+    command:
+      - rm -rf /cache/*
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "busybox"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - wait
+
+  - name: "Clone TIAB"
+    command:
+      - clone --depth 1 https://github.com/iotaledger/tiab.git /cache/tiab
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "alpine/git"
+        shell: false
+        mounts:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - wait
+
+  - name: "Install TIAB dependencies"
+    command:
+      - pip install virtualenv
+      - cd /cache/tiab
+      - virtualenv venv
+      - source venv/bin/activate
+      - pip install -r requirements.txt
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "python:2-alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - wait
+
+  - name: "Run TIAB against config.yml files"
+    command:
+      - cd /cache/tiab
+      - source venv/bin/activate
+      - cd /cache/iri/python-regression
+      - |
+        ERROR=0
+        for machine_dir in machine1; do
+          mkdir -p /cache/\$machine_dir/
+          python /cache/tiab/create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -n buildkite -d
+          if [ \$? -ne 0 ]; then
+            ERROR=1
+            python /workdir/ci-pipelines/iri-regression-tests/print-logs.py /cache/\$machine_dir/output.yml
+          fi
+        if [ \$ERROR -ne 0 ]; then
+          exit 1
+        fi
+        done
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "python:2-alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf:/conf:ro
+
+  - wait
+
+  - name: "Generate dynamic jmeter steps"
+    command: 
+      - cd iri-jmeter-tests && ./jmeter-steps-create.sh > /cache/jmeter-steps.yml
+      - buildkite-agent pipeline upload < /cache/jmeter-steps.yml
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "busybox"
+        shell: /bin/sh -c
+        mount-buildkite-agent: true
+        mounts:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+          - /etc/ssl/certs:/etc/ssl/certs:ro
+
+  - wait: ~
+    continue_on_failure: true
+
+  - name: "Teardown cluster"
+    command:
+      - cd /cache/tiab
+      - source venv/bin/activate
+      - if [ -z "$KEEP_CLUSTER" ]; then python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite; fi
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "python:2-alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf:/conf:ro
