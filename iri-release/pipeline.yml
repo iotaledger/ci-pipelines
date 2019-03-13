@@ -2,14 +2,14 @@ steps:
   - name: iri-release-test
     command: 
       - apt install jq -y 
-      - VERSION=$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
-      - VERSION=${VERSION/DEV*/RELEASE}
-      - echo $VERSION
-      - mvn versions:set -DnewVersion=$VERSION
+      - VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
+      - VERSION=\${VERSION/DEV*/RELEASE}
+      - echo \$VERSION
+      - mvn versions:set -DnewVersion=\$VERSION
       - mvn integration-test -Dlogging-level=INFO
-      - JACOCO_V=$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
+      - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
       - export _JAVA_OPTIONS="$_JAVA_OPTIONS -javaagent:$HOME/.m2/repository/org/jacoco/org.jacoco.agent/$JACOCO_V/org.jacoco.agent-$JACOCO_V-runtime.jar=destfile=$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true"
-      - echo $_JAVA_OPTIONS
+      - echo \$_JAVA_OPTIONS
       - git clone https://github.com/iotaledger/iri-regression-tests.git
       - cd iri-regression-tests
       - git checkout -f master
@@ -17,7 +17,7 @@ steps:
       - tar -xzf testnet_files.tgz
       - mkdir iri
       - cp -rf ../target iri/target
-      - bash run_all_stable_tests.sh $VERSION
+      - bash run_all_stable_tests.sh \$VERSION
       - cd ..
       - mvn jacoco:report
       - mvn package -Dlogging-level=INFO
