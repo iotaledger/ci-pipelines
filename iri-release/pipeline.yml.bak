@@ -1,0 +1,57 @@
+steps:
+  - name: set-release-major-metadata
+    command:
+      - buildkite-agent meta-data set "release-major" "1.6"
+      - echo release-major set to 1.6.0
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "docker:latest"
+         shell: "/bin/sh -e -c"
+         mount-buildkite-agent: true
+    agents:
+      queue: ops
+
+  - block: "Publish Release Candidate"
+    prompt: "Fill out the details for release"
+    fields: 
+      - text: "Minor Release Number"
+        key: "release-minor"
+        hint: "Only digits allowed. This will be carried forward."
+
+      - text: "Release Candidate Number"
+        key: "release-candidate-number"
+        hint: "Only digits allowed. This will be carried forward."
+
+  - name: "publish-release-candidate"
+    command:
+      - |
+        RELEASE_MAJOR=$(buildkite-agent meta-data get release-major)
+        RELEASE_MINOR=$(buildkite-agent meta-data get release-minor)
+        RELEASE_CANDIDATE_NUMBER=$(buildkite-agent meta-data get release-candidate-number)
+        echo Releasing $$RELEASE_MAJOR.$$RELEASE_MINOR-RC$$RELEASE_CANDIDATE_NUMBER
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "docker:latest"
+         shell: "/bin/sh -e -c"
+         mount-buildkite-agent: true
+    agents:
+      queue: ops
+
+
+  - block: "Publish Stable Release"
+
+  - name: "publish-stable-release"
+    command:
+      - |
+        RELEASE_MAJOR=$(buildkite-agent meta-data get release-major)
+        RELEASE_MINOR=$(buildkite-agent meta-data get release-minor)
+        RELEASE_CANDIDATE_NUMBER=$(buildkite-agent meta-data get release-candidate-number)
+        echo Releasing Stable $$RELEASE_MAJOR.$$RELEASE_MINOR-RELEASE
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "docker:latest"
+         shell: "/bin/sh -e -c"
+         mount-buildkite-agent: true
+    agents:
+      queue: ops
+

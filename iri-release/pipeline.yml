@@ -1,57 +1,40 @@
 steps:
-  - name: set-release-major-metadata
-    command:
-      - buildkite-agent meta-data set "release-major" "1.6"
-      - echo release-major set to 1.6.0
+  - name: iri-release-test
+    command: 
+      - apt install jq -y 
+      - VERSION=$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
+      - VERSION=${VERSION/DEV*/RELEASE}
+      - echo $VERSION
+      - mvn versions:set -DnewVersion=$VERSION
+      - mvn integration-test -Dlogging-level=INFO
+      - JACOCO_V=$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
+      - export _JAVA_OPTIONS="$_JAVA_OPTIONS -javaagent:$HOME/.m2/repository/org/jacoco/org.jacoco.agent/$JACOCO_V/org.jacoco.agent-$JACOCO_V-runtime.jar=destfile=$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true"
+#      - echo $_JAVA_OPTIONS
+      - git clone https://github.com/iotaledger/iri-regression-tests.git
+      - cd iri-regression-tests
+      - git checkout -f master
+      - curl -LO https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
+      - tar -xzf testnet_files.tgz
+      - mkdir iri
+#      - cp -rf ../target iri/target
+      - bash run_all_stable_tests.sh $VERSION
+      - cd ..
+      - mvn jacoco:report
+      - mvn package -Dlogging-level=INFO
+      - ls -alR
+#      - github-release "v1.2" 
+      - sha256sum target/*.jar*
+      - wget -O codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets[0].browser_download_url')
+      - java -jar codacy-coverage-reporter-assembly-latest.jar report -l Java -r target/site/jacoco/jacoco.xml
     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-         image: "docker:latest"
-         shell: "/bin/sh -e -c"
-         mount-buildkite-agent: true
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "maven:3.6.0-jdk-8"
+         always-pull: true
+         environment:
+          - GITHUB_RELEASE_ACCESS_TOKEN
+          - GITHUB_RELEASE_REPOSITORY="sadjy/iri"
+          - GITHUB_RELEASE_TAG="1.0"
+          - GITHUB_RELEASE_COMMIT="dev"
+      #    - GITHUB_RELEASE_PRERELEASE="..."
     agents:
-      queue: ops
-
-  - block: "Publish Release Candidate"
-    prompt: "Fill out the details for release"
-    fields: 
-      - text: "Minor Release Number"
-        key: "release-minor"
-        hint: "Only digits allowed. This will be carried forward."
-
-      - text: "Release Candidate Number"
-        key: "release-candidate-number"
-        hint: "Only digits allowed. This will be carried forward."
-
-  - name: "publish-release-candidate"
-    command:
-      - |
-        RELEASE_MAJOR=$(buildkite-agent meta-data get release-major)
-        RELEASE_MINOR=$(buildkite-agent meta-data get release-minor)
-        RELEASE_CANDIDATE_NUMBER=$(buildkite-agent meta-data get release-candidate-number)
-        echo Releasing $$RELEASE_MAJOR.$$RELEASE_MINOR-RC$$RELEASE_CANDIDATE_NUMBER
-    plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-         image: "docker:latest"
-         shell: "/bin/sh -e -c"
-         mount-buildkite-agent: true
-    agents:
-      queue: ops
-
-
-  - block: "Publish Stable Release"
-
-  - name: "publish-stable-release"
-    command:
-      - |
-        RELEASE_MAJOR=$(buildkite-agent meta-data get release-major)
-        RELEASE_MINOR=$(buildkite-agent meta-data get release-minor)
-        RELEASE_CANDIDATE_NUMBER=$(buildkite-agent meta-data get release-candidate-number)
-        echo Releasing Stable $$RELEASE_MAJOR.$$RELEASE_MINOR-RELEASE
-    plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-         image: "docker:latest"
-         shell: "/bin/sh -e -c"
-         mount-buildkite-agent: true
-    agents:
-      queue: ops
-
+      queue: aws-nano
