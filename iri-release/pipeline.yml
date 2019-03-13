@@ -3,7 +3,7 @@ steps:
     command: 
       - apt update && apt install jq -y 
       - VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
-      - VERSION=\${VERSION/DEV*/RELEASE}
+      - bash -c "VERSION=\${VERSION/DEV*/RELEASE}"
       - echo \$VERSION
       - mvn versions:set -DnewVersion=\$VERSION
       - mvn integration-test -Dlogging-level=INFO

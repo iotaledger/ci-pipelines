@@ -2,7 +2,7 @@ steps:
    - name: build-iri-oracle8
      command: 
         - mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version | tee -a build-iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.log
-#        - mvn versions:set -DnewVersion=$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')-$(git rev-parse --short $BUILDKITE_COMMIT)
+        - mvn versions:set -DnewVersion=$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
      plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
