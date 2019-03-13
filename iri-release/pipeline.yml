@@ -3,7 +3,7 @@ steps:
     command: 
       - apt update && apt install jq -y 
       - VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
-      - bash -c "VERSION=\${VERSION/DEV*/RELEASE}"
+      - VERSION=\${VERSION/DEV*/RELEASE}
       - echo \$VERSION
       - mvn versions:set -DnewVersion=\$VERSION
       - mvn integration-test -Dlogging-level=INFO
@@ -36,5 +36,6 @@ steps:
           - GITHUB_RELEASE_TAG="1.0"
           - GITHUB_RELEASE_COMMIT="dev"
       #    - GITHUB_RELEASE_PRERELEASE="..."
+         shell: ["/bin/bash", "-e", "-c"]
     agents:
       queue: aws-nano
