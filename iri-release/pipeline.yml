@@ -9,23 +9,23 @@ steps:
       - mvn integration-test -Dlogging-level=INFO
       - JACOCO_V=$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
       - export _JAVA_OPTIONS="$_JAVA_OPTIONS -javaagent:$HOME/.m2/repository/org/jacoco/org.jacoco.agent/$JACOCO_V/org.jacoco.agent-$JACOCO_V-runtime.jar=destfile=$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true"
-#      - echo $_JAVA_OPTIONS
+      - echo $_JAVA_OPTIONS
       - git clone https://github.com/iotaledger/iri-regression-tests.git
       - cd iri-regression-tests
       - git checkout -f master
       - curl -LO https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
       - tar -xzf testnet_files.tgz
       - mkdir iri
-#      - cp -rf ../target iri/target
+      - cp -rf ../target iri/target
       - bash run_all_stable_tests.sh $VERSION
       - cd ..
       - mvn jacoco:report
       - mvn package -Dlogging-level=INFO
       - ls -alR
 #      - github-release "v1.2" 
-      - sha256sum target/*.jar*
-      - wget -O codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets[0].browser_download_url')
-      - java -jar codacy-coverage-reporter-assembly-latest.jar report -l Java -r target/site/jacoco/jacoco.xml
+#      - sha256sum target/*.jar*
+#      - wget -O codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets[0].browser_download_url')
+#      - java -jar codacy-coverage-reporter-assembly-latest.jar report -l Java -r target/site/jacoco/jacoco.xml
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "maven:3.6.0-jdk-8"
