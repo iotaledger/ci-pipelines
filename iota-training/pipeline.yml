@@ -48,7 +48,7 @@ steps:
          environment:
           - ZEIT_TOKEN
           - SITE_ROOT=https://training.iota.works
-          - API_ENDPOINT=https://training-api.works
+          - API_ENDPOINT=https://training-api.iota.works
           - GOOGLE_TAG_ID="null"
           - ALIAS=training.iota.works
           - GOOGLE_MAPS_KEY
