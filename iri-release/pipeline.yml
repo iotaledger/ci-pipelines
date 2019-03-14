@@ -5,7 +5,7 @@ steps:
       - VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
       - VERSION=\${VERSION/DEV*/RELEASE}
       - echo \$VERSION
-      - mvn versions:set -DnewVersion=\$VERSION 
+      - mvn versions:set -DnewVersion=\$VERSION
       - mvn integration-test -Dlogging-level=INFO
       - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
       - export _JAVA_OPTIONS=-javaagent:\$HOME/.m2/repository/org/jacoco/org.jacoco.agent/\$JACOCO_V/org.jacoco.agent-\$JACOCO_V-runtime.jar=destfile=\$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
