@@ -76,8 +76,8 @@ steps:
          image: "node:8.12-stretch"
          environment:
           - ZEIT_TOKEN
-          - TRAIN_prod_AWS_ACCESS_KEY_ID
-          - TRAIN_prod_AWS_SECRET_ACCESS_KEY
+          - TRAIN_PROD_AWS_ACCESS_KEY_ID
+          - TRAIN_PROD_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=training-prod-
           - ALIAS=training-api.iota.org
           - OAUTH_TOKEN
