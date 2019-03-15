@@ -15,7 +15,7 @@ api_staging () {
       - jq -r '.ipfs .provider = \\\$provider' --arg provider \\\$IPFS_NODE src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.ipfs .token = \\\$token' --arg token \\\$AUTH_TOKEN src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.seed = \\\$seed' --arg seed \\\$(cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}) src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"node:8.12-stretch\"
@@ -36,7 +36,7 @@ client_staging () {
       - npm i -g --unsafe-perm now
       - cd client
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
-      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
@@ -60,7 +60,7 @@ api_prod () {
       - jq -r '.ipfs .provider = \\\$provider' --arg provider \\\$IPFS_NODE src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.ipfs .token = \\\$token' --arg token \\\$AUTH_TOKEN src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.seed = \\\$seed' --arg seed \\\$(cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}) src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"node:8.12-stretch\"
@@ -84,7 +84,7 @@ client_prod () {
       - jq -r '.tangleExplorer .transactions = \\\$transactions' --arg transactions 'https://thetangle.org/transaction/:transactionHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.tangleExplorer .bundles = \\\$bundles' --arg bundles 'https://thetangle.org/bundle/:bundleHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-3' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
-      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
                 image: \"node:8.12-stretch\"
