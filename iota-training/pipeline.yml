@@ -110,3 +110,5 @@ steps:
           - ALIAS=training.iota.org
           - GOOGLE_MAPS_KEY
           - GIT_TOKEN
+    agents:
+      queue: aws-nano
