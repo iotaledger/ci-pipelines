@@ -3,7 +3,8 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - cd api
+      - git clone https://github.com/iotaledger/documentation-platform.git
+      - cd documentation-platform/api
       - jq -r '.dynamoDbConnection .region = \$region' --arg region 'eu-central-1' src/data/config.template.json > src/data/config.staging.json
       - jq -r '.dynamoDbConnection .accessKeyId = \$accessKeyId' --arg accessKeyId \$TRAIN_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$TRAIN_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
@@ -29,13 +30,16 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
+      - mkdir docs && mv ./* docs/ 
+      - git clone https://github.com/iotaledger/documentation-platform.git
+      - mv docs documentation-platform/docs
+      - cd documentation-platform
       - jq -r '.siteRoot = \$siteRoot' --arg siteRoot \$SITE_ROOT src/config.template.json > src/config.staging.json
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r 'del(.hotJarId)' src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId \$GOOGLE_TAG_ID src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r '.googleMapsKey = \$googleMapsKey' --arg googleMapsKey \$GOOGLE_MAPS_KEY src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r '.name = \$name' --arg name 'iota-training' now.json > tmp.json && mv tmp.json now.json
-      - git clone https://\$GIT_TOKEN@github.com/iotaledger/iota-training docs 
       - rm -r docs/.git* && rm .gitignore
       - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS
 
@@ -62,7 +66,8 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - cd api
+      - git clone https://github.com/iotaledger/documentation-platform.git
+      - cd documentation-platform/api
       - jq -r '.dynamoDbConnection .region = \$region' --arg region 'eu-central-1' src/data/config.template.json > src/data/config.prod.json
       - jq -r '.dynamoDbConnection .accessKeyId = \$accessKeyId' --arg accessKeyId \$TRAIN_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.dynamoDbConnection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$TRAIN_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
@@ -88,13 +93,16 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
+      - mkdir docs && mv ./* docs/ 
+      - git clone https://github.com/iotaledger/documentation-platform.git
+      - mv docs documentation-platform/docs
+      - cd documentation-platform
       - jq -r '.siteRoot = \$siteRoot' --arg siteRoot \$SITE_ROOT src/config.template.json > src/config.prod.json
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
       - jq -r 'del(.hotJarId)' src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
       - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId \$GOOGLE_TAG_ID src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
       - jq -r '.googleMapsKey = \$googleMapsKey' --arg googleMapsKey \$GOOGLE_MAPS_KEY src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
       - jq -r '.name = \$name' --arg name 'iota-training' now.json > tmp.json && mv tmp.json now.json
-      - git clone https://\$GIT_TOKEN@github.com/iotaledger/iota-training docs 
       - rm -r docs/.git* && rm .gitignore
       - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS
 

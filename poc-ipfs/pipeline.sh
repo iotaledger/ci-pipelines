@@ -38,13 +38,13 @@ client_staging () {
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
-              https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-                image: \"node:8.12-stretch\"
-                environment:
-                  - API_ENDPOINT=https://ipfs-api.iota.works
-                  - ALIAS=ipfs.iota.works
-                  - ZEIT_TOKEN
-                  - GIT_TOKEN"
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: \"node:8.12-stretch\"
+        environment:
+          - API_ENDPOINT=https://ipfs-api.iota.works
+          - ALIAS=ipfs.iota.works
+          - ZEIT_TOKEN
+          - GIT_TOKEN"
   echo "    agents:
             queue: aws-nano"
 }
@@ -86,13 +86,13 @@ client_prod () {
       - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-3' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
-              https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-                image: \"node:8.12-stretch\"
-                environment:
-                  - API_ENDPOINT=https://ipfs-api.iota.org
-                  - ALIAS=ipfs.iota.org
-                  - ZEIT_TOKEN
-                  - GIT_TOKEN"
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: \"node:8.12-stretch\"
+        environment:
+          - API_ENDPOINT=https://ipfs-api.iota.org
+          - ALIAS=ipfs.iota.org
+          - ZEIT_TOKEN
+          - GIT_TOKEN"
   echo "    agents:
             queue: aws-nano"
 }
