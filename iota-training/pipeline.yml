@@ -30,10 +30,10 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - mkdir tmp && shopt -s extglob && mv !(tmp) tmp && mv tmp docs 
+      - rm -r ./*
       - git clone https://github.com/iotaledger/documentation-platform.git
-      - mv docs documentation-platform/docs
       - cd documentation-platform
+      - git clone https://\$GIT_TOKEN@github.com/iotaledger/iota-training docs
       - jq -r '.siteRoot = \$siteRoot' --arg siteRoot \$SITE_ROOT src/config.template.json > src/config.staging.json
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
       - jq -r 'del(.hotJarId)' src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
@@ -93,10 +93,10 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - mkdir tmp && shopt -s extglob && mv !(tmp) tmp && mv tmp docs
+      - rm -r ./*
       - git clone https://github.com/iotaledger/documentation-platform.git
-      - mv docs documentation-platform/docs
       - cd documentation-platform
+      - git clone https://\$GIT_TOKEN@github.com/iotaledger/iota-training docs
       - jq -r '.siteRoot = \$siteRoot' --arg siteRoot \$SITE_ROOT src/config.template.json > src/config.prod.json
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
       - jq -r 'del(.hotJarId)' src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
