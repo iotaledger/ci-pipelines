@@ -36,7 +36,7 @@ api_prod () {
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"node:8.12-stretch\"
         environment:
-          - IRI_NODE=https://nodes.iota.cafe:443
+          - IRI_NODE=https://altnodes.devnet.iota.org:443
           - ALIAS=eclass-api.iota.org
           - ZEIT_TOKEN
           - GIT_TOKEN"
@@ -57,6 +57,7 @@ client_staging () {
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"node:8.12-stretch\"
         environment:
+          - IRI_NODE=https://altnodes.devnet.iota.org:443
           - API_ENDPOINT=https://eclass-api.iota.works
           - ALIAS=eclass.iota.works
           - ZEIT_TOKEN
@@ -78,6 +79,7 @@ client_prod () {
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"node:8.12-stretch\"
         environment:
+          - IRI_NODE=https://altnodes.devnet.iota.org:443
           - API_ENDPOINT=https://eclass-api.iota.org
           - ALIAS=eclass.iota.org
           - ZEIT_TOKEN
