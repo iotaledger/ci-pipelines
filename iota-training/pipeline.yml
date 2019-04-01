@@ -30,7 +30,7 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - mkdir docs && mv ./* docs/ 
+      - mkdir tmp && mv ./* tmp/ && mv tmp docs 
       - git clone https://github.com/iotaledger/documentation-platform.git
       - mv docs documentation-platform/docs
       - cd documentation-platform
@@ -93,7 +93,7 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - mkdir docs && mv ./* docs/ 
+      - mkdir tmp && mv ./* tmp/ && mv tmp docs
       - git clone https://github.com/iotaledger/documentation-platform.git
       - mv docs documentation-platform/docs
       - cd documentation-platform
