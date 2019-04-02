@@ -2,12 +2,12 @@ steps:
   - name: iri-release-test
     command: 
       - apt update && apt install jq -y 
-      - VERSION=$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
-      - VERSION=${VERSION/DEV*/RELEASE}
-      - mvn versions:set -DnewVersion=$VERSION-test-$(shuf -i 0-255 -n 1) --log-file mvn-version.log
+      - VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
+      - VERSION=\${VERSION/DEV*/RELEASE}
+      - mvn versions:set -DnewVersion=\$VERSION-test-$(shuf -i 0-255 -n 1) --log-file mvn-version.log
       - mvn package -Dlogging-level=INFO --log-file mvn-package.log
-      - JACOCO_V=$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
-      - export _JAVA_OPTIONS=-javaagent:$HOME/.m2/repository/org/jacoco/org.jacoco.agent/$JACOCO_V/org.jacoco.agent-$JACOCO_V-runtime.jar=destfile=$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
+      - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
+      - export _JAVA_OPTIONS=-javaagent:\$HOME/.m2/repository/org/jacoco/org.jacoco.agent/\$JACOCO_V/org.jacoco.agent-\$JACOCO_V-runtime.jar=destfile=\$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
       - git clone https://github.com/iotaledger/iri-regression-tests.git
       - cd iri-regression-tests
       - git checkout -f master
@@ -19,8 +19,8 @@ steps:
       - mvn jacoco:report --log-file jacoco-report.log
       - wget https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -O github-release
       - chmod +x github-release
-      - export GITHUB_RELEASE_TAG=$VERSION
-      - ./github-release $VERSION iri-*.jar
+      - export GITHUB_RELEASE_TAG=\$VERSION
+      - ./github-release \$VERSION iri-*.jar
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
