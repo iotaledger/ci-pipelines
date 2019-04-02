@@ -2,40 +2,38 @@ steps:
   - name: iri-release-test
     command: 
       - apt update && apt install jq -y 
-      - VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
-      - VERSION=\${VERSION/DEV*/RELEASE}
-      - echo \$VERSION
-      - mvn versions:set -DnewVersion=\$VERSION
-      - mvn integration-test -Dlogging-level=INFO
-      - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
-      - export _JAVA_OPTIONS=-javaagent:\$HOME/.m2/repository/org/jacoco/org.jacoco.agent/\$JACOCO_V/org.jacoco.agent-\$JACOCO_V-runtime.jar=destfile=\$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
-      - echo \$_JAVA_OPTIONS
+      - VERSION=$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
+      - VERSION=${VERSION/DEV*/RELEASE}
+      - mvn versions:set -DnewVersion=$VERSION-test-$(shuf -i 0-255 -n 1) --log-file mvn-version.log
+      - mvn package -Dlogging-level=INFO --log-file mvn-package.log
+      - JACOCO_V=$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
+      - export _JAVA_OPTIONS=-javaagent:$HOME/.m2/repository/org/jacoco/org.jacoco.agent/$JACOCO_V/org.jacoco.agent-$JACOCO_V-runtime.jar=destfile=$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
       - git clone https://github.com/iotaledger/iri-regression-tests.git
       - cd iri-regression-tests
       - git checkout -f master
-      - curl -LO https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
-      - tar -xzf testnet_files.tgz
+      - curl -LO https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz | tar -xzf -
       - mkdir iri
       - cp -rf ../target iri/target
-      - bash run_all_stable_tests.sh \$VERSION
+      - bash run_all_stable_tests.sh $VERSION
       - cd ..
-      - mvn jacoco:report
-      - mvn package -Dlogging-level=INFO
-      - ls -alR
-#      - github-release "v1.2" 
-#      - sha256sum target/*.jar*
-#      - wget -O codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r '.assets[0].browser_download_url')
-#      - java -jar codacy-coverage-reporter-assembly-latest.jar report -l Java -r target/site/jacoco/jacoco.xml
+      - mvn jacoco:report --log-file jacoco-report.log
+      - wget https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -O github-release
+      - chmod +x github-release
+      - export GITHUB_RELEASE_TAG=$VERSION
+      - ./github-release $VERSION iri-*.jar
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
          always-pull: true
          environment:
-          - GITHUB_RELEASE_ACCESS_TOKEN
+          - GIT_TOKEN
+          - GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN
           - GITHUB_RELEASE_REPOSITORY="sadjy/iri"
-          - GITHUB_RELEASE_TAG="1.0"
           - GITHUB_RELEASE_COMMIT="dev"
-      #    - GITHUB_RELEASE_PRERELEASE="..."
+          - AWS_ACCESS_KEY_ID
+          - AWS_SECRET_ACCESS_KEY          
+          - BUILDKITE_ARTIFACT_UPLOAD_DESTINATION="s3://iotaledger-iri-release/$BUILDKITE_COMMIT"
+          - BUILDKITE_ARTIFACT_PATHS=*.log
          shell: ["/bin/bash", "-e", "-c"]
     agents:
       queue: aws-nano
