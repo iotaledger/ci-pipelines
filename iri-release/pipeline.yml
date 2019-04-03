@@ -4,10 +4,11 @@ steps:
       - apt update && apt install jq -y 
       - VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
       - VERSION=\${VERSION/DEV*/RELEASE}
+      - echo $VERSION
       - echo "Running mvn versions"
       - mvn versions:set -DnewVersion=\$VERSION --log-file mvn-version.log
-      - echo "Running mvn package"
-      - mvn package -Dlogging-level=INFO --log-file mvn-package.log
+      - echo "Running integration-test"
+      - mvn integration-test -Dlogging-level=INFO --log-file integration-test.log
       - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
       - export _JAVA_OPTIONS=-javaagent:\$HOME/.m2/repository/org/jacoco/org.jacoco.agent/\$JACOCO_V/org.jacoco.agent-\$JACOCO_V-runtime.jar=destfile=\$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
       - git clone https://github.com/iotaledger/iri-regression-tests.git
@@ -22,6 +23,8 @@ steps:
       - cd ..
       - echo "Generating jacoco report"
       - mvn jacoco:report --log-file jacoco-report.log
+      - echo "Running mvn package"
+      - mvn package -Dlogging-level=INFO --log-file mvn-package.log      
       - wget https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -O github-release
       - chmod +x github-release
       - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)2
