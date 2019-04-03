@@ -35,8 +35,8 @@ steps:
          always-pull: true
          environment:
           - GIT_TOKEN
-          - GITHUB_RELEASE_REPOSITORY="sadjy/iri"
-          - GITHUB_RELEASE_COMMIT="dev"
+          - GITHUB_RELEASE_REPOSITORY=sadjy/iri
+          - GITHUB_RELEASE_COMMIT=dev
           - AWS_ACCESS_KEY_ID
           - AWS_SECRET_ACCESS_KEY          
           - BUILDKITE_ARTIFACT_UPLOAD_DESTINATION="s3://iotaledger-iri-release/$BUILDKITE_COMMIT"
