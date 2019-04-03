@@ -1,7 +1,7 @@
 steps:
   - name: iri-release-test
     command: 
-      - apt update && apt install jq -y 
+      - apt update && apt install jq python -y 
       - export VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
       - export VERSION=\${VERSION/DEV*/RELEASE}
       - echo \$VERSION
