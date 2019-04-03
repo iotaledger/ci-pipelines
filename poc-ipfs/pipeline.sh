@@ -14,7 +14,10 @@ api_staging () {
       - jq -r '.node .mwm = \\\$mwm' --argjson mwm '9' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.ipfs .provider = \\\$provider' --arg provider \\\$IPFS_NODE src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.ipfs .token = \\\$token' --arg token \\\$AUTH_TOKEN src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.seed = \\\$seed' --arg seed \\\$(cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}) src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$CERT_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
@@ -24,7 +27,10 @@ api_staging () {
           - IPFS_NODE=https://ipfs.iota.cafe:443/api/v0/
           - AUTH_TOKEN
           - ALIAS=ipfs-api.iota.works
-          - ZEIT_TOKEN" 
+          - ZEIT_TOKEN
+          - IPFS_STAGING_AWS_ACCESS_KEY_ID
+          - IPFS_STAGING_AWS_SECRET_ACCESS_KEY
+          - DB_TABLE_PREFIX=ipfs-staging-" 
   echo "    agents:
       queue: aws-nano"
 }
@@ -59,7 +65,10 @@ api_prod () {
       - jq -r '.node .mwm = \\\$mwm' --argjson mwm '14' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.ipfs .provider = \\\$provider' --arg provider \\\$IPFS_NODE src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.ipfs .token = \\\$token' --arg token \\\$AUTH_TOKEN src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - jq -r '.seed = \\\$seed' --arg seed \\\$(cat /dev/urandom |tr -dc A-Z9|head -c${1:-81}) src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$IPFS_PROD_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$IPFS_PROD_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
@@ -69,7 +78,10 @@ api_prod () {
           - IPFS_NODE=https://ipfs.iota.cafe:443/api/v0/
           - AUTH_TOKEN
           - ALIAS=ipfs-api.iota.org
-          - ZEIT_TOKEN" 
+          - ZEIT_TOKEN
+          - IPFS_PROD_AWS_ACCESS_KEY_ID
+          - IPFS_PROD_AWS_SECRET_ACCESS_KEY
+          - DB_TABLE_PREFIX=ipfs-prod-"  
   echo "    agents:
       queue: aws-nano"
 }
