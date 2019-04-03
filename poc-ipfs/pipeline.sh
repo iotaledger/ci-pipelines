@@ -46,7 +46,7 @@ client_staging () {
           - ZEIT_TOKEN
           - GIT_TOKEN"
   echo "    agents:
-            queue: aws-nano"
+      queue: aws-nano"
 }
 
 api_prod () {
@@ -94,7 +94,7 @@ client_prod () {
           - ZEIT_TOKEN
           - GIT_TOKEN"
   echo "    agents:
-            queue: aws-nano"
+      queue: aws-nano"
 }
 
 block_prod () {
