@@ -39,4 +39,4 @@ steps:
           - BUILDKITE_ARTIFACT_PATHS=*.log
          shell: ["/bin/bash", "-e", "-c"]
     agents:
-      queue: aws-nano
+      queue: aws-medium
