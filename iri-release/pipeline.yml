@@ -29,7 +29,7 @@ steps:
       - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)
       - export GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN 
       - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) iri-*.jar
-      - buildkite artifact upload *.log
+      - buildkite-agent artifact upload *.log
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
