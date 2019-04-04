@@ -29,6 +29,7 @@ steps:
       - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)
       - export GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN 
       - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) iri-*.jar
+      - buildkite artifact upload *.log
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
@@ -40,7 +41,9 @@ steps:
           - AWS_ACCESS_KEY_ID
           - AWS_SECRET_ACCESS_KEY          
           - BUILDKITE_ARTIFACT_UPLOAD_DESTINATION="s3://iotaledger-iri-release/$BUILDKITE_COMMIT"
-          - BUILDKITE_ARTIFACT_PATHS=*.log
+          - BUILDKITE_S3_ACCESS_KEY_ID
+          - BUILDKITE_S3_SECRET_ACCESS_KEY
+          - BUILDKITE_S3_DEFAULT_REGION=eu-central-1 
          shell: ["/bin/bash", "-e", "-c"]
     agents:
-      queue: aws-nano
+      queue: aws-medium
