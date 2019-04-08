@@ -6,9 +6,9 @@ steps:
       - export VERSION=\${VERSION/DEV*/RELEASE}
       - echo \$VERSION
       - echo "Running mvn versions"
-      - mvn versions:set -DnewVersion=\$VERSION --log-file /cache/mvn-version.log
+      - mvn versions:set -DnewVersion=\$VERSION --log-file mvn-version.log
       - echo "Running integration-test"
-      - mvn integration-test -Dlogging-level=INFO --log-file /cache/integration-test.log
+      - mvn integration-test -Dlogging-level=INFO --log-file integration-test.log
       - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
       - export _JAVA_OPTIONS=-javaagent:\$HOME/.m2/repository/org/jacoco/org.jacoco.agent/\$JACOCO_V/org.jacoco.agent-\$JACOCO_V-runtime.jar=destfile=\$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
       - git clone https://github.com/iotaledger/iri-regression-tests.git
@@ -21,14 +21,15 @@ steps:
       - ./run_all_stable_tests.sh \$VERSION
       - cd ..
       - echo "Generating jacoco report"
-      - mvn jacoco:report --log-file /cache/jacoco-report.log
+      - mvn jacoco:report --log-file jacoco-report.log
       - echo "Running mvn package"
-      - mvn package -Dlogging-level=INFO --log-file /cache/mvn-package.log      
+      - mvn package -Dlogging-level=INFO --log-file mvn-package.log      
       - wget https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -O github-release
       - chmod +x github-release
       - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)
       - export GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN 
       - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) iri-*.jar
+    artifact_paths: "*.log"
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
@@ -38,15 +39,5 @@ steps:
           - GITHUB_RELEASE_REPOSITORY=sadjy/iri
           - GITHUB_RELEASE_COMMIT=dev
          shell: ["/bin/bash", "-e", "-c"]
-         volumes: 
-          - "/cache:/cache"
-    agents:
-      queue: aws-medium
-
-  - wait
-
-  - name: logs
-    command: 
-      - buildkite-agente artifact upload /cache/*.log
     agents:
       queue: aws-medium
