@@ -13,3 +13,4 @@ steps:
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/trinity-mobile-ci:latest"
+        always-pull: true
