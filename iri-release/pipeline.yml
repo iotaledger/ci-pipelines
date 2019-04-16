@@ -29,6 +29,10 @@ steps:
       - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)
       - export GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN 
       - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) iri-*.jar
+      - wget -O jacoco.zip http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.3/jacoco-0.8.3.zip
+      - unzip jacoco.zip -d jacoco
+      - cd jacoco
+      - java -jar jacococli.jar report target/jacoco.exec --csv jacoco.csv --xml jacoco.xml
       - ls -alR
     artifact_paths: 
       - "*.log"
@@ -43,4 +47,4 @@ steps:
           - GITHUB_RELEASE_COMMIT=dev
          shell: ["/bin/bash", "-e", "-c"]
     agents:
-      queue: aws-medium
+      queue: aws-m5large
