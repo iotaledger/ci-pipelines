@@ -54,7 +54,7 @@ for test_dir in jmeter/test*/
   cp python-regression/tests/features/machine$TEST_ID $test_dir
   echo "      - 
       - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c $test_dir/config.yml -o $test_dir/output.yml -k kube.config -n buildkite -d
-      - jmeter -n -t test.jmx -l results-$TEST_ID.jtl "
+      - jmeter -n -t test.jmx -l results-$TEST_ID.jtl -j jmeter-$TEST_ID.log"
 done
 echo "     - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite"
 echo "    plugins:
