@@ -32,7 +32,7 @@ steps:
 #      - wget -O jacoco.zip http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.3/jacoco-0.8.3.zip
 #      - unzip -q jacoco.zip -d jacoco
 #      - java -jar jacoco/lib/jacococli.jar report target/jacoco.exec --csv jacoco.csv --xml jacoco.xml
-      - ls -al /
+      - ls -alR /workdir
     artifact_paths: 
       - "*.log"
       - "target/site/jacoco/jacoco.*"
