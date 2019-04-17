@@ -37,7 +37,7 @@ steps:
       - "*.log"
       - "target/site/jacoco/jacoco.*"
     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.1.0:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
          always-pull: true
          environment:
