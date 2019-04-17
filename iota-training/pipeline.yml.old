@@ -1,0 +1,122 @@
+steps:
+  - name: api-build-and-deploy-staging
+    command:
+      - apt update && apt install jq -y
+      - npm i -g --unsafe-perm now
+      - git clone https://github.com/iotaledger/documentation-platform.git
+      - cd documentation-platform/api
+      - jq -r '.dynamoDbConnection .region = \$region' --arg region 'eu-central-1' src/data/config.template.json > src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .accessKeyId = \$accessKeyId' --arg accessKeyId \$TRAIN_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$TRAIN_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .dbTablePrefix = \$dbTablePrefix' --arg dbTablePrefix \$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '. + {"feeds":{"training":{"service":"eventbrite","config":{"oauthToken":(\$oautharg)}}}}' --arg oautharg "\$OAUTH_TOKEN" src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.name = \$name' --arg name 'training-api' now.json > tmp.json && mv tmp.json now.json
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "node:8.12-stretch"
+         environment:
+          - ZEIT_TOKEN
+          - TRAIN_STAGING_AWS_ACCESS_KEY_ID
+          - TRAIN_STAGING_AWS_SECRET_ACCESS_KEY
+          - DB_TABLE_PREFIX=training-staging-
+          - ALIAS=training-api.iota.works
+          - OAUTH_TOKEN
+    agents:
+      queue: aws-nano
+
+  - name: web-build-and-deploy-staging
+    command:
+      - apt update && apt install jq -y
+      - npm i -g --unsafe-perm now
+      - rm -r ./*
+      - git clone https://github.com/iotaledger/documentation-platform.git
+      - cd documentation-platform
+      - git clone https://\$GIT_TOKEN@github.com/iotaledger/iota-training docs
+      - jq -r '.siteRoot = \$siteRoot' --arg siteRoot \$SITE_ROOT src/config.template.json > src/config.staging.json
+      - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
+      - jq -r 'del(.hotJarId)' src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
+      - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId \$GOOGLE_TAG_ID src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
+      - jq -r '.googleMapsKey = \$googleMapsKey' --arg googleMapsKey \$GOOGLE_MAPS_KEY src/config.staging.json > tmp.json && mv tmp.json src/config.staging.json
+      - jq -r '.name = \$name' --arg name 'iota-training' now.json > tmp.json && mv tmp.json now.json
+      - rm .gitignore
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS
+
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "node:8.12-stretch"
+         mount-buildkite-agent: true
+         environment:
+          - ZEIT_TOKEN
+          - SITE_ROOT=https://training.iota.works
+          - API_ENDPOINT=https://training-api.iota.works
+          - GOOGLE_TAG_ID="null"
+          - ALIAS=training.iota.works
+          - GOOGLE_MAPS_KEY
+          - GIT_TOKEN
+
+    agents:
+      queue: aws-nano
+
+  - block: "Deploy LIVE"
+    prompt: "Deploy this build to training.iota.org and traning-api.iota.org?"
+
+  - name: api-build-and-deploy-prod
+    command:
+      - apt update && apt install jq -y
+      - npm i -g --unsafe-perm now
+      - git clone https://github.com/iotaledger/documentation-platform.git
+      - cd documentation-platform/api
+      - jq -r '.dynamoDbConnection .region = \$region' --arg region 'eu-central-1' src/data/config.template.json > src/data/config.prod.json
+      - jq -r '.dynamoDbConnection .accessKeyId = \$accessKeyId' --arg accessKeyId \$TRAIN_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.dynamoDbConnection .secretAccessKey = \$secretAccessKey' --arg secretAccessKey \$TRAIN_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.dynamoDbConnection .dbTablePrefix = \$dbTablePrefix' --arg dbTablePrefix \$DB_TABLE_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '. + {"feeds":{"training":{"service":"eventbrite","config":{"oauthToken":(\$oautharg)}}}}' --arg oautharg "\$OAUTH_TOKEN" src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.name = \$name' --arg name 'training-api' now.json > tmp.json && mv tmp.json now.json
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "node:8.12-stretch"
+         environment:
+          - ZEIT_TOKEN
+          - TRAIN_PROD_AWS_ACCESS_KEY_ID
+          - TRAIN_PROD_AWS_SECRET_ACCESS_KEY
+          - DB_TABLE_PREFIX=training-prod-
+          - ALIAS=training-api.iota.org
+          - OAUTH_TOKEN
+    agents:
+      queue: aws-nano
+
+  - name: web-build-and-deploy-prod
+    command:
+      - apt update && apt install jq -y
+      - npm i -g --unsafe-perm now
+      - rm -r ./*
+      - git clone https://github.com/iotaledger/documentation-platform.git
+      - cd documentation-platform
+      - git clone https://\$GIT_TOKEN@github.com/iotaledger/iota-training docs
+      - jq -r '.siteRoot = \$siteRoot' --arg siteRoot \$SITE_ROOT src/config.template.json > src/config.prod.json
+      - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
+      - jq -r 'del(.hotJarId)' src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
+      - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId \$GOOGLE_TAG_ID src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
+      - jq -r '.googleMapsKey = \$googleMapsKey' --arg googleMapsKey \$GOOGLE_MAPS_KEY src/config.prod.json > tmp.json && mv tmp.json src/config.prod.json
+      - jq -r '.name = \$name' --arg name 'iota-training' now.json > tmp.json && mv tmp.json now.json
+      - rm .gitignore
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS
+
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "node:8.12-stretch"
+         mount-buildkite-agent: true
+         environment:
+          - ZEIT_TOKEN
+          - SITE_ROOT=https://training.iota.org
+          - API_ENDPOINT=https://training-api.iota.org
+          - GOOGLE_TAG_ID
+          - ALIAS=training.iota.org
+          - GOOGLE_MAPS_KEY
+          - GIT_TOKEN
+    agents:
+      queue: aws-nano
