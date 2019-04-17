@@ -8,7 +8,7 @@ steps:
       - echo "Running mvn versions"
       - mvn versions:set -DnewVersion=\$VERSION --log-file mvn-version.log
       - echo "Running integration-test"
-      - mvn integration-test -Dlogging-level=INFO --log-file integration-test.log
+      - mvn integration-test -Dlogging-level=INFO --log-file integration-test.log # java tests - to be deleted
       - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
       - export _JAVA_OPTIONS=-javaagent:\$HOME/.m2/repository/org/jacoco/org.jacoco.agent/\$JACOCO_V/org.jacoco.agent-\$JACOCO_V-runtime.jar=destfile=\$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
       - git clone https://github.com/iotaledger/iri-regression-tests.git
@@ -18,7 +18,7 @@ steps:
       - tar -xzf testnet_files.tgz
       - mkdir iri
       - cp -rf ../target iri/target
-      - ./run_all_stable_tests.sh \$VERSION
+      - ./run_all_stable_tests.sh \$VERSION # regression-tests - to be deleted
       - cd ..
       - echo "Generating jacoco report"
       - mvn jacoco:report --log-file jacoco-report.log
@@ -29,15 +29,15 @@ steps:
       - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)
       - export GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN 
       - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) iri-*.jar
-      - wget -O jacoco.zip http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.3/jacoco-0.8.3.zip
-      - unzip -q jacoco.zip -d jacoco
-      - java -jar jacoco/lib/jacococli.jar report target/jacoco.exec --csv jacoco.csv --xml jacoco.xml
-      - ls -alR
+#      - wget -O jacoco.zip http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.3/jacoco-0.8.3.zip
+#      - unzip -q jacoco.zip -d jacoco
+#      - java -jar jacoco/lib/jacococli.jar report target/jacoco.exec --csv jacoco.csv --xml jacoco.xml
+      - ls -al /
     artifact_paths: 
       - "*.log"
-      - "target/jacoco.exec"
+      - "target/site/jacoco/jacoco.*"
     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.1.0:
          image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
          always-pull: true
          environment:
@@ -47,3 +47,6 @@ steps:
          shell: ["/bin/bash", "-e", "-c"]
     agents:
       queue: aws-m5large
+
+# TODO:
+#
