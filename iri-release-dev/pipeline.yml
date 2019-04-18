@@ -39,7 +39,7 @@ steps:
          always-pull: true
          environment:
           - GIT_TOKEN
-          - GITHUB_RELEASE_REPOSITORY=sadjy/iri
+          - GITHUB_RELEASE_REPOSITORY=GalRogozinski/iri
           - GITHUB_RELEASE_COMMIT=dev
          shell: ["/bin/bash", "-e", "-c"]
     agents:
