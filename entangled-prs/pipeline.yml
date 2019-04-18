@@ -11,7 +11,7 @@ steps:
           - /cache:/cache
   - wait
   - name: "TE=1 bazel test --remote_upload_local_results=false opt ASAN"
-    command: bazel test --remote_upload_local_results=false -c opt --test_output=all --config asan --define trit_encoding=1 //...
+    command: bazel test --remote_upload_local_results=false -c opt --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -23,7 +23,7 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - name: "TE=1 bazel test --remote_upload_local_results=false dbg ASAN"
-    command: bazel test --remote_upload_local_results=false -c dbg --test_output=all --config asan --define trit_encoding=1 //...
+    command: bazel test --remote_upload_local_results=false -c dbg --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -76,7 +76,7 @@ steps:
           - /cache:/cache
   - wait
   - name: "TE=3 bazel test --remote_upload_local_results=false opt"
-    command: bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=3 //...
+    command: bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=3 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -86,7 +86,7 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - name: "TE=3 bazel test --remote_upload_local_results=false debug"
-    command: bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=3 //...
+    command: bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=3 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -96,7 +96,7 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - name: "TE=4 bazel test --remote_upload_local_results=false opt"
-    command: bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=4 //...
+    command: bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=4 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -106,7 +106,7 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - name: "TE=4 bazel test --remote_upload_local_results=false debug"
-    command: bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=4 //...
+    command: bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=4 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -116,7 +116,7 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - name: "TE=5 bazel test --remote_upload_local_results=false opt"
-    command: bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=5 //...
+    command: bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=5 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -126,7 +126,7 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - name: "TE=5 bazel test --remote_upload_local_results=false debug"
-    command: bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=5 //...
+    command: bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=5 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -136,7 +136,7 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - name: "bazel test --remote_upload_local_results=false bootlin x86_64 toolchains"
-    command: bazel test --remote_upload_local_results=false --crosstool_top=@iota_toolchains//tools/x86-64-core-i7--glibc--bleeding-edge-2018.07-1:toolchain --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain  //...
+    command: bazel test --remote_upload_local_results=false --crosstool_top=@iota_toolchains//tools/x86-64-core-i7--glibc--bleeding-edge-2018.07-1:toolchain --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain  -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -146,7 +146,7 @@ steps:
           - /conf:/conf
           - /cache:/cache
   - name: "bazel test --remote_upload_local_results=false bootlin i686 toolchains"
-    command: bazel test --remote_upload_local_results=false --crosstool_top='@iota_toolchains//tools/x86-i686--glibc--bleeding-edge-2018.07-1:toolchain' --cpu=i686 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain //...
+    command: bazel test --remote_upload_local_results=false --crosstool_top='@iota_toolchains//tools/x86-i686--glibc--bleeding-edge-2018.07-1:toolchain' --cpu=i686 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
