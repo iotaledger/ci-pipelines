@@ -40,7 +40,7 @@ steps:
          environment:
           - GIT_TOKEN
           - GITHUB_RELEASE_REPOSITORY=GalRogozinski/iri
-          - GITHUB_RELEASE_COMMIT=dev
+          - GITHUB_RELEASE_COMMIT=gal-release
          shell: ["/bin/bash", "-e", "-c"]
     agents:
       queue: aws-m5large
