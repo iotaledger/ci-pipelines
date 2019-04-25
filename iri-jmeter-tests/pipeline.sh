@@ -85,6 +85,7 @@ echo "    command:
     - echo \"[TIAB] Creating IRI nodes cluster\"
     - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d"
 for testfile in ../Nightly-Tests/Jmeter-Tests/*.jmx
+do
   TESTNAME=${testfile%.jmx}
   echo "nodes:
     node$TESTNAME:
