@@ -97,7 +97,8 @@ echo "    command:
     - . venv/bin/activate
     - pip install -r requirements.txt
     - echo \"[TIAB] Creating IRI nodes cluster\"
-    - sleep 120
+    - cat node_config.yml
+    - sleep 60
     - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d"
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
