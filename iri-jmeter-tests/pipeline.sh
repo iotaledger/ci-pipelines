@@ -80,6 +80,7 @@ echo "  - name: \"Running jmeter tests\""
 echo "    command:
     - echo \"[TIAB] Cloning github repository\"
     - git clone --depth 1 https://github.com/iotaledger/tiab.git
+    - ls -al
     - cp kube.config tiab/
     - cp node_config.yml tiab/
     - echo \"[TIAB] Installing dependencies\"
