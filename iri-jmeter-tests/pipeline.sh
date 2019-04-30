@@ -88,7 +88,7 @@ echo "    command:
           if key == node_name:
             if host:
                 print(\"{}\".format(yaml_file['nodes'][node_name]['host'])
-              if port:
+            if port:
                 print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
       EOF
     - echo \"[TIAB] Installing dependencies\"
