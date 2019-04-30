@@ -65,7 +65,7 @@ echo "    command:
         TESTNAME=\$(basename \\\$testfile .jmx)
         echo \"nodes:
           node\\\$TESTNAME:
-            <<: *config\" >> node_config.yml
+            <<: *config\" >> tiab/node_config.yml
       done
     - |
       cat <<EOF >> tiab/nodeaddr.py 
