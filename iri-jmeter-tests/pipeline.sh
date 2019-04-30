@@ -28,64 +28,63 @@ echo "    command:
     - echo \"[TIAB] Cloning github repository\"
     - git clone --depth 1 https://github.com/iotaledger/tiab.git
     - |
-cat <<EOF >> tiab/kube.config 
-apiVersion: v1
-kind: Config
-preferences: {}
+      cat <<EOF >> tiab/kube.config 
+      apiVersion: v1
+      kind: Config
+      preferences: {}
 
-clusters:
-- cluster:
-    certificate-authority-data: \\\$TIAB_KUBE_CA  
-    server: \\\$TIAB_KUBE_SERVER
-  name: my-cluster
+      clusters:
+      - cluster:
+          certificate-authority-data: \\\$TIAB_KUBE_CA  
+          server: \\\$TIAB_KUBE_SERVER
+        name: my-cluster
 
-users:
-- name: buildkite-user
-  user:
-    as-user-extra: {}
-    client-key-data: \\\$TIAB_KUBE_CLIENT_KEY 
-    token: \\\$TIAB_KUBE_TOKEN 
+      users:
+      - name: buildkite-user
+        user:
+          as-user-extra: {}
+          client-key-data: \\\$TIAB_KUBE_CLIENT_KEY 
+          token: \\\$TIAB_KUBE_TOKEN 
 
-contexts:
-- context:
-    cluster: my-cluster
-    namespace: buildkite
-    user: buildkite-user
-  name: buildkite-namespace
+      contexts:
+      - context:
+          cluster: my-cluster
+          namespace: buildkite
+          user: buildkite-user
+        name: buildkite-namespace
 
-current-context: buildkite-namespace
-EOF
+      current-context: buildkite-namespace
+      EOF
     - |
-cat <<EOF >> tiab/node_config.yml 
-defaults: &config
-  db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
-  db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
-
-EOF
+      cat <<EOF >> tiab/node_config.yml 
+      defaults: &config
+        db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
+        db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
+      EOF
     - |
-cat <<EOF >> tiab/nodeaddr.py 
-from yaml import load, Loader
-import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument('node')
-parser.add_argument('-h', '--host', action=store_true)
-parser.add_argument('-p', '--port', action=store_true)
-args = parser.parse_args()
-node_name = args.node
-host = args.host
-port = args.port
+      cat <<EOF >> tiab/nodeaddr.py 
+      from yaml import load, Loader
+      import argparse
+      parser = argparse.ArgumentParser()
+      parser.add_argument('node')
+      parser.add_argument('-h', '--host', action=store_true)
+      parser.add_argument('-p', '--port', action=store_true)
+      args = parser.parse_args()
+      node_name = args.node
+      host = args.host
+      port = args.port
 
-yaml_path = './output.yml'
-stream = open(yaml_path,'r')
-yaml_file = load(stream,Loader=Loader)
+      yaml_path = './output.yml'
+      stream = open(yaml_path,'r')
+      yaml_file = load(stream,Loader=Loader)
 
-for key, value in yaml_file['nodes'].items():
-    if key == node_name:
-      if host:
-          print(\"{}\".format(yaml_file['nodes'][node_name]['host'])
-        if port:
-          print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
-EOF
+      for key, value in yaml_file['nodes'].items():
+          if key == node_name:
+            if host:
+                print(\"{}\".format(yaml_file['nodes'][node_name]['host'])
+              if port:
+                print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
+      EOF
     - echo \"[TIAB] Installing dependencies\"
     - cd tiab
     - virtualenv venv
