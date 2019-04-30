@@ -56,9 +56,13 @@ echo "defaults: &config
 echo "from yaml import load, Loader
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument(\"node\")
+parser.add_argument('node')
+parser.add_argument('-h', '--host', action=store_true)
+parser.add_argument('-p', '--port', action=store_true)
 args = parser.parse_args()
 node_name = args.node
+host = args.host
+port = args.port
 
 yaml_path = './output.yml'
 stream = open(yaml_path,'r')
@@ -66,7 +70,10 @@ yaml_file = load(stream,Loader=Loader)
 
 for key, value in yaml_file['nodes'].items():
     if key == node_name:
-        print(\"{}{}:{}\".format(\"https://\", yaml_file['nodes'][node_name]['host'], yaml_file['nodes'][node_name]['ports']['api']))" > nodeaddr.py
+      if host:
+          print(\"{}\".format(yaml_file['nodes'][node_name]['host'])
+        if port:
+          print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))" > nodeaddr.py
 
 
 echo "  - name: \"Running jmeter tests\""
@@ -89,7 +96,7 @@ do
     node$TESTNAME:
       <<: *config" >> node_config.yml
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
-      - jmeter -n -t $testfile host=\\\$(python nodeaddr.py node$TESTNAME) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
+      - jmeter -n -t $testfile Jhost=\\\$(python nodeaddr.py node$TESTNAME -h) Jport=\\\$(python nodeaddr.py node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
 echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite
     - ls -alR"
