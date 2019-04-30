@@ -91,7 +91,7 @@ do
     node$TESTNAME:
       <<: *config" >> node_config.yml
   echo "      - echo \"[Jmeter] Running $TESTNAME test\"
-      - jmeter -n -t $testfile host=$(python nodeaddr.py node$TESTNAME) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
+      - jmeter -n -t $testfile host=\\\$(python nodeaddr.py node$TESTNAME) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
 echo "     - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite"
 echo "    plugins:
