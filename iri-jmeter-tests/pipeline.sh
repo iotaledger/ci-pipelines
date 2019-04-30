@@ -60,10 +60,10 @@ echo "    command:
       defaults: &config
         db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
         db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
+      nodes:
       EOF
       for testfile in Nightly-Tests/Jmeter-Tests/*.jmx; do
         TESTNAME=\$(basename \\\$testfile .jmx)
-        echo \"nodes:
           node\\\$TESTNAME:
             <<: *config\" >> tiab/node_config.yml
       done
