@@ -88,7 +88,7 @@ echo "    command:
     - echo \"[TIAB] Installing dependencies\"
     - cd tiab
     - virtualenv venv
-    - source venv/bin/activate
+    - . venv/bin/activate
     - pip install -r requirements.txt
     - echo \"[TIAB] Creating IRI nodes cluster\"
     - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d"
