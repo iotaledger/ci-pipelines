@@ -91,6 +91,7 @@ echo "    command:
     - . venv/bin/activate
     - pip install -r requirements.txt
     - echo \"[TIAB] Creating IRI nodes cluster\"
+    - sleep 300
     - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d"
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
@@ -105,7 +106,7 @@ echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n 
     - ls -alR"
 echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"python:2\"
+        image: \"python:2-alpine\"
         environment:
           - TIAB_KUBE_CA
           - TIAB_KUBE_TOKEN
