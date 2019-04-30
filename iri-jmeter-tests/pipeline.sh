@@ -8,8 +8,6 @@ set -eu
 
 echo "steps:"
 
-echo "  - block: \"Just printing\""
-
 echo "apiVersion: v1
 kind: Config
 preferences: {}
@@ -93,7 +91,8 @@ do
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
       - jmeter -n -t $testfile host=\\\$(python nodeaddr.py node$TESTNAME) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
-echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite"
+echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite
+    - ls -alR"
 echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"python:2\"
