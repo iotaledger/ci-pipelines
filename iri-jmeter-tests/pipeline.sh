@@ -64,7 +64,7 @@ echo "    command:
       EOF
       for testfile in Nightly-Tests/Jmeter-Tests/*.jmx; do
         TESTNAME=\$(basename \\\$testfile .jmx)
-          node\\\$TESTNAME:
+        echo \"  node\\\$TESTNAME:
             <<: *config\" >> tiab/node_config.yml
       done
     - |
