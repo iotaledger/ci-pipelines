@@ -98,7 +98,6 @@ echo "    command:
     - pip install -r requirements.txt
     - echo \"[TIAB] Creating IRI nodes cluster\"
     - cat node_config.yml
-    - sleep 60
     - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d"
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
@@ -108,6 +107,9 @@ do
 done
 echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
     - ls -alR"
+
+echo "    artifact_paths: 
+      - \"tiab/*.jmx\""
 echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"python:2\"
