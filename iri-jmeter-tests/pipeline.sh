@@ -8,32 +8,6 @@ set -eu
 
 echo "steps:"
 
-echo "apiVersion: v1
-kind: Config
-preferences: {}
-
-clusters:
-- cluster:
-    certificate-authority-data: $TIAB_KUBE_CA  
-    server: $TIAB_KUBE_SERVER
-  name: my-cluster
-
-users:
-- name: buildkite-user
-  user:
-    as-user-extra: {}
-    client-key-data: $TIAB_KUBE_CLIENT_KEY 
-    token: $TIAB_KUBE_TOKEN 
-
-contexts:
-- context:
-    cluster: my-cluster
-    namespace: buildkite
-    user: buildkite-user
-  name: buildkite-namespace
-
-current-context: buildkite-namespace" > kube.config
-
 #echo "defaults: &conFig
 #  db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
 #  db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
@@ -49,11 +23,48 @@ current-context: buildkite-namespace" > kube.config
 #  'true'
 #  ]" > node_config.yml
 
-echo "defaults: &config
-  db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
-  db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75" > node_config.yml
+echo "  - name: \"Running jmeter tests\""
+echo "    command:
+    - echo \"[TIAB] Cloning github repository\"
+    - git clone --depth 1 https://github.com/iotaledger/tiab.git
+    - |
+cat <<EOF >> tiab/kube.config 
+apiVersion: v1
+kind: Config
+preferences: {}
 
-echo "from yaml import load, Loader
+clusters:
+- cluster:
+    certificate-authority-data: \\\$TIAB_KUBE_CA  
+    server: \\\$TIAB_KUBE_SERVER
+  name: my-cluster
+
+users:
+- name: buildkite-user
+  user:
+    as-user-extra: {}
+    client-key-data: \\\$TIAB_KUBE_CLIENT_KEY 
+    token: \\\$TIAB_KUBE_TOKEN 
+
+contexts:
+- context:
+    cluster: my-cluster
+    namespace: buildkite
+    user: buildkite-user
+  name: buildkite-namespace
+
+current-context: buildkite-namespace
+EOF
+    - |
+cat <<EOF >> tiab/node_config.yml 
+defaults: &config
+  db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
+  db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
+
+EOF
+    - |
+cat <<EOF >> tiab/nodeaddr.py 
+from yaml import load, Loader
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('node')
@@ -73,16 +84,8 @@ for key, value in yaml_file['nodes'].items():
       if host:
           print(\"{}\".format(yaml_file['nodes'][node_name]['host'])
         if port:
-          print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))" > nodeaddr.py
-
-
-echo "  - name: \"Running jmeter tests\""
-echo "    command:
-    - echo \"[TIAB] Cloning github repository\"
-    - git clone --depth 1 https://github.com/iotaledger/tiab.git
-    - ls -al
-    - cp kube.config tiab/
-    - cp node_config.yml tiab/
+          print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
+EOF
     - echo \"[TIAB] Installing dependencies\"
     - cd tiab
     - virtualenv venv
@@ -99,7 +102,7 @@ do
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
       - jmeter -n -t $testfile Jhost=\\\$(python nodeaddr.py node$TESTNAME -h) Jport=\\\$(python nodeaddr.py node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
-echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite
+echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
     - ls -alR"
 echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
