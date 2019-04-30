@@ -61,6 +61,13 @@ echo "    command:
         db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
         db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
       EOF
+      for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
+      do
+        TESTNAME=\${testfile%.jmx}
+        echo \"nodes:
+          node\$TESTNAME:
+            <<: *config\" >> node_config.yml
+      done
     - |
       cat <<EOF >> tiab/nodeaddr.py 
       from yaml import load, Loader
@@ -96,11 +103,8 @@ echo "    command:
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
   TESTNAME=${testfile%.jmx}
-  echo "nodes:
-    node$TESTNAME:
-      <<: *config" >> node_config.yml
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
-      - jmeter -n -t $testfile Jhost=\\\$(python nodeaddr.py node$TESTNAME -h) Jport=\\\$(python nodeaddr.py node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
+      - jmeter -n -t $testfile Jhost=\$(python nodeaddr.py node$TESTNAME -h) Jport=\$(python nodeaddr.py node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
 echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
     - ls -alR"
