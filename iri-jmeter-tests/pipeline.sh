@@ -95,9 +95,9 @@ do
 done
 echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite"
 echo "    plugins:
-    https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-      image: \"python:2\"
-      environment:
-        - AAA=env" 
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: \"python:2\"
+        environment:
+          - AAA=env" 
 echo "    agents:
       queue: aws-m5large"  
