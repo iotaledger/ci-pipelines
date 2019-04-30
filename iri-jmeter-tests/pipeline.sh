@@ -86,7 +86,6 @@ echo "    command:
     - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d"
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
-  echo $testfile
   TESTNAME=${testfile%.jmx}
   echo "nodes:
     node$TESTNAME:
@@ -99,6 +98,9 @@ echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"python:2\"
         environment:
-          - AAA=env" 
+          - TIAB_KUBE_CA
+          - TIAB_KUBE_TOKEN
+          - TIAB_KUBE_SERVER
+          - TIAB_KUBE_CLIENT_KEY" 
 echo "    agents:
       queue: aws-m5large"  
