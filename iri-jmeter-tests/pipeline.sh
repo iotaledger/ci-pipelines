@@ -90,14 +90,14 @@ do
   echo "nodes:
     node$TESTNAME:
       <<: *config" >> node_config.yml
-  echo "      - echo \"[Jmeter] Running $TESTNAME test\"
+  echo "    - echo \"[Jmeter] Running $TESTNAME test\"
       - jmeter -n -t $testfile host=\\\$(python nodeaddr.py node$TESTNAME) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
-echo "     - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite"
+echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite"
 echo "    plugins:
     https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
       image: \"python:2\"
       environment:
-        - " 
+        - AAA=env" 
 echo "    agents:
-      queue: aws-m5large"  
+    queue: aws-m5large"  
