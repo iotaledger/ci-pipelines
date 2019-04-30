@@ -100,4 +100,4 @@ echo "    plugins:
       environment:
         - " 
 echo "    agents:
-    queue: aws-m5large"  
+      queue: aws-m5large"  
