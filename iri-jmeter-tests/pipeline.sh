@@ -62,7 +62,7 @@ echo "    command:
         db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
       EOF
       for testfile in Nightly-Tests/Jmeter-Tests/*.jmx; do
-        TESTNAME=\${testfile\%.jmx}
+        TESTNAME=\$(basename \$testfile .jmx)
         echo \"nodes:
           node\$TESTNAME:
             <<: *config\" >> node_config.yml
