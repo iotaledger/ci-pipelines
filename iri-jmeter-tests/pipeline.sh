@@ -100,7 +100,7 @@ echo "    command:
     - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
     - echo [Jmeter] Downloading and extracting binary
     - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
-    - tar xzvf apache-jmeter-5.1.1.tgz && export \$PATH=\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin/"
+    - tar xzf apache-jmeter-5.1.1.tgz && export PATH=\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin"
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
   TESTNAME=${testfile%.jmx}
