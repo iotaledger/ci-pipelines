@@ -72,13 +72,12 @@ echo "    command:
       from yaml import load, Loader
       import argparse
       parser = argparse.ArgumentParser()
-      parser.add_argument('node')
-      parser.add_argument('-h', '--host', action=store_true)
-      parser.add_argument('-p', '--port', action=store_true)
+      parser.add_argument('-n', '--node', dest='node_name', required=True)
+      parser.add_argument('-q', '--host', dest='host', action='store_true')
+      parser.add_argument('-p', '--port', dest='port', action='store_true')
+
       args = parser.parse_args()
-      node_name = args.node
-      host = args.host
-      port = args.port
+      node_name = args.node_name
 
       yaml_path = './output.yml'
       stream = open(yaml_path,'r')
@@ -86,9 +85,9 @@ echo "    command:
 
       for key, value in yaml_file['nodes'].items():
           if key == node_name:
-            if host:
-                print(\"{}\".format(yaml_file['nodes'][node_name]['host'])
-            if port:
+            if args.host:
+                print(\"{}\".format(yaml_file['nodes'][node_name]['host']))
+            if args.port:
                 print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
       EOF
     - echo \"[TIAB] Installing dependencies\"
@@ -98,18 +97,22 @@ echo "    command:
     - pip install -r requirements.txt
     - echo \"[TIAB] Creating IRI nodes cluster\"
     - cat node_config.yml
-    - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d"
+    - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
+    - echo [Jmeter] Downloading and extracting binary
+    - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
+    - tar xzvf apache-jmeter-5.1.1.tgz && export \$PATH=\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin/"
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
   TESTNAME=${testfile%.jmx}
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
-      - jmeter -n -t $testfile Jhost=\$(python nodeaddr.py node$TESTNAME -h) Jport=\$(python nodeaddr.py node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
+      - jmeter -n -t $testfile Jhost=\$(python nodeaddr.py node$TESTNAME -q) Jport=\$(python nodeaddr.py node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
 echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
-    - ls -alR"
+    - ls -al"
 
 echo "    artifact_paths: 
-      - \"tiab/*.jmx\""
+      - \"tiab/*.jtl\"
+      - \"tiab/*.log\""
 echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"python:2\"
