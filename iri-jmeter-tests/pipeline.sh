@@ -111,7 +111,7 @@ do
       - python nodeaddr.py -n node\\\$TESTNAME -p
       - jmeter -n -t ../$testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
-echo "    - sleep 600
+echo "    - sleep 180
     - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
     - pwd && ls -al"
 
