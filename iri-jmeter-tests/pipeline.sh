@@ -90,7 +90,7 @@ echo "    command:
             if args.port:
                 print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
       EOF
-    - apt update && apt install python-pip -y
+    - apt update >/dev/null && apt install python-pip -y >/dev/null && pip install virtualenv
     - echo \"[TIAB] Installing dependencies\"
     - cd tiab
     - virtualenv venv
