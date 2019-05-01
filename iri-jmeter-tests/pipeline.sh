@@ -90,6 +90,7 @@ echo "    command:
             if args.port:
                 print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
       EOF
+    - pip install yaml kubernetes
     - echo \"[TIAB] Installing dependencies\"
     - cd tiab
     - virtualenv venv
