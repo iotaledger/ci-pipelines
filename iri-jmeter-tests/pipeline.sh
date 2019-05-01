@@ -120,7 +120,7 @@ echo "    artifact_paths:
       - \"tiab/*.log\""
 echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"python:2\"
+        image: \"openjdk:8\"
         environment:
           - TIAB_KUBE_CA
           - TIAB_KUBE_TOKEN
