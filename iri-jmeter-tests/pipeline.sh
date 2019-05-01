@@ -107,12 +107,13 @@ do
   TESTPATH=$(basename $testfile)
   TESTNAME=${TESTPATH%.jmx}
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
-      - python nodeaddr.py -n node\$TESTNAME -q
-      - python nodeaddr.py -n node\$TESTNAME -p
+      - python nodeaddr.py -n node\\\$TESTNAME -q
+      - python nodeaddr.py -n node\\\$TESTNAME -p
       - jmeter -n -t $testfile Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
 echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
-    - ls -al"
+    - pwd && ls -al
+    - sleep 600"
 
 echo "    artifact_paths: 
       - \"tiab/*.jtl\"
