@@ -68,7 +68,7 @@ echo "    command:
             <<: *config\" >> tiab/node_config.yml
       done
     - |
-      cat <<EOF >> tiab/nodeaddr.py 
+      cat <<EOF >> nodeaddr.py 
       from yaml import load, Loader
       import argparse
       parser = argparse.ArgumentParser()
@@ -79,7 +79,7 @@ echo "    command:
       args = parser.parse_args()
       node_name = args.node_name
 
-      yaml_path = './output.yml'
+      yaml_path = './tiab/output.yml'
       stream = open(yaml_path,'r')
       yaml_file = load(stream,Loader=Loader)
 
@@ -100,23 +100,24 @@ echo "    command:
     - cat node_config.yml
     - python create_cluster.py -i iotacafe/iri-dev:latest -t $BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
     - echo [Jmeter] Downloading and extracting binary
+    - cd ..
     - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
-    - tar xzf apache-jmeter-5.1.1.tgz && export PATH=\\\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin"
+    - tar xzf apache-jmeter-5.1.1.tgz && export PATH=\\\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin
+    - mkdir jmeter"
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
   TESTPATH=$(basename $testfile)
   TESTNAME=${TESTPATH%.jmx}
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
     - python nodeaddr.py -n node\\\$TESTNAME -q
-    - python nodeaddr.py -n node\\\$TESTNAME -p
-    - jmeter -n -t ../$testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
+    - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter/jmeter-$TESTNAME.log -l jmeter/results-$TESTNAME.jtl -e -o jmeter/results-$TESTNAME"
 done
-echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
+echo "    - cd tiab
+    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
     - pwd && ls -al"
 
 echo "    artifact_paths: 
-      - \"tiab/*.jtl\"
-      - \"tiab/*.log\""
+      - \"jmeter/**/*\""
 echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"openjdk:8\"
