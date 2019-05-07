@@ -1,0 +1,24 @@
+steps:
+  - name: release-trinity-desktop-win7
+    command:
+      - apk add --no-cache jq ca-certificates
+      - rm -rf tmp releases/win7
+      - mkdir -p tmp releases/win7
+      - echo Downloading artifacts from build ID $$TRINITY_DESKTOP_WIN7_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download *.exe tmp/ --build $$TRINITY_DESKTOP_WIN7_DEPLOY_BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download latest.yml tmp/ --build $$TRINITY_DESKTOP_WIN7_DEPLOY_BUILDKITE_BUILD_ID
+      - find tmp -type f -exec mv -v {} releases/win7 \;
+    agents:
+      queue: ops
+    artifact_paths:
+      - "releases/win7/*"
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: "alpine:3.8"
+        mount-buildkite-agent: true
+        environment:
+          - TRINITY_DESKTOP_WIN7_DEPLOY_BUILDKITE_BUILD_ID
+          - BUILDKITE_S3_DEFAULT_REGION
+          - AWS_ACCESS_KEY_ID
+          - BUILDKITE_ARTIFACT_UPLOAD_DESTINATION
+          - AWS_SECRET_ACCESS_KEY
