@@ -109,7 +109,6 @@ do
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
     - python nodeaddr.py -n node\\\$TESTNAME -q
     - jmeter -n -t ../$testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$TESTNAME.log -l results-$TESTNAME.jtl -g results-$TESTNAME.csv -e -o results-$TESTNAME"
-    - python nodeaddr.py -n node\\\$TESTNAME -p
 done
 echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
     - pwd && ls -al"
