@@ -108,15 +108,17 @@ do
   TESTNAME=${TESTPATH%.jmx}
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
     - python nodeaddr.py -n node\\\$TESTNAME -q
+    - jmeter -n -t ../$testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$TESTNAME.log -l results-$TESTNAME.jtl -g results-$TESTNAME.csv -e -o results-$TESTNAME"
     - python nodeaddr.py -n node\\\$TESTNAME -p
-    - jmeter -n -t ../$testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -l results-$TESTNAME.jtl -j jmeter-$TESTNAME.log"
 done
 echo "    - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
     - pwd && ls -al"
 
 echo "    artifact_paths: 
       - \"tiab/*.jtl\"
-      - \"tiab/*.log\""
+      - \"tiab/*.log\"
+      - \"tiab/*.csv\"
+      - \"tiab/results-*/*\""
 echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: \"openjdk:8\"
