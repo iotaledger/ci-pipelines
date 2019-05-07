@@ -102,14 +102,14 @@ echo "    command:
     - echo [Jmeter] Downloading and extracting binary
     - cd ..
     - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
-    - tar xzf apache-jmeter-5.1.1.tgz && export PATH=\\\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin"
+    - tar xzf apache-jmeter-5.1.1.tgz && export PATH=\\\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin
+    - mkdir jmeter"
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
   TESTPATH=$(basename $testfile)
   TESTNAME=${TESTPATH%.jmx}
   echo "    - echo \"[Jmeter] Running $TESTNAME test\"
     - python nodeaddr.py -n node\\\$TESTNAME -q
-    - mkdir jmeter/
     - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter/jmeter-$TESTNAME.log -l jmeter/results-$TESTNAME.jtl -e -o jmeter/results-$TESTNAME"
 done
 echo "    - cd tiab
