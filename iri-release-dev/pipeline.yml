@@ -19,7 +19,7 @@ steps:
       - chmod +x github-release
       - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)
       - export GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN 
-      - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) iri-*.jar
+      - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) target/iri-*.jar
       - ls -alR /workdir
     artifact_paths: 
       - "*.log"
@@ -35,6 +35,3 @@ steps:
          shell: ["/bin/bash", "-e", "-c"]
     agents:
       queue: aws-m5large
-
-# TODO:
-#
