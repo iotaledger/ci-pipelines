@@ -100,9 +100,9 @@ steps:
             ERROR=1
             python /workdir/iri-regression-tests/print-logs.py /cache/\$machine_dir/output.yml
           fi
-        if [ \$ERROR -ne 0 ]; then
-          exit 1
-        fi
+          if [ \$ERROR -ne 0 ]; then
+            exit 1
+          fi
         done
     agents:
       queue: ops
