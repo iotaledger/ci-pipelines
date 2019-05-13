@@ -1,27 +1,8 @@
 #!/bin/bash
 
-# TODO
-# Generate kube.config with Vault
-# Manage errors on config.yml files when running TIAB or just upload every output as artifacts 
-
 set -eu
 
 echo "steps:"
-
-#echo "defaults: &conFig
-#  db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
-#  db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
-#  iri_args: ['--testnet-coordinator',
-#  'BTCAAFIH9CJIVIMWFMIHKFNWRTLJRKSTMRCVRE9CIP9AEDTOULVFRHQZT9QAQBZXXAZGBNMVOOKTKAXTB',
-#  '--milestone-start', 
-#  '0',
-#  '--snapshot', 
-#  './snapshot.txt',
-#  '--testnet-no-coo-validation',
-#  'true',
-#  '--testnet',
-#  'true'
-#  ]" > node_config.yml
 
 echo "  - name: \"Running jmeter tests\""
 echo "    command:
