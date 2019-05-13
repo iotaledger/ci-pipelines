@@ -26,7 +26,7 @@ echo "steps:"
 echo "  - name: \"Running jmeter tests\""
 echo "    command:
     - echo \"[TIAB] Cloning github repository\"
-    - git clone --depth 1 https://github.com/iotaledger/tiab.git
+    - git clone --depth 1 https://github.com/sadjy/tiab.git
     - |
       cat <<EOF >> tiab/kube.config 
       apiVersion: v1
