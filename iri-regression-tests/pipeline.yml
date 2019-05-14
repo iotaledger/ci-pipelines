@@ -106,7 +106,6 @@ steps:
         ERROR=0
         for machine_dir in tests/features/machine?; do
           mkdir -p /cache/\$machine_dir/
-#          python /cache/tiab/create_cluster.py -i iotacafe/iri-dev:$IRI_BUILD_NUMBER -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -n buildkite -x /cache/iri/python-regression -e "apt update && apt install unzip && wget http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.4/jacoco-0.8.4.zip -O jacoco.zip && mkdir /opt/jacoco && unzip jacoco.zip -d /opt/jacoco" -d
           python /cache/tiab/create_cluster.py -i iotacafe/iri-dev:$IRI_BUILD_NUMBER -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -n buildkite -x /cache/iri/python-regression -d
           if [ \$? -ne 0 ]; then
             ERROR=1
