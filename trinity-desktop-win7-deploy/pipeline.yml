@@ -1,7 +1,7 @@
 steps:
   - label: ":hammer_and_wrench: Build for Windows 7 platform"
     command:
-      - "yarn && cd src/shared && yarn && cd ../.. && cd src/desktop && npm install usb && npm install && npm run build && bugsnag.sh && node bugsnag.js && .\\node_modules\\.bin\\electron-builder --win --x64 --publish=never && cd ../../ && mv src/desktop/out/latest* . && mv src/desktop/out/trinity-desktop* ."
+      - "yarn && cd src/shared && yarn && cd ../.. && cd src/desktop && npm install usb && npm install && bugsnag.sh && npm run build-no-concurrent && node bugsnag.js && .\\node_modules\\.bin\\electron-builder --win --x64 --publish=never && cd ../../ && mv src/desktop/out/latest* . && mv src/desktop/out/trinity-desktop* ."
     agents:
       queue: ec2-win-t2medium
     artifact_paths:
