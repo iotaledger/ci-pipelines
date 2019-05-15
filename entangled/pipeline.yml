@@ -10,6 +10,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - wait
@@ -25,6 +26,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - wait
@@ -42,6 +44,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test dbg ASAN"
@@ -57,6 +60,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test opt TSAN"
@@ -70,6 +74,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test dbg TSAN"
@@ -83,6 +88,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test opt UBSAN"
@@ -96,6 +102,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test dbg UBSAN"
@@ -109,6 +116,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - wait
@@ -124,6 +132,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=3 bazel test debug"
@@ -137,6 +146,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=4 bazel test opt"
@@ -150,6 +160,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=4 bazel test debug"
@@ -163,6 +174,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=5 bazel test opt"
@@ -176,6 +188,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=5 bazel test debug"
@@ -189,6 +202,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "bazel test bootlin x86_64 toolchains"
@@ -202,6 +216,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "bazel test bootlin i686 toolchains"
@@ -215,4 +230,5 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]

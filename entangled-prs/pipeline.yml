@@ -10,6 +10,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - wait
@@ -25,6 +26,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - wait
@@ -42,6 +44,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false dbg ASAN"
@@ -57,6 +60,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false opt TSAN"
@@ -70,6 +74,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false dbg TSAN"
@@ -83,6 +88,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false opt UBSAN"
@@ -96,6 +102,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false dbg UBSAN"
@@ -109,6 +116,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
 
   - wait
 
@@ -123,6 +131,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=3 bazel test --remote_upload_local_results=false debug"
@@ -136,6 +145,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=4 bazel test --remote_upload_local_results=false opt"
@@ -149,6 +159,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=4 bazel test --remote_upload_local_results=false debug"
@@ -162,6 +173,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=5 bazel test --remote_upload_local_results=false opt"
@@ -175,6 +187,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=5 bazel test --remote_upload_local_results=false debug"
@@ -188,6 +201,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "bazel test --remote_upload_local_results=false bootlin x86_64 toolchains"
@@ -201,6 +215,7 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "bazel test --remote_upload_local_results=false bootlin i686 toolchains"
@@ -214,4 +229,5 @@ steps:
         volumes:
           - /conf:/conf
           - /cache:/cache
+          - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
