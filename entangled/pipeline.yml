@@ -1,13 +1,13 @@
 steps:
   - name: "coding style checker"
-    command: ls -alR && ./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
+    command: ls -alR /workdir && ./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
     agents:
       queue: dev
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -22,7 +22,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -39,7 +39,7 @@ steps:
         capabilities:
           - SYS_PTRACE
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -54,7 +54,7 @@ steps:
         capabilities:
           - SYS_PTRACE
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -67,7 +67,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -80,7 +80,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -93,7 +93,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -106,7 +106,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -121,7 +121,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -134,7 +134,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -147,7 +147,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -160,7 +160,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -173,7 +173,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -186,7 +186,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -199,7 +199,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
@@ -212,7 +212,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         always-pull: true
-        mounts:
+        volumes:
           - /conf:/conf
           - /cache:/cache
         shell: ["/bin/bash", "-e", "-c"]
