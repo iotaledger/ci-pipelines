@@ -10,7 +10,10 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - wait
+
   - name: "static analysis check"
     command: cppcheck --library=googletest --error-exitcode=1 -q cclient ciri common consensus cppclient gossip mam tanglescope utils
     agents:
@@ -22,7 +25,10 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - wait
+
   - name: "TE=1 bazel test opt ASAN"
     command: bazel test -c opt --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
     agents:
@@ -36,6 +42,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=1 bazel test dbg ASAN"
     command: bazel test -c dbg --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
     agents:
@@ -49,6 +57,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=1 bazel test opt TSAN"
     command: bazel test -c opt --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
@@ -60,6 +70,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=1 bazel test dbg TSAN"
     command: bazel test -c dbg --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
@@ -71,6 +83,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=1 bazel test opt UBSAN"
     command: bazel test -c opt --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
@@ -82,6 +96,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=1 bazel test dbg UBSAN"
     command: bazel test -c dbg --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
@@ -93,7 +109,10 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - wait
+
   - name: "TE=3 bazel test opt"
     command: bazel test -c opt --test_output=all --define trit_encoding=3 -- //... -//mobile/ios/...
     agents:
@@ -105,6 +124,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=3 bazel test debug"
     command: bazel test -c dbg --test_output=all --define trit_encoding=3 -- //... -//mobile/ios/...
     agents:
@@ -116,6 +137,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=4 bazel test opt"
     command: bazel test -c opt --test_output=all --define trit_encoding=4 -- //... -//mobile/ios/...
     agents:
@@ -127,6 +150,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=4 bazel test debug"
     command: bazel test -c dbg --test_output=all --define trit_encoding=4 -- //... -//mobile/ios/...
     agents:
@@ -138,6 +163,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=5 bazel test opt"
     command: bazel test -c opt --test_output=all --define trit_encoding=5 -- //... -//mobile/ios/...
     agents:
@@ -149,6 +176,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "TE=5 bazel test debug"
     command: bazel test -c dbg --test_output=all --define trit_encoding=5 -- //... -//mobile/ios/...
     agents:
@@ -160,6 +189,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "bazel test bootlin x86_64 toolchains"
     command: bazel test --crosstool_top=@iota_toolchains//tools/x86-64-core-i7--glibc--bleeding-edge-2018.07-1:toolchain --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain  -- //... -//mobile/ios/...
     agents:
@@ -171,6 +202,8 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
+
   - name: "bazel test bootlin i686 toolchains"
     command: bazel test --crosstool_top='@iota_toolchains//tools/x86-i686--glibc--bleeding-edge-2018.07-1:toolchain' --cpu=i686 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain -- //... -//mobile/ios/...
     agents:
@@ -182,3 +215,4 @@ steps:
         mounts:
           - /conf:/conf
           - /cache:/cache
+        shell: ["/bin/bash", "-e", "-c"]
