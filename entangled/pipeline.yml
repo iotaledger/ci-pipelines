@@ -1,22 +1,12 @@
 steps:
-  - name: "coding style check"
-    command: ./tools/ci_format_check 'cclient ciri common consensus cppclient gossip mam tanglescope utils'
+  - name: "coding style checker"
+    command: ./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
-        mounts:
-          - /conf:/conf
-          - /cache:/cache
-  - wait
-  - name: "static analysis check"
-    command: cppcheck --library=googletest --error-exitcode=1 -q cclient ciri common consensus cppclient gossip mam tanglescope utils
-    agents:
-      queue: dev
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-        image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -26,10 +16,11 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         capabilities:
           - SYS_PTRACE
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -38,10 +29,11 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
         capabilities:
           - SYS_PTRACE
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -50,8 +42,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -60,8 +53,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -70,8 +64,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -80,8 +75,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -91,8 +87,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -101,8 +98,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -111,8 +109,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -121,8 +120,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -131,8 +131,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -141,8 +142,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -151,8 +153,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -161,8 +164,9 @@ steps:
     agents:
       queue: dev
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
         image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
