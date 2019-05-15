@@ -16,7 +16,7 @@ steps:
   - wait
 
   - name: "static analysis check"
-    command: cppcheck --library=googletest --error-exitcode=1 -q cclient ciri common consensus cppclient gossip mam tanglescope utils
+    command: cppcheck --library=tools/cppcheck/googletest.cfg --error-exitcode=1 -q cclient ciri common consensus cppclient gossip mam tanglescope utils
     agents:
       queue: dev
     plugins:
