@@ -1,6 +1,17 @@
 steps:
-  - name: "coding style checker"
-    command: ./tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
+  - name: "coding style check"
+    command: ./tools/ci_format_check 'cclient ciri common consensus cppclient gossip mam tanglescope utils'
+    agents:
+      queue: dev
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "iotacafe/iota-buildenv"
+        mounts:
+          - /conf:/conf
+          - /cache:/cache
+  - wait
+  - name: "static analysis check"
+    command: cppcheck --library=googletest --error-exitcode=1 -q cclient ciri common consensus cppclient gossip mam tanglescope utils
     agents:
       queue: dev
     plugins:
