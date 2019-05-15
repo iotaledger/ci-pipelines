@@ -1,0 +1,17 @@
+steps:
+  - name: build-iota-buildenv
+    command: 
+      - 'docker build -f Dockerfile -t iotacafe/iota-buildenv:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
+      - 'docker push iotacafe/iota-buildenv:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
+      - 'docker tag iotacafe/iota-buildenv:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER iotacafe/iota-buildenv:latest'
+      - 'docker push iotacafe/iota-buildenv:latest'
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "docker:latest"
+         shell: "/bin/sh -e -c"
+         mounts:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /conf/docker/.docker:$HOME/.docker
+    agents:
+      queue: ops
+
