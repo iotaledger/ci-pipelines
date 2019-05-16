@@ -1,6 +1,6 @@
 steps:
-  - name: "coding style checker"
-    command: /workdir/tools/ci_format_check 'cclient consensus gossip mam ciri common cppclient tanglescope'
+  - name: "coding style check"
+    command: cd /workdir && ./tools/ci_format_check 'cclient ciri common consensus cppclient gossip mam tanglescope utils'
     agents:
       queue: dev
     plugins:
@@ -12,8 +12,6 @@ steps:
           - /cache:/cache
           - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
-
-  - wait
 
   - name: "static analysis check"
     command: cd /workdir && cppcheck --library=tools/cppcheck/googletest.cfg --error-exitcode=1 -q cclient ciri common consensus cppclient gossip mam tanglescope utils
