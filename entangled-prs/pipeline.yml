@@ -30,7 +30,7 @@ steps:
   - wait
 
   - name: "TE=1 bazel test --remote_upload_local_results=false opt ASAN"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c opt --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c opt --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -46,7 +46,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false dbg ASAN"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c dbg --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c dbg --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -62,7 +62,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false opt TSAN"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c opt --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c opt --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
     plugins:
@@ -76,7 +76,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false dbg TSAN"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c dbg --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c dbg --test_output=all --config tsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
     plugins:
@@ -90,7 +90,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false opt UBSAN"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c opt --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c opt --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
     plugins:
@@ -104,7 +104,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=1 bazel test --remote_upload_local_results=false dbg UBSAN"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c dbg --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c dbg --test_output=all --config ubsan --define trit_encoding=1 -- //... -//mobile/...
     agents:
       queue: dev
     plugins:
@@ -119,7 +119,7 @@ steps:
   - wait
 
   - name: "TE=3 bazel test --remote_upload_local_results=false opt"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=3 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=3 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -133,7 +133,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=3 bazel test --remote_upload_local_results=false debug"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=3 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=3 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -147,7 +147,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=4 bazel test --remote_upload_local_results=false opt"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=4 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=4 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -161,7 +161,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=4 bazel test --remote_upload_local_results=false debug"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=4 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=4 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -175,7 +175,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=5 bazel test --remote_upload_local_results=false opt"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=5 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c opt --test_output=all --define trit_encoding=5 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -189,7 +189,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "TE=5 bazel test --remote_upload_local_results=false debug"
-    command: cd /workdir && bazel test --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=5 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c dbg --test_output=all --define trit_encoding=5 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -202,8 +202,10 @@ steps:
           - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
+  - wait
+
   - name: "bazel test --remote_upload_local_results=false bootlin x86_64 toolchains"
-    command: cd /workdir && bazel test --remote_upload_local_results=false --crosstool_top=@iota_toolchains//tools/x86-64-core-i7--glibc--bleeding-edge-2018.07-1:toolchain --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain  -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false --crosstool_top=@iota_toolchains//tools/x86-64-core-i7--glibc--bleeding-edge-2018.07-1:toolchain --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain  -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
@@ -217,7 +219,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "bazel test --remote_upload_local_results=false bootlin i686 toolchains"
-    command: cd /workdir && bazel test --remote_upload_local_results=false --crosstool_top='@iota_toolchains//tools/x86-i686--glibc--bleeding-edge-2018.07-1:toolchain' --cpu=i686 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain -- //... -//mobile/ios/...
+    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false --crosstool_top='@iota_toolchains//tools/x86-i686--glibc--bleeding-edge-2018.07-1:toolchain' --cpu=i686 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:
