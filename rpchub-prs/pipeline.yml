@@ -5,7 +5,8 @@ steps:
       queue: dev
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-        image: "th0br0/iota-buildenv:x86_64"
+        image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -15,7 +16,8 @@ steps:
       queue: dev
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-        image: "th0br0/iota-buildenv:x86_64"
+        image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
@@ -25,7 +27,8 @@ steps:
       queue: dev
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-        image: "th0br0/iota-buildenv:x86_64"
+        image: "iotacafe/iota-buildenv"
+        always-pull: true
         mounts:
           - /conf:/conf
           - /cache:/cache
