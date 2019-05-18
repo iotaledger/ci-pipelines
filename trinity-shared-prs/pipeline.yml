@@ -3,7 +3,6 @@ steps:
     command:
       - "yarn"
       - "yarn deps:shared"
-      - "cd src/shared && yarn auditjs && cd ../.."
       - "yarn lint:shared"
       - "cd src/shared && yarn test && cd ../.."
     agents:
