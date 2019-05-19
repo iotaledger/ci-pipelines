@@ -4,7 +4,6 @@ steps:
       - "yarn"
       - "yarn deps:shared"
       - "yarn deps:desktop"
-      - "cd src/desktop && yarn auditjs && cd ../.."
       - "yarn lint:desktop"
       - "cd src/desktop && npm run build"
     agents:
