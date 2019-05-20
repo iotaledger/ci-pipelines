@@ -1,6 +1,20 @@
 steps:
   - name: "coding style check"
-    command: cd /workdir && ./tools/ci_format_check 'cclient ciri common consensus cppclient gossip mam tanglescope utils'
+    command: cd /workdir && ./tools/ci_format_check cclient ciri common consensus cppclient gossip mam tanglescope utils
+    agents:
+      queue: dev
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: "iotacafe/iota-buildenv"
+        always-pull: true
+        volumes:
+          - /conf:/conf
+          - /cache:/cache
+          - .:/workdir
+        shell: ["/bin/bash", "-e", "-c"]
+
+  - name: "buildifier check"
+    command: cd /workdir && ./tools/ci_buildifier_check
     agents:
       queue: dev
     plugins:
