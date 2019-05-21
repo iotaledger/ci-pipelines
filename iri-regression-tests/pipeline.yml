@@ -163,10 +163,12 @@ steps:
         done
       - apt update && apt install unzip && wget http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.4/jacoco-0.8.4.zip -O jacoco.zip && unzip jacoco.zip -d /cache/jacoco && rm jacoco.zip
       - java -jar /cache/jacoco/lib/jacococli.jar merge /cache/*.exec --destfile /cache/jacoco.exec
-#      - buildkite-agent artifact download <classfiles> <dest> --build $ARTIFACT_BUILDKITE_BUILD_ID 
-#      - java -jar /cache/jacoco/lib/jacococli.jar report /cache/jacoco/jacoco.exec --classfiles <classfilespath> --html /cache/jacoco/jacoco_html --name jacocoreport-$BUILDKITE_BUILD_ID
+      - buildkite-agent artifact download target/iri-oracle8-${IRI_BUILD_NUMBER}.jar /cache/jacoco/ --build $ARTIFACT_BUILDKITE_BUILD_ID 
+      - java -jar /cache/jacoco/lib/jacococli.jar report /cache/jacoco/jacoco.exec --classfiles /cache/jacoco/iri-oracle8-${IRI_BUILD_NUMBER}.jar --html /cache/jacoco/jacoco_html --name jacocoreport-$BUILDKITE_BUILD_ID
     agents:
       queue: ops
+    artifact_paths:
+      - "/cache/jacoco/jacoco_html"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "python:latest"
