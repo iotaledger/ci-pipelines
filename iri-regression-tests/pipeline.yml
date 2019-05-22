@@ -178,7 +178,7 @@ steps:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
           - /conf:/conf:ro
     soft_fail:
-     - exit_status: false
+      - exit_status: false
 
   - wait: ~
     continue_on_failure: true
