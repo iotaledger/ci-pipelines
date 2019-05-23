@@ -3,7 +3,7 @@ steps:
     command:
       - "yarn"
       - "yarn deps:shared"
-      - "yarn deps:desktop"
+      - "cd src/desktop && npm ci && cd ../.."
       - "yarn lint:desktop"
       - "cd src/desktop && npm run build"
     agents:
