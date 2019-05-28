@@ -158,7 +158,7 @@ steps:
             if [ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') = \$BUILDKITE_BUILD_ID ]
             then
               /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "pkill java"
-              /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "ls -al"
+              /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "ls -al /iri"
             fi
           done
         done
