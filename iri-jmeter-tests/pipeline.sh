@@ -77,9 +77,9 @@ echo "    command:
     - virtualenv venv
     - . venv/bin/activate
     - pip install -r requirements.txt
-    - echo \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:.iotacafe/iri-dev:latest}\"
+    - echo \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/iri-dev}\"
     - cat node_config.yml
-    - python create_cluster.py -i \${IRI_IMAGE:.iotacafe/iri-dev:latest} -t \$BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
+    - python create_cluster.py -i \${IRI_IMAGE:-iotacafe/iri-dev} -t \$BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
     - echo [Jmeter] Downloading and extracting binary
     - cd ..
     - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
