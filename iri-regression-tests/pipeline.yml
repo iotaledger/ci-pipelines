@@ -159,6 +159,7 @@ steps:
             then
               /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "pkill java"
               /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "ls -al /iri"
+              /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/\$pod:/iri/jacoco.exec /cache/jacoco/jacoco_\$pod.exec
             fi
           done
         done
