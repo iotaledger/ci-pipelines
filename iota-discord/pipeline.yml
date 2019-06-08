@@ -19,21 +19,19 @@ steps:
   - block: "Deploy LIVE"
     prompt: "Deploy this build to prod?"
 
-#  - name: build-and-deploy-prod
-#    command:
-#      - apt update && apt install jq -y
-#      - npm i -g --unsafe-perm now
-#      - jq -n '{"version":1,"name":"iota-discord"}' > now.json
-#      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
-#    plugins:
-#       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-#         image: "node:8.12-stretch"
-#         environment:
-#          - ZEIT_TOKEN
-#          - ALIAS=discord.iota.org
-#          - SITE_KEY
-#          - SECRET_KEY
-#          - CHANNEL_ID
-#          - DISCORD_TOKEN
-#    agents:
-#      queue: aws-nano
+  - name: build-and-deploy-prod
+    command:
+      - npm i -g --unsafe-perm now
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy -e SITE_KEY -e SECRET_KEY -e CHANNEL_ID -e DISCORD_TOKEN -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "node:8.12-stretch"
+         environment:
+          - ZEIT_TOKEN
+          - ALIAS=discord.iota.org
+          - SITE_KEY
+          - SECRET_KEY
+          - CHANNEL_ID
+          - DISCORD_TOKEN
+    agents:
+      queue: aws-nano
