@@ -1,49 +1,41 @@
 steps:
-  - name: iri-release-test
-    command: 
-      - apt update && apt install jq python unzip -y 
-      - export VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
-      - export VERSION=\${VERSION/DEV*/RELEASE}
-      - echo \$VERSION
-      - echo "Running mvn versions"
-      - mvn versions:set -DnewVersion=\$VERSION --log-file mvn-version.log
-      - echo "Running integration-test"
-      - mvn integration-test -Dlogging-level=INFO --log-file integration-test.log # java tests - to be deleted
-      - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
-      - export _JAVA_OPTIONS=-javaagent:\$HOME/.m2/repository/org/jacoco/org.jacoco.agent/\$JACOCO_V/org.jacoco.agent-\$JACOCO_V-runtime.jar=destfile=\$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
-#      - git clone https://github.com/iotaledger/iri-regression-tests.git
-#      - cd iri-regression-tests
-#      - git checkout -f master
-#      - curl -LO https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
-#      - tar -xzf testnet_files.tgz
-#      - mkdir iri
-#      - cp -rf ../target iri/target
-#      - ./run_all_stable_tests.sh \$VERSION # regression-tests - to be deleted
-#      - cd ..
-      - echo "Generating jacoco report"
-      - mvn jacoco:report --log-file jacoco-report.log
-      - echo "Running mvn package"
-      - mvn package -Dlogging-level=INFO --log-file mvn-package.log      
-      - wget https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -O github-release
-      - chmod +x github-release
-      - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)
-      - export GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN 
-      - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) iri-*.jar
-      - ls -alR /workdir
-    artifact_paths: 
-      - "*.log"
-      - "target/site/jacoco/jacoco.*"
+  - name: build-and-push-branch
+    command:
+    - TAG=$(git describe --tags)
+    - |
+      if [ ! -z "$(git show-ref -s $(git describe --tags))" ]
+      then
+        TAG=$(git describe --tags) 
+        exit 0
+      fi
+    - mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version | tee -a build-iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.log
+    - docker login -u="\$DOCKER_USERNAME" -p="\$DOCKER_PASSWORD"
+    - docker build -f $BUILDKITE_PIPELINE_SLUG/Dockerfile -t sadjy/iri-dev:$TAG .
+    - docker push sadjy/iri-dev:$TAG
     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
-         always-pull: true
-         environment:
-          - GIT_TOKEN
-          - GITHUB_RELEASE_REPOSITORY=sadjy/iri
-          - GITHUB_RELEASE_COMMIT=dev
-         shell: ["/bin/bash", "-e", "-c"]
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
+        environment:
+          - DOCKER_USERNAME
+          - DOCKER_PASSWORD        
     agents:
       queue: aws-m5large
 
-# TODO:
-#
+
+##caution! pushing to official repo, validate the branch is in a good state.
+#git push iotaledger dev
+##wait for build process to complete
+ 
+#####master###
+#git checkout master
+#git pull iotaledger master # get master up to date
+#git merge -S --no-ff release-v$VERSION
+#git log --show-signature -1 #validate signature
+#git tag v$VERSION
+ 
+##caution! pushing to official repo, validate the branch is in a good state.
+#git push iotaledger v$VERSION #This will run the CI. Wait for it to complete
+#git push iotaledger master
+
+
+
