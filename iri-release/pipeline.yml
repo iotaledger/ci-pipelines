@@ -1,5 +1,19 @@
 steps:
-  - name: build-and-push-branch
+#  - name: "Cleanup /cache mount"
+#    command:
+#      - rm -rf /cache/*
+#    agents:
+#      queue: aws-m5large
+#    plugins:
+#      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+#        image: "busybox"
+#        shell: /bin/sh -c
+#        mounts:
+#          - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
+
+#  - wait 
+
+  - name: "Building IRI"
     command:
     - TAG=$(git describe --tags)
     - |
@@ -9,33 +23,35 @@ steps:
         exit 0
       fi
     - mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version | tee -a build-iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.log
-    - docker login -u="\$DOCKER_USERNAME" -p="\$DOCKER_PASSWORD"
-    - docker build -f $BUILDKITE_PIPELINE_SLUG/Dockerfile -t sadjy/iri-dev:$TAG .
-    - docker push sadjy/iri-dev:$TAG
+    - cp target/iri-oracle8-* /cache/iri/
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
-        environment:
-          - DOCKER_USERNAME
-          - DOCKER_PASSWORD        
+        volumes:
+          - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: aws-m5large
 
+  - wait
 
-##caution! pushing to official repo, validate the branch is in a good state.
-#git push iotaledger dev
-##wait for build process to complete
- 
-#####master###
-#git checkout master
-#git pull iotaledger master # get master up to date
-#git merge -S --no-ff release-v$VERSION
-#git log --show-signature -1 #validate signature
-#git tag v$VERSION
- 
-##caution! pushing to official repo, validate the branch is in a good state.
-#git push iotaledger v$VERSION #This will run the CI. Wait for it to complete
-#git push iotaledger master
-
-
-
+  - name: push-iri-oracle8
+    command: 
+      - cp /cache/iri/iri-oracle8-*.jar .
+      - ls -alR
+      - ls -al /
+#    - docker login -u="\$DOCKER_USERNAME" -p="\$DOCKER_PASSWORD"
+#    - docker build -f $BUILDKITE_PIPELINE_SLUG/Dockerfile -t sadjy/iri-dev:$TAG .
+#    - docker push sadjy/iri-dev:$TAG
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: "docker"
+        mount-buildkite-agent: true
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /conf/docker/.docker:$HOME/.docker
+        - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
+        environment:
+          - DOCKER_USERNAME
+          - DOCKER_PASSWORD
+    agents:
+      queue: aws-m5large
