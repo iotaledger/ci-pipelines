@@ -15,36 +15,33 @@ steps:
 
   - name: "Building IRI"
     command:
-    - TAG=$(git describe --tags)
+    - export TAG=$(git describe --tags)
     - |
       if [ -z "$(git show-ref -s $(git describe --tags))" ]
       then
-        TAG=$(git describe --tags)
         echo $TAG 
         exit 0
       fi
     - mvn integration-test -Dlogging-level=INFO -log-file integration-test.log && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version 
-    - ls -al
-    - mkdir /cache/iri
-    - cp target/iri-oracle8-* /cache/iri/
+    - mkdir /cache/iri && cp target/iri-oracle8-* /cache/iri/
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
         volumes:
           - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
+        environment:
+          - TAG
     agents:
       queue: aws-m5large
 
   - wait
 
-  - name: "Push to docker hub"
+  - name: "Pushing to docker hub"
     command: 
-      - ls -al
-      - cp /cache/iri/iri-oracle8-*.jar .
-      - ls -al /workdir
-#    - docker login -u="\$DOCKER_USERNAME" -p="\$DOCKER_PASSWORD"
-#    - docker build -f $BUILDKITE_PIPELINE_SLUG/Dockerfile -t sadjy/iri-dev:$TAG .
-#    - docker push sadjy/iri-dev:$TAG
+    - mkdir target && cp /cache/iri/iri-oracle8-*.jar target/
+    - docker login -u="\$DOCKER_USERNAME" -p="\$DOCKER_PASSWORD"
+    - docker build -f $BUILDKITE_PIPELINE_SLUG/Dockerfile -t sadjy/iri-dev:$TAG .
+    - docker push sadjy/iri-dev:$TAG
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
@@ -56,5 +53,6 @@ steps:
         environment:
           - DOCKER_USERNAME
           - DOCKER_PASSWORD
+          - TAG
     agents:
       queue: aws-m5large
