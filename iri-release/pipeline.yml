@@ -23,7 +23,9 @@ steps:
         echo $TAG 
         exit 0
       fi
-    - mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version | tee -a build-iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.log
+    - mvn integration-test -Dlogging-level=INFO -log-file integration-test.log && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version 
+    - ls -al
+    - mkdir /cache/iri
     - cp target/iri-oracle8-* /cache/iri/
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
