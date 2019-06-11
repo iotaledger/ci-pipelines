@@ -24,13 +24,14 @@ steps:
       fi
     - mvn integration-test -Dlogging-level=INFO -log-file integration-test.log && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version 
     - mkdir /cache/iri && cp target/iri-oracle8-* /cache/iri/
+    - echo $TAG
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
         volumes:
           - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
         environment:
-          - TAG
+          - DOCKER_TAG: $TAG 
     agents:
       queue: aws-m5large
 
@@ -40,8 +41,8 @@ steps:
     command: 
     - mkdir target && cp /cache/iri/iri-oracle8-*.jar target/
     - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
-    - docker build -t sadjy/iri-dev:\$TAG .
-    - docker push sadjy/iri-dev:\$TAG
+    - docker build -t sadjy/iri-dev:\$DOCKER_TAG .
+    - docker push sadjy/iri-dev:\$DOCKER_TAG
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
@@ -53,6 +54,6 @@ steps:
         environment:
           - DOCKER_USERNAME
           - DOCKER_PASSWORD
-          - TAG
+          - DOCKER_TAG
     agents:
       queue: aws-m5large
