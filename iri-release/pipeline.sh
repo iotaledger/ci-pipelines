@@ -22,12 +22,19 @@ build_and_push_docker () {
       queue: aws-m5large"
 }
 
+skip_build () {
+  echo "  - name: \"Commit not tagged\""
+  echo "    command:
+      - exit 0" 
+ echo "    agents:
+      queue: aws-m5large"  
+}
+
 echo "steps:"
 TAG=$(git describe --tags)
 if [ ! -z "$(git show-ref -s $TAG)" ]
 then
   build_and_push_docker "$TAG"
 else
-  echo
-  exit 0
+  skip_build
 fi
