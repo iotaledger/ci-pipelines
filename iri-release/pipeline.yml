@@ -30,8 +30,8 @@ steps:
         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
         volumes:
           - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
-        environment:
-          - DOCKER_TAG: $TAG 
+    env:
+      DOCKER_TAG: $TAG 
     agents:
       queue: aws-m5large
 
