@@ -17,9 +17,10 @@ steps:
     command:
     - TAG=$(git describe --tags)
     - |
-      if [ ! -z "$(git show-ref -s $(git describe --tags))" ]
+      if [ -z "$(git show-ref -s $(git describe --tags))" ]
       then
-        TAG=$(git describe --tags) 
+        TAG=$(git describe --tags)
+        echo $TAG 
         exit 0
       fi
     - mvn integration-test -Dlogging-level=INFO && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version | tee -a build-iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.log
