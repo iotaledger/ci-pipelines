@@ -37,11 +37,11 @@ steps:
 
   - wait
 
-  - name: push-iri-oracle8
+  - name: "Push to docker hub"
     command: 
+      - ls -al
       - cp /cache/iri/iri-oracle8-*.jar .
-      - ls -alR
-      - ls -al /
+      - ls -al /workdir
 #    - docker login -u="\$DOCKER_USERNAME" -p="\$DOCKER_PASSWORD"
 #    - docker build -f $BUILDKITE_PIPELINE_SLUG/Dockerfile -t sadjy/iri-dev:$TAG .
 #    - docker push sadjy/iri-dev:$TAG
