@@ -39,8 +39,7 @@ steps:
   - name: "Pushing to docker hub"
     command: 
     - mkdir target && cp /cache/iri/iri-oracle8-*.jar target/
-    - docker login -u="\$DOCKER_USERNAME" -p="\$DOCKER_PASSWORD"
-    - echo "\$DOCKER_USERNAME"
+    - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
     - docker build -t sadjy/iri-dev:\$TAG .
     - docker push sadjy/iri-dev:\$TAG
     plugins:
