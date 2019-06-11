@@ -40,8 +40,9 @@ steps:
     command: 
     - mkdir target && cp /cache/iri/iri-oracle8-*.jar target/
     - docker login -u="\$DOCKER_USERNAME" -p="\$DOCKER_PASSWORD"
-    - docker build -f $BUILDKITE_PIPELINE_SLUG/Dockerfile -t sadjy/iri-dev:$TAG .
-    - docker push sadjy/iri-dev:$TAG
+    - echo "\$DOCKER_USERNAME"
+    - docker build -t sadjy/iri-dev:\$TAG .
+    - docker push sadjy/iri-dev:\$TAG
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
