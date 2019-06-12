@@ -1,58 +1,37 @@
 steps:
-#  - name: "Cleanup /cache mount"
-#    command:
-#      - rm -rf /cache/*
-#    agents:
-#      queue: aws-m5large
-#    plugins:
-#      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-#        image: "busybox"
-#        shell: /bin/sh -c
-#        mounts:
-#          - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
-
-#  - wait 
-
-  - name: "Building IRI"
-    command:
-    - |
-      if [ -z "$(git show-ref -s $(git describe --tags))" ]
-      then
-        echo $TAG 
-        exit 0
-      fi
-    - mvn integration-test -Dlogging-level=INFO -log-file integration-test.log && mv target/iri*.jar target/iri-oracle8-${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar && java -version && java -version 
-    - mkdir /cache/iri && cp target/iri-oracle8-* /cache/iri/
-    - git describe --tags > /cache/iri/tag
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
-        volumes:
-          - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
-    env:
-      DOCKER_TAG: $TAG 
-    agents:
-      queue: aws-m5large
-
-  - wait
-
-  - name: "Pushing to docker hub"
+  - name: iri-release-test
     command: 
-    - mkdir target && cp /cache/iri/iri-oracle8-*.jar target/
-    - TAG=$(cat /cache/iri/tag)
-    - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
-    - docker build -t sadjy/iri-dev:\$TAG .
-    - docker push sadjy/iri-dev:\$TAG
+      - apt update && apt install jq python unzip -y 
+      - export VERSION=\$(mvn git-commit-id:revision help:evaluate -Dexpression=project.version | grep -E '^[0-9.]+')
+      - export VERSION=\${VERSION/DEV*/RELEASE}
+      - echo \$VERSION
+      - echo "Running mvn versions"
+      - mvn versions:set -DnewVersion=\$VERSION --log-file mvn-version.log
+      - echo "Running integration-test"
+      - mvn integration-test -Dlogging-level=INFO --log-file integration-test.log # java tests - to be deleted
+      - JACOCO_V=\$(mvn help:evaluate -Dexpression=jacoco.version | grep -E '^[0-9.]+')
+      - export _JAVA_OPTIONS=-javaagent:\$HOME/.m2/repository/org/jacoco/org.jacoco.agent/\$JACOCO_V/org.jacoco.agent-\$JACOCO_V-runtime.jar=destfile=\$PWD/target/jacoco.exec,output=file,append=true,dumponexit=true
+      - echo "Generating jacoco report"
+      - mvn jacoco:report --log-file jacoco-report.log
+      - echo "Running mvn package"
+      - mvn package -Dlogging-level=INFO --log-file mvn-package.log      
+      - wget https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -O github-release
+      - chmod +x github-release
+      - export GITHUB_RELEASE_TAG=\$VERSION-test-$(shuf -i 0-255 -n 1)
+      - export GITHUB_RELEASE_ACCESS_TOKEN=\$GIT_TOKEN 
+      - ./github-release \$VERSION-test-$(shuf -i 0-255 -n 1) target/iri-*.jar
+      - ls -alR /workdir
+    artifact_paths: 
+      - "*.log"
+      - "target/site/jacoco/jacoco.*"
     plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: "docker"
-        mount-buildkite-agent: true
-        volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /conf/docker/.docker:$HOME/.docker
-        - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
-        environment:
-          - DOCKER_USERNAME
-          - DOCKER_PASSWORD
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
+         always-pull: true
+         environment:
+          - GIT_TOKEN
+          - GITHUB_RELEASE_REPOSITORY=GalRogozinski/iri
+          - GITHUB_RELEASE_COMMIT=gal-release
+         shell: ["/bin/bash", "-e", "-c"]
     agents:
       queue: aws-m5large
