@@ -8,7 +8,7 @@ build_and_push_docker () {
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
       - docker build -t sadjy/iri-dev:$1 .
       - docker push sadjy/iri-dev:$1
-      - target/iri-oracle8-$1.jar"
+      - mv target/iri*.jar target/iri-oracle8-$1.jar"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
