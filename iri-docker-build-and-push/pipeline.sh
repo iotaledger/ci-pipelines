@@ -25,6 +25,10 @@ build_and_push_docker () {
       queue: aws-m5large"
 }
 
+wait () {
+  echo "  - wait"
+}
+
 skip_build () {
   echo "  - name: \"Triggering commit not tagged, skipping build\""
   echo "    command:
@@ -48,7 +52,8 @@ IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
 if [ ! -z "$IRI_TAGGED_GIT_COMMIT" ]
 then
   build_and_push_docker "$TAG"
-  trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
+#  wait
+#  trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
 else
   skip_build
 fi
