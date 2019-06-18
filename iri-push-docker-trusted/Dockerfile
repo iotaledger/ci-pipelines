@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         socat \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=local_stage_build /iri/target/iri*.jar /iri/target/
+COPY /iri/target/iri*.jar /iri/target/
 COPY docker/entrypoint.sh /
 
 # Default environment variables configuration. See DOCKER.md for details.
