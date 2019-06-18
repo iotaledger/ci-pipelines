@@ -17,7 +17,7 @@ api_staging () {
       - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$TANGLE_UTILS_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.zmqMainNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmq.iota.org:5556' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.zmqDevNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmp.devnet.iota.org:5556' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.zmqDevNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmq.devnet.iota.org:5556' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -47,7 +47,7 @@ api_prod () {
       - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$TANGLE_UTILS_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.zmqMainNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmq.iota.org:5556' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - jq -r '.zmqDevNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmp.devnet.iota.org:5556' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.zmqDevNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmq.devnet.iota.org:5556' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
