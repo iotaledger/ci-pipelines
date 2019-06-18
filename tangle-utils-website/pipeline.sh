@@ -73,8 +73,8 @@ client_staging () {
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
       - jq -r '.nodesMainnet[0] .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.nodesMainnet[1] .provider = \\\$provider' --arg provider 'https://nodes.thetangle.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
-      - jq -r '.nodesDevnet[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.cafe:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
-      - jq -r '.nodesDevnet[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.cafe:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
+      - jq -r '.nodesDevnet[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
+      - jq -r '.nodesDevnet[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -97,8 +97,8 @@ client_prod () {
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
       - jq -r '.nodesMainnet[0] .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.nodesMainnet[1] .provider = \\\$provider' --arg provider 'https://nodes.thetangle.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
-      - jq -r '.nodesDevnet[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.cafe:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
-      - jq -r '.nodesDevnet[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.cafe:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.nodesDevnet[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.nodesDevnet[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-12' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
