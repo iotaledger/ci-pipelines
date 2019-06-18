@@ -43,6 +43,7 @@ steps:
       - jq -r '.apiEndpoint = \$apiEndpoint' --arg apiEndpoint \$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
       - jq -r '.tangleExplorer .transactions = \$transactions' --arg transactions 'https://devnet.thetangle.org/transaction/:transactionHash' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.tangleExplorer .bundles = \$bundles' --arg bundles 'https://devnet.thetangle.org/bundle/:bundleHash' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
+      - jq -r '.organizationId = \$organizationId' --arg organizationId 'SYBZMHNRVCBSLJNQCYVJFQXRDFFGCEHBWMWUEKZAUXFESRETBYKJJFKDUNB9NPLDRIUQZTP9DKLJMXEPA' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.name = \$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
 #      - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
       - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\$GIT_TOKEN -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
@@ -125,6 +126,7 @@ steps:
 #      - jq -r '.tangleExplorer .transactions = \$transactions' --arg transactions 'https://devnet.thetangle.org/transaction/:transactionHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
 #      - jq -r '.tangleExplorer .bundles = \$bundles' --arg bundles 'https://devnet.thetangle.org/bundles/:bundleHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.googleAnalyticsId = \$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-5' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.organizationId = \$organizationId' --arg organizationId 'VTOGTFGLYSYYUABYVOKAIJPMSAYQUIWRSBTZAHNGSSQWOGQXNDFTJPCPTZWMWFDQNUZ9LRYFNTBNWJCSK' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.name = \$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
 #      - jq -r '.alias = \$alias' --arg alias \$ALIAS now.json > tmp.json && mv tmp.json now.json
       - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\$GIT_TOKEN -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
