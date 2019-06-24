@@ -75,6 +75,7 @@ client_staging () {
       - jq -r '.nodesMainnet[1] .provider = \\\$provider' --arg provider 'https://nodes.thetangle.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.nodesDevnet[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.nodesDevnet[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
+      - jq -r '.googleMapsKey = \\\$googleMapsKey' --arg googleMapsKey \\\$GOOGLE_MAPS_KEY public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -83,7 +84,8 @@ client_staging () {
           - API_ENDPOINT=https://utils-api.iota.works
           - ALIAS=utils.iota.works
           - ZEIT_TOKEN
-          - GIT_TOKEN"
+          - GIT_TOKEN
+          - GOOGLE_MAPS_KEY"
   echo "    agents:
       queue: aws-nano"
 }
@@ -100,6 +102,7 @@ client_prod () {
       - jq -r '.nodesDevnet[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.nodesDevnet[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-12' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.googleMapsKey = \\\$googleMapsKey' --arg googleMapsKey \\\$GOOGLE_MAPS_KEY public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -108,7 +111,8 @@ client_prod () {
           - API_ENDPOINT=https://utils-api.iota.org
           - ALIAS=utils.iota.org
           - ZEIT_TOKEN
-          - GIT_TOKEN"
+          - GIT_TOKEN
+          - GOOGLE_MAPS_KEY"
   echo "    agents:
       queue: aws-nano"
 }
