@@ -1,0 +1,202 @@
+steps:
+  - name: "Cleanup /cache mount"
+    command:
+      - rm -rf /cache/*
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "busybox"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - wait
+
+  - name: "Clone IRI"
+    command:
+      - |
+        apk add git
+        if [ ! -z "$IRI_BUILDKITE_PULL_REQUEST_REPO" ]; then
+          git clone "$IRI_BUILDKITE_PULL_REQUEST_REPO" /cache/iri
+        else
+          git clone https://github.com/sadjy/iri.git /cache/iri
+        fi
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - name: "Clone TIAB"
+    command:
+      - clone --depth 1 https://github.com/sadjy/tiab.git /cache/tiab
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "alpine/git"
+        shell: false
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - wait
+
+  - name: "Checkout IRI revision"
+    command:
+      - apk add git
+      - cd /cache/iri
+      - git checkout $IRI_GIT_COMMIT
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - wait
+
+  - name: "Install TIAB dependencies"
+    command:
+      - pip install virtualenv
+      - cd /cache/tiab
+      - virtualenv venv
+      - source venv/bin/activate
+      - pip install -r requirements.txt
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "python:2-alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - name: "Install iri-regression dependencies"
+    command:
+      - apk add gcc musl-dev libffi-dev openssl-dev
+      - pip install virtualenv
+      - virtualenv /cache/iri-regression-venv
+      - source /cache/iri-regression-venv/bin/activate
+      - cd /cache/iri/python-regression
+      - pip install -e .
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "python:2-alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+
+  - wait
+
+  - name: "Run TIAB against config.yml files"
+    command:
+      - cd /cache/tiab
+      - source venv/bin/activate
+      - cd /cache/iri/python-regression
+      - |
+        ERROR=0
+        for machine_dir in tests/features/machine?; do
+          mkdir -p /cache/\$machine_dir/
+          python /cache/tiab/create_cluster.py -i iotacafe/iri-dev:$IRI_BUILD_NUMBER -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -n buildkite -x /cache/iri/python-regression -e "apt update && apt install unzip && wget http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.4/jacoco-0.8.4.zip -O jacoco.zip && mkdir /opt/jacoco && unzip jacoco.zip -d /opt/jacoco" -d
+          if [ \$? -ne 0 ]; then
+            ERROR=1
+            python /workdir/iri-regression-tests/print-logs.py /cache/\$machine_dir/output.yml
+          fi
+          if [ \$ERROR -ne 0 ]; then
+            exit 1
+          fi
+        done
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "python:2-alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf:/conf:ro
+
+  - wait
+
+  - name: "Generate dynamic Aloe steps"
+    command: 
+      - cd iri-regression-tests && ./aloe-steps-create.sh > /cache/aloe-steps.yml
+      - buildkite-agent pipeline upload < /cache/aloe-steps.yml
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "busybox"
+        shell: /bin/sh -c
+        mount-buildkite-agent: true
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+          - /etc/ssl/certs:/etc/ssl/certs:ro
+
+  - wait: ~
+    continue_on_failure: true
+
+  - name: "Fetching jacoco exec files"
+    command:
+      - wget https://storage.googleapis.com/kubernetes-release/release/v1.14.1/bin/linux/amd64/kubectl -O /cache/kubectl && chmod +x /cache/kubectl
+      - cd /cache/tiab
+      - source venv/bin/activate
+      - cd /cache/iri/python-regression
+      - mkdir /cache/jacoco && mkdir /cache/jacoco/jacoco_html
+      - |
+        for machine_dir in tests/features/machine?; do
+          for pod in \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pods -o jsonpath='{.items[*].metadata.name}'); do
+            echo \$pod
+            if [ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') = \$BUILDKITE_BUILD_ID ]
+            then
+              /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "pkill java"
+              /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/\$pod:/iri/jacoco.exec /cache/jacoco/jacoco_\$pod.exec
+            fi
+          done
+        done
+      - apt -qq update && apt -qq install unzip && wget http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.4/jacoco-0.8.4.zip -O jacoco.zip && unzip -qq jacoco.zip -d /cache/jacoco && rm jacoco.zip
+      - java -jar /cache/jacoco/lib/jacococli.jar merge /cache/*.exec --destfile /cache/jacoco.exec
+      - buildkite-agent artifact download target/iri-oracle8-${IRI_BUILD_NUMBER}.jar /cache/jacoco/ --build $ARTIFACT_BUILDKITE_BUILD_ID 
+      - java -jar /cache/jacoco/lib/jacococli.jar report /cache/jacoco/jacoco.exec --classfiles /cache/jacoco/iri-oracle8-${IRI_BUILD_NUMBER}.jar --html /cache/jacoco/jacoco_html --name jacocoreport-$BUILDKITE_BUILD_ID
+    agents:
+      queue: ops
+    artifact_paths:
+      - "/cache/jacoco/jacoco_html/*"
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
+        shell: /bin/bash -c
+        mount-buildkite-agent: true
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf:/conf:ro
+    soft_fail:
+      - exit_status: 1
+
+  - wait: ~
+    continue_on_failure: true
+
+  - name: "Teardown cluster"
+    command:
+      - cd /cache/tiab
+      - source venv/bin/activate
+      - if [ -z "$KEEP_CLUSTER" ]; then python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite; fi
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "python:2-alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf:/conf:ro
+
+

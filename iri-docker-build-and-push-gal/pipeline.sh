@@ -64,7 +64,7 @@ skip_build () {
 }
 
 trigger_reg_tests () {
-  echo "  - trigger: iri-regression-tests-dev"
+  echo "  - trigger: iri-regression-tests"
   echo "    build:
       env: 
         IRI_BUILD_NUMBER: $1
