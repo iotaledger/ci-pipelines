@@ -73,7 +73,7 @@ trigger_reg_tests () {
 }
 
 echo "steps:"
-TAG=$(git describe --tags --abbrev=0)
+TAG=$(git describe --exact-match --tags HEAD)
 IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
 IRI_BUILD_NUMBER=${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
 if [ ! -z "$IRI_TAGGED_GIT_COMMIT" ]
