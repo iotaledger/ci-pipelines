@@ -5,7 +5,7 @@ set -eu
 
 build_docker () {
   echo "  - name: \"Building jar - $1\""
-  echo "    commands:
+  echo "    command:
       - mvn clean package
       - mv target/iri*.jar target/iri-oracle8-$1.jar
       - cp target/iri-oracle8-$1.jar /cache"
@@ -27,7 +27,7 @@ build_docker () {
 
 push_docker () {
   echo "  - name: \"Pushing to docker hub - $1\""
-  echo "    commands:
+  echo "    command:
       - mkdir target
       - cp /cache/iri-oracle8-$1.jar target
       - sed -i '/# execution image/d' Dockerfile     
@@ -57,7 +57,7 @@ wait () {
 
 skip_build () {
   echo "  - name: \"Triggering commit not tagged, skipping build\""
-  echo "    commands:
+  echo "    command:
       - exit 0"
   echo "    agents:
       queue: aws-m5large"
