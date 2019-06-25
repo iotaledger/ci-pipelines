@@ -4,11 +4,13 @@ set -eu
 
 
 build_docker () {
-  echo "  - name: \"Building jar - $1\""
-  echo "    command:
+  echo "  - label: \"Building jar - $1\""
+  echo "    commands:
       - mvn clean package
       - mv target/iri*.jar target/iri-oracle8-$1.jar
       - cp target/iri-oracle8-$1.jar /cache"
+  echo "    env:
+      BUILDKITE_CLEAN_CHECKOUT: \"true\""
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"iotacafe/maven:3.5.4.oracle8u181.1.webupd8.1.1-1\"
@@ -24,8 +26,8 @@ build_docker () {
 
 
 push_docker () {
-  echo "  - name: \"Pushing to docker hub - $1\""
-  echo "    command:
+  echo "  - label: \"Pushing to docker hub - $1\""
+  echo "    commands:
       - mkdir target
       - cp /cache/iri-oracle8-$1.jar target
       - sed -i '/# execution image/d' Dockerfile     
@@ -54,8 +56,8 @@ wait () {
 }
 
 skip_build () {
-  echo "  - name: \"Triggering commit not tagged, skipping build\""
-  echo "    command:
+  echo "  - label: \"Triggering commit not tagged, skipping build\""
+  echo "    commands:
       - exit 0" 
   echo "    agents:
       queue: aws-m5large"  
