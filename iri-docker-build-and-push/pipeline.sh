@@ -73,7 +73,7 @@ trigger_reg_tests () {
 }
 
 echo "steps:"
-TAG=$(git describe --exact-match --tags HEAD)
+TAG=$(git describe --exact-match --tags HEAD 2>/dev/null)
 if [ ! -z "$TAG" ]
 then
   IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
