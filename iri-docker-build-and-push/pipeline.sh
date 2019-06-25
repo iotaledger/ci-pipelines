@@ -76,6 +76,7 @@ IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
 if [ ! -z "$IRI_TAGGED_GIT_COMMIT" ]
 then
   build_docker "$TAG"
+  wait
   push_docker "$TAG"
 #  wait
 #  trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
