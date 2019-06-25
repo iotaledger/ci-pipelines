@@ -11,7 +11,7 @@ build_docker () {
       - cp target/iri-oracle8-$1.jar /cache"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"iotacafe/java:oracle8u181.1.webupd8.1-1\"
+        image: \"maven:3.5.4.oracle8u181.1.webupd8.1.1-1\"
         mount-buildkite-agent: false
         volumes:
         - /cache-iri-docker-build-and-push-$BUILDKITE_BUILD_ID:/cache"
