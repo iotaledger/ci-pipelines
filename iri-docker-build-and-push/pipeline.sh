@@ -57,7 +57,7 @@ wait () {
 
 skip_build () {
   echo "  - label: \"Triggering commit not tagged, skipping build\""
-  echo "    commands:
+  echo "    command:
       - exit 0" 
   echo "    agents:
       queue: aws-m5large"  
