@@ -73,13 +73,19 @@ trigger_reg_tests () {
 echo "steps:"
 TAG=$(git describe --tags --abbrev=0)
 IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
+IRI_BUILD_NUMBER=${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
 if [ ! -z "$IRI_TAGGED_GIT_COMMIT" ]
 then
   build_docker "$TAG"
   wait
   push_docker "$TAG"
-#  wait
-#  trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
+  wait
+  trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
 else
   skip_build
+#  build_docker "$IRI_BUILD_NUMBER"
+#  wait
+#  push_docker "$IRI_BUILD_NUMBER"
+#  wait
+#  trigger_reg_tests "$IRI_BUILD_NUMBER" "$GIT_COMMIT"
 fi
