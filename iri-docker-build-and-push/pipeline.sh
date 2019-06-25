@@ -4,8 +4,8 @@ set -eu
 
 
 build_docker () {
-  echo "  - name: \"Building jar - $1\""
-  echo "    command:
+  echo "  - label: \"Building jar - $1\""
+  echo "    commands:
       - mvn clean package
       - mv target/iri*.jar target/iri-oracle8-$1.jar
       - cp target/iri-oracle8-$1.jar /cache"
@@ -26,8 +26,8 @@ build_docker () {
 
 
 push_docker () {
-  echo "  - name: \"Pushing to docker hub - $1\""
-  echo "    command:
+  echo "  - label: \"Pushing to docker hub - $1\""
+  echo "    commands:
       - mkdir target
       - cp /cache/iri-oracle8-$1.jar target
       - sed -i '/# execution image/d' Dockerfile     
@@ -56,8 +56,8 @@ wait () {
 }
 
 skip_build () {
-  echo "  - name: \"Triggering commit not tagged, skipping build\""
-  echo "    command:
+  echo "  - label: \"Triggering commit not tagged, skipping build\""
+  echo "    commands:
       - exit 0"
   echo "    agents:
       queue: aws-m5large"
@@ -73,7 +73,7 @@ trigger_reg_tests () {
 }
 
 echo "steps:"
-TAG=$(git describe --exact-match --tags HEAD 2>/dev/null)
+TAG=$(git describe --exact-match --tags HEAD || true)
 if [ ! -z "$TAG" ]
 then
   IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
@@ -83,7 +83,7 @@ then
   wait
   trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
 else
-#  IRI_BUILD_NUMBER=${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
+  IRI_BUILD_NUMBER=${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
   skip_build
 #  build_docker "$IRI_BUILD_NUMBER"
 #  wait
