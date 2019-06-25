@@ -2,13 +2,11 @@
 
 set -eu
 
-
 build_docker () {
   echo "  - label: \"Building jar - $1\""
   echo "    commands:
       - mvn clean package
-      - mv target/iri*.jar target/iri-oracle8-$1.jar
-      - cp target/iri-oracle8-$1.jar /cache"
+      - cp target/iri*.jar /cache/iri-$1.jar"
   echo "    env:
       BUILDKITE_CLEAN_CHECKOUT: \"true\""
   echo "    plugins:
@@ -29,7 +27,7 @@ push_docker () {
   echo "  - label: \"Pushing to docker hub - $1\""
   echo "    commands:
       - mkdir target
-      - cp /cache/iri-oracle8-$1.jar target
+      - cp /cache/iri-$1.jar target
       - sed -i '/# execution image/d' Dockerfile     
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
@@ -72,16 +70,47 @@ trigger_reg_tests () {
         ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID"
 }
 
+trigger_release () {
+  echo "  - label: \"Releasing - $1\""
+  echo "    commands:
+      - wget https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -O github-release
+      - chmod +x github-release
+      - ./github-release \\\$GITHUB_RELEASE_TAG /cache/iri-$1.jar"
+  echo "    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: \"debian\"
+        always-pull: true
+        mount-buildkite-agent: false
+        volumes:
+        - /cache-iri-docker-build-and-push-$BUILDKITE_BUILD_ID:/cache
+        environment:
+          - GITHUB_RELEASE_TAG=$1
+          - GITHUB_RELEASE_ACCESS_TOKEN
+          - GITHUB_RELEASE_REPOSITORY=sadjy/iri
+          - GITHUB_RELEASE_COMMIT"
+  echo "    agents:
+      queue: aws-m5large"
+}
+
 echo "steps:"
 TAG=$(git describe --exact-match --tags HEAD || true)
-if [ ! -z "$TAG" ]
-then
+if [ ! -z "$TAG" ]; then
   IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
-  build_docker "$TAG"
-  wait
-  push_docker "$TAG"
-  wait
-  trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
+  if [[ $TAG != *"RELEASE"* ]]; then 
+    build_docker "$TAG"
+    wait
+    push_docker "$TAG"
+    wait
+    trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
+  else
+    build_docker "$TAG"
+    wait
+    push_docker "$TAG"
+    wait
+    trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
+    wait
+    trigger_release "$TAG"
+  fi
 else
   IRI_BUILD_NUMBER=${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
   skip_build
@@ -91,3 +120,4 @@ else
 #  wait
 #  trigger_reg_tests "$IRI_BUILD_NUMBER" "$GIT_COMMIT"
 fi
+
