@@ -74,7 +74,7 @@ trigger_reg_tests () {
 trigger_release () {
   echo "  - label: \"Releasing - $1\""
   echo "    commands:
-      - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
+      - apt update && apt install curl -y && curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
       - sha256sum /cache/iri-$1.jar >> SHA256SUM
       #- gpg --armor --detach-sign --clearsign --default-key email@iota.org SHA256SUM
