@@ -50,7 +50,8 @@ push_docker () {
 }
 
 wait () {
-  echo "  - wait"
+  echo "  - wait: ~
+    continue_on_failure: true"
 }
 
 skip_build () {
@@ -75,7 +76,10 @@ trigger_release () {
   echo "    commands:
       - wget https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -O github-release
       - chmod +x github-release
-      - ./github-release \\\$GITHUB_RELEASE_TAG /cache/iri-$1.jar"
+      - sha256sum /cache/iri-$1.jar >> SHA256SUM
+      #- gpg --armor --detach-sign --clearsign --default-key email@iota.org SHA256SUM
+      - ./github-release \\\$GITHUB_RELEASE_TAG /cache/iri-$1.jar
+      - ./github-release \\\$GITHUB_RELEASE_TAG /cache/SHA256SUM*"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"debian\"
