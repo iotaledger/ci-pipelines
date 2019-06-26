@@ -76,10 +76,9 @@ trigger_release () {
   echo "    commands:
       - apt update && apt install curl -y && curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
-      - sha256sum /cache/iri-$1.jar >> SHA256SUM
-      #- gpg --armor --detach-sign --clearsign --default-key email@iota.org SHA256SUM
-      - ./github-release \\\$GITHUB_RELEASE_TAG /cache/iri-$1.jar
-      - ./github-release \\\$GITHUB_RELEASE_TAG /cache/SHA256SUM*"
+      - sha256sum /cache/iri-$1.jar >> /cache/SHA256SUM
+      #- gpg --armor --detach-sign --clearsign --default-key email@iota.org /cache/SHA256SUM
+      - ./github-release \\\$GITHUB_RELEASE_TAG /cache/*"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"debian\"
