@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         jq curl socat \
     && rm -rf /var/lib/apt/lists/*
 
-COPY /iri/target/iri*.jar /iri/target/
+COPY target/iri*.jar /iri/target/
 COPY docker/entrypoint.sh /
 
 # Java related options. Defaults set as below
