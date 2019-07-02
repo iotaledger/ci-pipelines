@@ -87,8 +87,8 @@ client_staging () {
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"node:8.12-stretch\"
         environment:
-          - API_ENDPOINT=https://utils-api.iota.works
-          - ALIAS=utils.iota.works
+          - API_ENDPOINT=https://p2p-energy-api.iota.works
+          - ALIAS=p2p-energy.iota.works
           - ZEIT_TOKEN
           - GIT_TOKEN"
   echo "    agents:
@@ -110,8 +110,8 @@ client_prod () {
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"node:8.12-stretch\"
         environment:
-          - API_ENDPOINT=https://utils-api.iota.org
-          - ALIAS=utils.iota.org
+          - API_ENDPOINT=https://p2p-energy-api.iota.org
+          - ALIAS=p2p-energy.iota.org
           - ZEIT_TOKEN
           - GIT_TOKEN"
   echo "    agents:
