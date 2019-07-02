@@ -13,12 +13,12 @@ api_staging () {
       - jq -r '.nodes[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' src/data/config.template.json > src/data/config.staging.json
       - jq -r '.nodes[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$ECO_P2P_NRG_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$ECO_P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$P2P_NRG_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.s3Connection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.s3Connection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$ECO_P2P_NRG_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$ECO_P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.s3Connection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$P2P_NRG_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.s3Connection .bucketPrefix = \\\$bucketPrefix' --arg bucketPrefix \\\$BUCKET_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.walletSeed = \\\$walletSeed' --arg walletSeed \\\$WALLET_SEED src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
@@ -28,8 +28,8 @@ api_staging () {
         environment:
           - ALIAS=p2p-energy-api.iota.works
           - ZEIT_TOKEN
-          - ECO_P2P_NRG_STAGING_AWS_ACCESS_KEY_ID
-          - ECO_P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY
+          - P2P_NRG_STAGING_AWS_ACCESS_KEY_ID
+          - P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=p2p-energy-demo-staging-
           - BUCKET_PREFIX=p2p-energy-demo-staging-
           - WALLET_SEED" 
@@ -46,12 +46,12 @@ api_prod () {
       - jq -r '.nodes[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' src/data/config.template.json > src/data/config.prod.json
       - jq -r '.nodes[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$ECO_P2P_NRG_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$ECO_P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$P2P_NRG_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.s3Connection .region = \\\$region' --arg region 'eu-central-1' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - jq -r '.s3Connection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$ECO_P2P_NRG_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$ECO_P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.s3Connection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$P2P_NRG_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.s3Connection .bucketPrefix = \\\$bucketPrefix' --arg bucketPrefix \\\$BUCKET_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.walletSeed = \\\$walletSeed' --arg walletSeed \\\$WALLET_SEED src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
@@ -61,8 +61,8 @@ api_prod () {
         environment:
           - ALIAS=p2p-energy-api.iota.org
           - ZEIT_TOKEN
-          - ECO_P2P_NRG_PROD_AWS_ACCESS_KEY_ID
-          - ECO_P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY
+          - P2P_NRG_PROD_AWS_ACCESS_KEY_ID
+          - P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=p2p-energy-demo-prod-
           - BUCKET_PREFIX=p2p-energy-demo-prod-
           - WALLET_SEED" 
