@@ -28,6 +28,7 @@ api_staging () {
         environment:
           - ALIAS=p2p-energy-api.iota.works
           - ZEIT_TOKEN
+          - GIT_TOKEN          
           - P2P_NRG_STAGING_AWS_ACCESS_KEY_ID
           - P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=p2p-energy-demo-staging-
@@ -61,6 +62,7 @@ api_prod () {
         environment:
           - ALIAS=p2p-energy-api.iota.org
           - ZEIT_TOKEN
+          - GIT_TOKEN
           - P2P_NRG_PROD_AWS_ACCESS_KEY_ID
           - P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=p2p-energy-demo-prod-
