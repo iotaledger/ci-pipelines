@@ -21,7 +21,7 @@ api_staging () {
       - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.s3Connection .bucketPrefix = \\\$bucketPrefix' --arg bucketPrefix \\\$BUCKET_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.walletSeed = \\\$walletSeed' --arg walletSeed \\\$WALLET_SEED src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
-      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"node:8.12-stretch\"
@@ -55,7 +55,7 @@ api_prod () {
       - jq -r '.s3Connection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.s3Connection .bucketPrefix = \\\$bucketPrefix' --arg bucketPrefix \\\$BUCKET_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.walletSeed = \\\$walletSeed' --arg walletSeed \\\$WALLET_SEED src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
-      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"node:8.12-stretch\"
