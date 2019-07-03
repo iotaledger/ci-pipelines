@@ -103,14 +103,14 @@ else
   TAG=${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
   # TO DO: Differentiate normal commits from PRs
 fi
-if [[ $BUILDKITE_BRANCH != "master"* ]]; then
+if [[ "$BUILDKITE_BRANCH" != "master"* ]]; then
   build_docker "$TAG"
   wait
   push_docker "$TAG"
   wait
   trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
 else
-  if [[ $TAG == *"RELEASE" ]]; then
+  if [[ "$TAG" == *"RELEASE" ]]; then
     release "$TAG"
   fi
 fi
