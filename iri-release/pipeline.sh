@@ -75,11 +75,12 @@ trigger_reg_tests () {
 release () {
   echo "  - label: \"Releasing - $1\""
   echo "    commands:
+      - buildkite-agent artifact download target/iri-oracle8-$1.jar target/ 
       - apt update && apt install curl -y && curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
-      - sha256sum /cache/iri-$1.jar >> /cache/SHA256SUM
+      - sha256sum target/iri-$1.jar >> target/SHA256SUM
       #- gpg --armor --detach-sign --clearsign --default-key email@iota.org /cache/SHA256SUM
-      - ./github-release \\\$GITHUB_RELEASE_TAG /cache/*"
+      - ./github-release \\\$GITHUB_RELEASE_TAG target/*"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"debian\"
