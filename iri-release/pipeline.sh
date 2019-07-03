@@ -97,6 +97,7 @@ release () {
 }
 
 echo "steps:"
+TAG=$(git describe --exact-match --tags HEAD || true)
 if [ ! -z "$TAG" ]; then
   IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
 else
