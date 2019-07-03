@@ -6,7 +6,8 @@ build_docker () {
   echo "  - label: \"Building jar - $1\""
   echo "    commands:
       - mvn clean package
-      - cp target/iri*.jar /cache/iri-$1.jar"
+      - mv target/iri*.jar target/iri-oracle8-$1.jar
+      - cp target/iri*.jar /cache/"
   echo "    env:
       BUILDKITE_CLEAN_CHECKOUT: \"true\""
   echo "    plugins:
@@ -27,7 +28,7 @@ push_docker () {
   echo "  - label: \"Pushing to docker hub - $1\""
   echo "    commands:
       - mkdir target
-      - cp /cache/iri-$1.jar target
+      - cp /cache/iri-*.jar target
       - sed -i '/# execution image/d' Dockerfile     
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
@@ -55,7 +56,7 @@ wait () {
 }
 
 skip_build () {
-  echo "  - label: \"Triggering commit not tagged, skipping build\""
+  echo "  - label: \"Something went wrong, skipping build\""
   echo "    commands:
       - exit 0"
   echo "    agents:
@@ -71,7 +72,7 @@ trigger_reg_tests () {
         ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID"
 }
 
-trigger_release () {
+release () {
   echo "  - label: \"Releasing - $1\""
   echo "    commands:
       - apt update && apt install curl -y && curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
@@ -96,32 +97,20 @@ trigger_release () {
 }
 
 echo "steps:"
-TAG=$(git describe --exact-match --tags HEAD || true)
 if [ ! -z "$TAG" ]; then
   IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
-
-  if [[ $BUILDKITE_BRANCH != "master"* ]]; then 
-    build_docker "$TAG"
-    wait
-    push_docker "$TAG"
-    wait
-    trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
-  else
-    build_docker "$TAG"
-    wait
-    push_docker "$TAG"
-    wait
-    trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
-    wait
-    trigger_release "$TAG"
-  fi
 else
-  IRI_BUILD_NUMBER=${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
-  skip_build
-#  build_docker "$IRI_BUILD_NUMBER"
-#  wait
-#  push_docker "$IRI_BUILD_NUMBER"
-#  wait
-#  trigger_reg_tests "$IRI_BUILD_NUMBER" "$GIT_COMMIT"
+  TAG=${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
+  # TO DO: Differentiate normal commits from PRs
 fi
-
+if [[ $BUILDKITE_BRANCH != "master"* ]]; then
+  build_docker "$TAG"
+  wait
+  push_docker "$TAG"
+  wait
+  trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
+else
+  if [[ $TAG == *"RELEASE" ]]
+    release "$TAG"
+  fi
+fi
