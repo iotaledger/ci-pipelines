@@ -100,7 +100,7 @@ echo "steps:"
 if [ ! -z "$TAG" ]; then
   IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
 else
-  TAG=${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
+  TAG=${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
   # TO DO: Differentiate normal commits from PRs
 fi
 if [[ $BUILDKITE_BRANCH != "master"* ]]; then
