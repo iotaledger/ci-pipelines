@@ -85,7 +85,7 @@ release () {
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"debian\"
         always-pull: true
-        mount-buildkite-agent: false
+        mount-buildkite-agent: true
         volumes:
         - /cache-iri-docker-build-and-push-$BUILDKITE_BUILD_ID:/cache
         environment:
