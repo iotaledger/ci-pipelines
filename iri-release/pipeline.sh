@@ -75,6 +75,7 @@ trigger_reg_tests () {
 release () {
   echo "  - label: \"Releasing - $1\""
   echo "    commands:
+      - mkdir -p target
       - buildkite-agent artifact download target/iri-oracle8-$1.jar target/ 
       - apt update && apt install curl -y && curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
