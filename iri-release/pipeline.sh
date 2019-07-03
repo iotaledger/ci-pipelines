@@ -77,8 +77,9 @@ release () {
   echo "  - label: \"Releasing - $1\""
   echo "    commands:
       - mkdir -p target
+      - apt update && apt install curl -y
       - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/iri-$1.jar --output target/iri-$1.jar
-      - apt update && apt install curl -y && curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
+      - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
       - sha256sum target/iri-$1.jar >> target/SHA256SUM
       #- gpg --armor --detach-sign --clearsign --default-key email@iota.org target/SHA256SUM
