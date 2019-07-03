@@ -110,7 +110,7 @@ if [[ $BUILDKITE_BRANCH != "master"* ]]; then
   wait
   trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
 else
-  if [[ $TAG == *"RELEASE" ]]
+  if [[ $TAG == *"RELEASE" ]]; then
     release "$TAG"
   fi
 fi
