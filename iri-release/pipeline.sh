@@ -99,9 +99,10 @@ release () {
 echo "steps:"
 TAG=$(git describe --exact-match --tags HEAD || true)
 if [ ! -z "$TAG" ]; then
-  IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
+  GIT_COMMIT=$(git show-ref -s $TAG)
 else
   TAG=${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
+  GIT_COMMIT=$BUILDKITE_COMMIT
   # TO DO: Differentiate normal commits from PRs
 fi
 if [[ "$BUILDKITE_BRANCH" != "master"* ]]; then
@@ -109,7 +110,7 @@ if [[ "$BUILDKITE_BRANCH" != "master"* ]]; then
   wait
   push_docker "$TAG"
   wait
-  trigger_reg_tests "$TAG" "$IRI_TAGGED_GIT_COMMIT"
+  trigger_reg_tests "$TAG" "$GIT_COMMIT"
 else
   if [[ "$TAG" == *"RELEASE" ]]; then
     release "$TAG"
