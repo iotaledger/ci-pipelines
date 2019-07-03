@@ -94,7 +94,7 @@ release () {
         environment:
           - GITHUB_RELEASE_TAG=$1
           - GITHUB_RELEASE_ACCESS_TOKEN
-          - GITHUB_RELEASE_REPOSITORY=sadjy/iri
+          - GITHUB_RELEASE_REPOSITORY=GalRogozinski/iri
           - GITHUB_RELEASE_COMMIT"
   echo "    agents:
       queue: aws-m5large"
