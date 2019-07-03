@@ -99,7 +99,8 @@ echo "steps:"
 TAG=$(git describe --exact-match --tags HEAD || true)
 if [ ! -z "$TAG" ]; then
   IRI_TAGGED_GIT_COMMIT=$(git show-ref -s $TAG)
-  if [[ $TAG != *"RELEASE"* ]]; then 
+
+  if [[ $BUILDKITE_BRANCH != "master"* ]]; then 
     build_docker "$TAG"
     wait
     push_docker "$TAG"
