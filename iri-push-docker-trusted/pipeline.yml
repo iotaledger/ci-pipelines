@@ -4,7 +4,10 @@ steps:
       - mkdir -p target docker
       - buildkite-agent artifact download target/iri-oracle8-${IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
       - buildkite-agent artifact download docker/entrypoint.sh docker/ --build $ARTIFACT_BUILDKITE_BUILD_ID && chmod +x docker/entrypoint.sh
-      - docker build -f $BUILDKITE_PIPELINE_SLUG/Dockerfile -t iotacafe/iri-dev:$IRI_BUILD_NUMBER .
+      - buildkite-agent artifact download Dockerfile . --build $ARTIFACT_BUILDKITE_BUILD_ID      
+      - sed -i '1,/# execution image/d' Dockerfile
+      - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
+      - docker build -f Dockerfile -t iotacafe/iri-dev:$IRI_BUILD_NUMBER .
       - docker push iotacafe/iri-dev:$IRI_BUILD_NUMBER
       - |
         case $IRI_BUILD_NUMBER in

@@ -44,7 +44,7 @@ steps:
   - wait
 
   - name: "TE=1 bazel test --remote_upload_local_results=false opt ASAN"
-    command: cd /workdir && bazel test --build_tests_only --remote_upload_local_results=false -c opt --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
+    command: cd /workdir && bazel clean --expunge && bazel test --build_tests_only --remote_upload_local_results=false -c opt --test_output=all --config asan --define trit_encoding=1 -- //... -//mobile/ios/...
     agents:
       queue: dev
     plugins:

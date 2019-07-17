@@ -14,6 +14,7 @@ steps:
        - surefire-reports
        - "*-jvmRun*.dump"
        - "*.dumpstream"
+       - "Dockerfile"
      agents:
        queue: dev
 
