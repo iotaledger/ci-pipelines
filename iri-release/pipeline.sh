@@ -20,8 +20,8 @@ build_docker () {
         volumes:
         - /cache-iri-docker-build-and-push-$BUILDKITE_BUILD_ID:/cache"
   echo "    artifact_paths:
-      - \"iri-*\"
-      - \"SHA256SUM-*\""
+      - \"target/iri-*.jar\"
+      - \"target/SHA256SUM-*\""
   echo "    agents:
       queue: aws-m5large"
 }
@@ -80,8 +80,8 @@ release () {
   echo "    commands:
       - mkdir -p target
       - apt update && apt install curl -y
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/iri-$1.jar --output target/iri-$1.jar
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/SHA256SUM-$1.jar --output target/SHA256SUM-$1
+      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/iri-$1.jar --output target/iri-$1.jar
+      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/SHA256SUM-$1.jar --output target/SHA256SUM-$1
       - if [ \\\$(sha256sum target/iri-$1.jar) != \\\$(cat target/SHA256SUM-$1)]; exit 1
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
