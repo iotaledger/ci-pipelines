@@ -10,7 +10,7 @@ steps:
       - docker push sadjy/iri-dev:$IRI_BUILD_NUMBER
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"docker\"
+        image: "docker"
         always-pull: true
         mount-buildkite-agent: true
         volumes:
