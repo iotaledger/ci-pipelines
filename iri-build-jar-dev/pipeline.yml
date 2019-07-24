@@ -3,7 +3,7 @@ steps:
     commands:
       - mvn clean package
       - mv target/iri*.jar target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar
-      - TAG=\$(git describe --exact-match --tags HEAD || true); if [[ "$TAG" == *"RELEASE" ]]; then cp target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar target/iri-$TAG.jar; fi
+      - TAG=\$(git describe --exact-match --tags HEAD || true); if [[ "\$TAG" == *"RELEASE" ]]; then cp target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar target/iri-\$TAG.jar; fi
       - cd target
     env:
       BUILDKITE_CLEAN_CHECKOUT: true
