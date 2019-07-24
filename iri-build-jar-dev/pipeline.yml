@@ -12,6 +12,7 @@ steps:
         image: "iotacafe/maven:3.5.4.oracle8u181.1.webupd8.1.1-1"
         always-pull: true
         mount-buildkite-agent: false
+        shell: ["/bin/bash", "-e", "-c"]
     artifact_paths:
       - "target/iri-*.jar"
     agents:
