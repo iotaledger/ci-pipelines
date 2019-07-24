@@ -1,0 +1,35 @@
+steps:
+  - label: "Pushing to docker hub - $IRI_BUILD_NUMBER"
+    commands:
+      - mkdir target
+      - buildkite-agent artifact download target/iri-${IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
+      - sed -i '1,/# execution image/d' Dockerfile  
+      - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
+      - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
+      - docker build -t sadjy/iri-dev:$IRI_BUILD_NUMBER .
+      - docker push sadjy/iri-dev:$IRI_BUILD_NUMBER"
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: \"docker\"
+        always-pull: true
+        mount-buildkite-agent: true
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /conf/docker/.docker:$HOME/.docker
+        environment:
+        - DOCKER_USERNAME
+        - DOCKER_PASSWORD
+    agents:
+      queue: aws-m5large
+
+  - wait
+
+  - trigger: iri-regression-tests-dev
+    build:
+      env:
+        IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
+        IRI_GIT_COMMIT: $IRI_GIT_COMMIT
+        IRI_BUILDKITE_PULL_REQUEST_REPO: $IRI_BUILDKITE_PULL_REQUEST_REPO
+        ARTIFACT_BUILDKITE_BUILD_ID: $ARTIFACT_BUILDKITE_BUILD_ID
+
+

@@ -2,56 +2,7 @@
 
 set -eu
 
-build_docker () {
-  echo "  - label: \"Building jar - $1\""
-  echo "    commands:
-      - mvn clean package
-      - mv target/iri*.jar target/iri-$1.jar
-      - cp target/iri*.jar /cache/
-      - sha256sum target/iri-$1.jar >> target/SHA256SUM-$1
-      - cd target"
-  echo "    env:
-      BUILDKITE_CLEAN_CHECKOUT: \"true\""
-  echo "    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"iotacafe/maven:3.5.4.oracle8u181.1.webupd8.1.1-1\"
-        always-pull: true
-        mount-buildkite-agent: false
-        volumes:
-        - /cache-iri-docker-build-and-push-$BUILDKITE_BUILD_ID:/cache"
-  echo "    artifact_paths:
-      - \"target/iri-*.jar\"
-      - \"target/SHA256SUM-*\""
-  echo "    agents:
-      queue: aws-m5large"
-}
-
-
-push_docker () {
-  echo "  - label: \"Pushing to docker hub - $1\""
-  echo "    commands:
-      - mkdir target
-      - cp /cache/iri-*.jar target
-      - sed -i '/# execution image/d' Dockerfile     
-      - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
-      - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
-      - docker build -t sadjy/iri-dev:$1 .
-      - docker push sadjy/iri-dev:$1"
-  echo "    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"docker\"
-        always-pull: true
-        mount-buildkite-agent: true
-        volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /conf/docker/.docker:$HOME/.docker
-        - /cache-iri-docker-build-and-push-$BUILDKITE_BUILD_ID:/cache
-        environment:
-          - DOCKER_USERNAME
-          - DOCKER_PASSWORD"
-  echo "    agents:
-      queue: aws-m5large"
-}
+# TODO: Use external IRI-build-jar and IRI-docker-push-trusted instead of >>>>
 
 wait () {
   echo "  - wait: ~
@@ -66,23 +17,12 @@ skip_build () {
       queue: aws-m5large"
 }
 
-trigger_reg_tests () {
-  echo "  - trigger: iri-regression-tests-dev"
-  echo "    build:
-      env: 
-        IRI_BUILD_NUMBER: $1
-        IRI_GIT_COMMIT: $2
-        ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID"
-}
-
 release () {
   echo "  - label: \"Releasing - $1\""
   echo "    commands:
       - mkdir -p target
       - apt update && apt install curl -y
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/iri-$1.jar --output target/iri-$1.jar
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/SHA256SUM-$1.jar --output target/SHA256SUM-$1
-      - if [ \\\$(sha256sum target/iri-$1.jar) != \\\$(cat target/SHA256SUM-$1)]; then exit 1; fi
+      - buildkite-agent artifact download target/iri-$TAG.jar target/ 
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
       #- gpg --armor --detach-sign --clearsign --default-key email@iota.org target/SHA256SUM
@@ -105,21 +45,8 @@ release () {
 
 echo "steps:"
 TAG=$(git describe --exact-match --tags HEAD || true)
-if [ ! -z "$TAG" ]; then
-  GIT_COMMIT=$(git show-ref -s $TAG)
+if [[ "$TAG" == *"RELEASE" ]]; then
+  release "$TAG"
 else
-  TAG=${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
-  GIT_COMMIT=$BUILDKITE_COMMIT
-  # TO DO: Differentiate normal commits from PRs
-fi
-if [[ "$BUILDKITE_BRANCH" != "master"* ]]; then
-  build_docker "$TAG"
-  wait
-  push_docker "$TAG"
-  wait
-  trigger_reg_tests "$TAG" "$GIT_COMMIT"
-else
-  if [[ "$TAG" == *"RELEASE" ]]; then
-    release "$TAG"
-  fi
+  skip_build
 fi

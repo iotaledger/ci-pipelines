@@ -1,0 +1,29 @@
+steps:
+  - label: "Building jar - ${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}"
+  commands:
+    - mvn clean package
+    - mv target/iri*.jar target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar
+    - TAG=\$(git describe --exact-match --tags HEAD); if [ "$TAG" == *"RELEASE" ]; then cp target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar target/iri-$TAG.jar; fi
+    - cd target"
+  env:
+    BUILDKITE_CLEAN_CHECKOUT: true
+  plugins:
+    https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+      image: "iotacafe/maven:3.5.4.oracle8u181.1.webupd8.1.1-1"
+      always-pull: true
+      mount-buildkite-agent: false
+  artifact_paths:
+    - "target/iri-*.jar"
+  agents:
+    queue: dev
+
+  - wait
+
+  - trigger: iri-push-docker-trusted-dev
+    build:
+      env:
+        ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
+        IRI_BUILD_NUMBER: ${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
+        IRI_GIT_COMMIT: $GIT_COMMIT
+
+

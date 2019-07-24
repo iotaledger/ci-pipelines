@@ -8,6 +8,7 @@ build_docker () {
       - mvn clean package
       - mv target/iri*.jar target/iri-$1.jar
       - cp target/iri*.jar /cache/
+      - sha256sum target/iri-$1.jar >> target/SHA256SUM-$1
       - cd target"
   echo "    env:
       BUILDKITE_CLEAN_CHECKOUT: \"true\""
@@ -19,7 +20,8 @@ build_docker () {
         volumes:
         - /cache-iri-docker-build-and-push-$BUILDKITE_BUILD_ID:/cache"
   echo "    artifact_paths:
-      - \"iri-*\""
+      - \"target/iri-*.jar\"
+      - \"target/SHA256SUM-*\""
   echo "    agents:
       queue: aws-m5large"
 }
@@ -30,7 +32,7 @@ push_docker () {
   echo "    commands:
       - mkdir target
       - cp /cache/iri-*.jar target
-      - sed -i '/# execution image/d' Dockerfile     
+      - sed -i '1,/# execution image/d' Dockerfile   
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
       - docker build -t sadjy/iri-dev:$1 .
@@ -78,10 +80,11 @@ release () {
   echo "    commands:
       - mkdir -p target
       - apt update && apt install curl -y
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/iri-$1.jar --output target/iri-$1.jar
+      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/iri-$1.jar --output target/iri-$1.jar
+      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/SHA256SUM-$1.jar --output target/SHA256SUM-$1
+      - if [ \\\$(sha256sum target/iri-$1.jar) != \\\$(cat target/SHA256SUM-$1)]; then exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
-      - sha256sum target/iri-$1.jar >> target/SHA256SUM
       #- gpg --armor --detach-sign --clearsign --default-key email@iota.org target/SHA256SUM
       - ./github-release \\\$GITHUB_RELEASE_TAG target/*"
   echo "    plugins:
