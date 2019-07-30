@@ -6,7 +6,7 @@ steps:
       - sha256sum target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar > target/SHA256SUM-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
       - export TAG=\$(git describe --exact-match --tags HEAD || true)
       - echo \$TAG
-      - if [[ "\$TAG" == *"RELEASE" ]]; then cp target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar target/iri-\$TAG.jar; cp target/SHA256SUM-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar target/SHA256SUM-\$TAG.jar; fi
+      - if [[ "\$TAG" == *"RELEASE" ]]; then cp target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar target/iri-\$TAG.jar; cp target/SHA256SUM-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8} target/SHA256SUM-\$TAG; fi
       - cd target
     env:
       BUILDKITE_CLEAN_CHECKOUT: true
