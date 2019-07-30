@@ -11,8 +11,8 @@ steps:
       - docker push sadjy/iri-dev:latest
       - |
         if [ ! -z "\\\$IRI_GIT_TAG" ]; then
-          docker tag sadjy/iri-dev:$IRI_BUILD_NUMBER sadjy/iri-dev:\$IRI_GIT_TAG
-          docker push sadjy/iri-dev:\$IRI_GIT_TAG
+          docker tag sadjy/iri-dev:$IRI_BUILD_NUMBER sadjy/iri-dev:\\\$IRI_GIT_TAG
+          docker push sadjy/iri-dev:\\\$IRI_GIT_TAG
         fi
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
