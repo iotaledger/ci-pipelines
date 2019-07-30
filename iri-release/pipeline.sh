@@ -46,9 +46,8 @@ release () {
 }
 
 echo "steps:"
-TAG=$(git describe --exact-match --tags HEAD || true)
-if [[ "$TAG" == *"RELEASE" ]]; then
-  release "$TAG"
+if [[ "$GIT_TAG" == *"RELEASE" ]]; then
+  release "$GIT_TAG"
 else
   skip_build
 fi
