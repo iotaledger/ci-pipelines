@@ -7,7 +7,8 @@ steps:
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
       - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
       - docker build -t sadjy/iri-dev:$IRI_BUILD_NUMBER -t sadjy/iri-dev:latest .
-      - echo 'sadjy/iri-dev:$IRI_BUILD_NUMBER' 'sadjy/iri-dev:latest' | xargs -n 1 docker push
+      - docker push sadjy/iri-dev:$IRI_BUILD_NUMBER
+      - docker push sadjy/iri-dev:latest
       - |
         if [[ -z "\$IRI_GIT_TAG" ]]; then
           docker tag sadjy/iri-dev:$IRI_BUILD_NUMBER sadjy/iri-dev:\$IRI_GIT_TAG
