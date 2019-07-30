@@ -24,7 +24,7 @@ release () {
       - apt update && apt install curl -y
       - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/iri-$1.jar --output target/iri-$1.jar
       - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/SHA256SUM-$1.jar --output target/SHA256SUM-$1
-      - if [ \\\$(sha256sum target/iri-$1.jar) != \\\$(cat target/SHA256SUM-$1) ]; then exit 1; fi
+      - if [ \\\$(sha256sum target/iri-$1.jar) != \\\$(cat target/SHA256SUM-$1)]; then exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
       #- gpg --armor --detach-sign --clearsign --default-key email@iota.org target/SHA256SUM
@@ -46,6 +46,7 @@ release () {
 }
 
 echo "steps:"
+GIT_TAG=$(git describe --exact-match --tags HEAD || true)
 if [[ "$GIT_TAG" == *"RELEASE" ]]; then
   release "$GIT_TAG"
 else
