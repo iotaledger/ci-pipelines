@@ -25,7 +25,6 @@ steps:
         environment:
         - DOCKER_USERNAME
         - DOCKER_PASSWORD
-        shell: ["/bin/bash", "-e", "-c"]
     agents:
       queue: aws-m5large
 
