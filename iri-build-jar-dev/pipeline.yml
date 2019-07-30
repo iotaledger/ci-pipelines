@@ -10,6 +10,7 @@ steps:
       - cd target
     env:
       BUILDKITE_CLEAN_CHECKOUT: true
+      TAG: ''
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "iotacafe/maven:3.5.4.oracle8u181.1.webupd8.1.1-1"
