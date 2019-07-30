@@ -2,13 +2,6 @@
 
 set -eu
 
-# TODO: Use external IRI-build-jar and IRI-docker-push-trusted instead of >>>>
-
-wait () {
-  echo "  - wait: ~
-    continue_on_failure: true"
-}
-
 skip_build () {
   echo "  - label: \"Something went wrong, skipping build\""
   echo "    commands:
