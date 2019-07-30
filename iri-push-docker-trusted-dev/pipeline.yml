@@ -10,7 +10,7 @@ steps:
       - docker push sadjy/iri-dev:$IRI_BUILD_NUMBER
       - docker push sadjy/iri-dev:latest
       - |
-        if [[ ! -z "\$IRI_GIT_TAG" ]]; then
+        if [ ! -z "\$IRI_GIT_TAG" ]; then
           docker tag sadjy/iri-dev:$IRI_BUILD_NUMBER sadjy/iri-dev:\$IRI_GIT_TAG
           docker push sadjy/iri-dev:\$IRI_GIT_TAG
         fi
