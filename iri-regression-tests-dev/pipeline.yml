@@ -20,7 +20,7 @@ steps:
         if [ ! -z "$IRI_BUILDKITE_PULL_REQUEST_REPO" ]; then
           git clone "$IRI_BUILDKITE_PULL_REQUEST_REPO" /cache/iri
         else
-          git clone https://github.com/GalRogozinski/iri.git /cache/iri
+          git clone https://github.com/sadjy/iri.git /cache/iri
         fi
     agents:
       queue: ops
