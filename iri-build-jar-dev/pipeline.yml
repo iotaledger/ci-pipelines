@@ -3,7 +3,6 @@ steps:
     commands:
       - mvn clean package
       - mv target/iri*.jar target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar
-      - cd target
     env:
       BUILDKITE_CLEAN_CHECKOUT: true
     plugins:
