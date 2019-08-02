@@ -17,6 +17,7 @@ steps:
           docker push sadjy/iri-dev:$IRI_GIT_TAG
         fi
       - ls -al
+      - ls -al ../
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
