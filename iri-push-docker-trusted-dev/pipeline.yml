@@ -16,6 +16,7 @@ steps:
           docker tag sadjy/iri-dev:$IRI_BUILD_NUMBER sadjy/iri-dev:$IRI_GIT_TAG
           docker push sadjy/iri-dev:$IRI_GIT_TAG
         fi
+      - ls -al
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
@@ -28,8 +29,8 @@ steps:
         - DOCKER_USERNAME
         - DOCKER_PASSWORD
     artifact_paths:
-      - "iri-*.jar"
-      - "SHA256SUM-*"
+      - "./iri-*.jar"
+      - "./SHA256SUM-*"
     agents:
       queue: aws-m5large
 
