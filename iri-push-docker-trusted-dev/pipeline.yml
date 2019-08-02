@@ -37,8 +37,8 @@ steps:
         - DOCKER_USERNAME
         - DOCKER_PASSWORD
     artifact_paths:
-      - "${IRI_GIT_TAG\%-*}/iri-$IRI_GIT_TAG.jar"
-      - "${IRI_GIT_TAG\%-*}/SHA256SUM-$IRI_GIT_TAG"
+      - "${IRI_GIT_TAG%-*}/iri-$IRI_GIT_TAG.jar"
+      - "${IRI_GIT_TAG%-*}/SHA256SUM-$IRI_GIT_TAG"
     agents:
       queue: aws-m5large
 
