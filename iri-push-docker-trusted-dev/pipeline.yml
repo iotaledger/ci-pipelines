@@ -6,7 +6,7 @@ steps:
       - sed -i '1,/# execution image/d' Dockerfile  
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
       - sha256sum target/iri-${IRI_BUILD_NUMBER}.jar > target/SHA256SUM-${IRI_BUILD_NUMBER}
-      - if [[ "$IRI_GIT_TAG" == *"RELEASE" ]] || [[ "$IRI_GIT_TAG" == *"RC"* ]]; then cp target/iri-${IRI_BUILD_NUMBER}.jar iri-$IRI_GIT_TAG.jar; cp target/SHA256SUM-${IRI_BUILD_NUMBER} SHA256SUM-$IRI_GIT_TAG; fi
+      - if [[ "$IRI_GIT_TAG" == *"RELEASE" ]]; then cp target/iri-${IRI_BUILD_NUMBER}.jar iri-$IRI_GIT_TAG.jar; cp target/SHA256SUM-${IRI_BUILD_NUMBER} SHA256SUM-$IRI_GIT_TAG; fi
       - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
       - docker build -t sadjy/iri-dev:$IRI_BUILD_NUMBER -t sadjy/iri-dev:latest .
       - docker push sadjy/iri-dev:$IRI_BUILD_NUMBER
