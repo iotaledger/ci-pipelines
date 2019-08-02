@@ -15,7 +15,9 @@ steps:
           docker tag sadjy/iri-dev:$IRI_BUILD_NUMBER sadjy/iri-dev:$IRI_GIT_TAG
           docker push sadjy/iri-dev:$IRI_GIT_TAG
         fi
-      - if [ "$IRI_GIT_TAG" == *"RELEASE" ] || [ "$IRI_GIT_TAG" == *"RC"* ]; then cp target/iri-${IRI_BUILD_NUMBER}.jar iri-$IRI_GIT_TAG.jar; cp target/SHA256SUM-${IRI_BUILD_NUMBER} SHA256SUM-$IRI_GIT_TAG; fi
+      - if [ "$IRI_GIT_TAG" == *"RELEASE" ] || [ "$IRI_GIT_TAG" == *"RC"* ]; then cp target/iri-${IRI_BUILD_NUMBER}.jar iri-$IRI_GIT_TAG.jar; cp target/SHA256SUM-${IRI_BUILD_NUMBER} SHA256SUM-$IRI_GIT_TAG; echo PASSED; fi
+      - ls -al
+      - ls -al target
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
