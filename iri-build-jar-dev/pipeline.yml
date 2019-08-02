@@ -3,8 +3,6 @@ steps:
     commands:
       - mvn clean package
       - mv target/iri*.jar target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar
-      - sha256sum target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar > target/SHA256SUM-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
-      - if [[ "$GIT_TAG" == *"RELEASE" ]]; then cp target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar target/iri-$GIT_TAG.jar; cp target/SHA256SUM-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8} target/SHA256SUM-$GIT_TAG; fi
       - cd target
     env:
       BUILDKITE_CLEAN_CHECKOUT: true
