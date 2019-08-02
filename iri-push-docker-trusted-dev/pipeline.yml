@@ -15,7 +15,7 @@ steps:
           *'RELEASE' | *'RC'*)
             docker tag sadjy/iri-dev:$IRI_BUILD_NUMBER sadjy/iri-dev:$IRI_GIT_TAG
             docker push sadjy/iri-dev:$IRI_GIT_TAG
-            mkdir ${IRI_GIT_TAG%-*}
+            mkdir $IRI_VERSION
             cp target/iri-$IRI_BUILD_NUMBER.jar $IRI_VERSION/$iri-$IRI_GIT_TAG.jar
             cp target/SHA256SUM-$IRI_BUILD_NUMBER $IRI_VERSION/SHA256SUM-$IRI_GIT_TAG                        
           ;;
