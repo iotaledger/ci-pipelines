@@ -26,6 +26,6 @@ steps:
         IRI_BUILD_NUMBER: ${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
         IRI_GIT_COMMIT: $GIT_COMMIT
         IRI_GIT_TAG: $GIT_TAG
-        IRI_VERSION: $(echo $GIT_TAG | awk -F- '{print $1}')
+        IRI_VERSION: $IRI_VERSION
 
 
