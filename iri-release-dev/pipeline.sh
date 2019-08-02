@@ -15,8 +15,8 @@ release () {
   echo "    commands:
       - mkdir -p target
       - apt update && apt install curl -y
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/iri-$1.jar --output target/iri-$1.jar
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/SHA256SUM-$1 --output target/SHA256SUM-$1
+      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/iri-$1.jar --output target/iri-$1.jar
+      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/SHA256SUM-$1 --output target/SHA256SUM-$1
       - if [ \\\$(sha256sum target/iri-$1.jar) != \\\$(cat target/SHA256SUM-$1)]; then exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
