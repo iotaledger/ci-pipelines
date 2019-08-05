@@ -12,7 +12,7 @@ steps:
           - ZEIT_TOKEN
           - ALIAS=www-iota.iota.works
     agents:
-      queue: aws-nano
+      queue: aws-m5large
 
   - block: "Deploy LIVE"
     prompt: "Deploy this build to prod?"
