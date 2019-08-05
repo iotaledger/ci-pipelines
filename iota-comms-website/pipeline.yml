@@ -3,7 +3,6 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - jq -n '{"version":1,"name":"iota-comms-website"}' > now.json
       - now --token \$ZEIT_TOKEN --scope iota alias $(now --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
