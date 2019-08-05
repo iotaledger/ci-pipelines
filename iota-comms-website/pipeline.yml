@@ -9,24 +9,27 @@ steps:
          image: "node:8.12-stretch"
          environment:
           - ZEIT_TOKEN
-          - ALIAS=www-iota.iota.works
+          - ALIAS=website.iota.works
     agents:
       queue: aws-m5large
 
   - block: "Deploy LIVE"
     prompt: "Deploy this build to prod?"
 
-#  - name: build-and-deploy-prod
-#    command:
-#      - apt update && apt install jq -y
-#      - npm i -g --unsafe-perm now
-#      - jq -n '{"version":1,"name":"iota-comms-website"}' > now.json
-#      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
-#    plugins:
-#       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-#         image: "node:8.12-stretch"
-#         environment:
-#          - ZEIT_TOKEN
-#          - ALIAS=www.iota.org
-#    agents:
-#      queue: aws-nano
+
+  - name: build-and-deploy-staging
+    command:
+      - apt update && apt install jq -y
+      - npm i -g --unsafe-perm now
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+         image: "node:8.12-stretch"
+         environment:
+          - ZEIT_TOKEN
+          - ALIAS=www-iota.iota.works
+    agents:
+      queue: aws-m5large
+
+  - block: "Deploy LIVE"
+    prompt: "Deploy this build to prod?"
