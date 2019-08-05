@@ -3,7 +3,7 @@ steps:
     command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - now --token \$ZEIT_TOKEN --scope iota alias $(now --token \$ZEIT_TOKEN --scope iota deploy --node -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --token \$ZEIT_TOKEN --scope iota deploy --npm -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
          image: "node:8.12-stretch"
