@@ -18,7 +18,7 @@ release () {
       - VERSION=\$(echo $1 | awk -F- '{print \\\$1}')
       - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$VERSION/iri-$1.jar --output target/iri-$1.jar
       - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$VERSION/SHA256SUM-$1 --output target/SHA256SUM-$1
-      - if [ \\\$(sha256sum target/iri-$1.jar) == \\\$(cat target/SHA256SUM-$1) ]; then echo 'CHECKSUM OK'; else exit 1; fi
+      - if [ \\\$(sha256sum target/iri-$1.jar) = \\\$(cat target/SHA256SUM-$1) ]; then echo 'CHECKSUM OK'; else exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
       #- gpg --armor --detach-sign --clearsign --default-key email@iota.org target/SHA256SUM
