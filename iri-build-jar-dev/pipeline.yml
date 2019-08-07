@@ -1,6 +1,8 @@
 steps:
   - label: "Building jar - ${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}"
     commands:
+      # Add git tag to pom.xml
+      - if [ "$BUILDKITE_TAG = *'RC'* ] || [ "$BUILDKITE_TAG" = *'RELEASE' ]; then sed -i 's/IRI-VERSION/'$BUILDKITE_TAG'/g' pom.xml; fi
       - mvn clean package
       - mv target/iri*.jar target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar
     env:
