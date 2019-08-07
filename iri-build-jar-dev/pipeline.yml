@@ -1,7 +1,7 @@
 steps:
   - label: "Building jar"
     commands:
-      - if [ "$GIT_TAG" = *'RC'* ] || [ "$GIT_TAG" = *'RELEASE' ]; then mvn versions:set -DnewVersion=$GIT_TAG; fi
+      - if [[ "$GIT_TAG" == *"RC"* ]] || [[ "$GIT_TAG" == *"RELEASE" ]]; then mvn versions:set -DnewVersion=$GIT_TAG; fi
       - mvn clean package
       - mv target/iri*.jar target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar
     env:
