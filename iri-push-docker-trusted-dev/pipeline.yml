@@ -1,5 +1,5 @@
 steps:
-  - label: "Pushing to docker hub - $IRI_BUILD_NUMBER"
+  - label: "Pushing to docker hub"
     commands:
       - mkdir target
       - buildkite-agent artifact download target/iri-${IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
