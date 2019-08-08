@@ -16,7 +16,7 @@ release () {
       - mkdir -p target
       - apt -qq update && apt -qq install curl -y
       - IRI_VERSION=\$(echo $1 | tr -d 'v')
-      - IRI_VERSION_NUMBER=\$(echo \$IRI_VERSION | awk -F- '{print \\\$1}')
+      - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
       - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/iri-\\\$IRI_VERSION.jar
       - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-\\\$IRI_VERSION --output target/SHA256SUM-\\\$IRI_VERSION
       - if [[ \\\$(sha256sum target/iri-\\\$IRI_VERSION.jar | cut -d \" \" -f 1) == \\\$(cat target/SHA256SUM-\\\$IRI_VERSION) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
