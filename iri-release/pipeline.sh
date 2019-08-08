@@ -42,12 +42,10 @@ release () {
 docker_push () {
   echo "  - label: \"Pushing to docker hub\""
   echo "    commands:
-      - IRI_VERSION=\$(echo $1 | tr -d 'v')
-      - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
-      - docker pull iotacafe:iri-\\\$IRI_VERSION
-      - docker tag iotacafe:iri-\\\$IRI_VERSION iotaledger:iri-\\\$IRI_VERSION
-      - docker push iotaledger:iri-\\\$IRI_VERSION"
+      - docker pull iotacafe:iri-$1
+      - docker tag iotacafe:iri-$1 iotaledger:iri-$1
+      - docker push iotaledger:iri-$1"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"

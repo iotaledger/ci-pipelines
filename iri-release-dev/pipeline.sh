@@ -33,7 +33,7 @@ release () {
         environment:
           - GITHUB_RELEASE_TAG=$1
           - GITHUB_RELEASE_ACCESS_TOKEN
-          - GITHUB_RELEASE_REPOSITORY=GalRogozinski/iri
+          - GITHUB_RELEASE_REPOSITORY=sadjy/iri
           - GITHUB_RELEASE_COMMIT"
   echo "    agents:
       queue: aws-m5large"
@@ -42,12 +42,10 @@ release () {
 docker_push () {
   echo "  - label: \"Pushing to docker hub\""
   echo "    commands:
-      - IRI_VERSION=\$(echo $1 | tr -d 'v')
-      - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
-      - docker pull sadjy:iri-dev-\\\$IRI_VERSION
-      - docker tag sadjy:iri-dev-\\\$IRI_VERSION sadjy:iri-offi-\\\$IRI_VERSION
-      - docker push sadjy:iri-offi-\\\$IRI_VERSION"
+      - docker pull sadjy:iri-dev-$1
+      - docker tag sadjy:iri-dev-$1 sadjy:iri-offi-$1
+      - docker push sadjy:iri-offi-$1"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
