@@ -43,9 +43,9 @@ docker_push () {
   echo "  - label: \"Pushing to docker hub\""
   echo "    commands:
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
-      - docker pull sadjy:iri-dev-$1
-      - docker tag sadjy:iri-dev-$1 sadjy:iri-offi-$1
-      - docker push sadjy:iri-offi-$1"
+      - docker pull sadjy/iri-dev:$1
+      - docker tag sadjy/iri-dev:$1 sadjy/iri-offi:$1
+      - docker push sadjy/iri-offi:$1"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"

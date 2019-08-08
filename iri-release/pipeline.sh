@@ -43,9 +43,9 @@ docker_push () {
   echo "  - label: \"Pushing to docker hub\""
   echo "    commands:
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
-      - docker pull iotacafe:iri-$1
-      - docker tag iotacafe:iri-$1 iotaledger:iri-$1
-      - docker push iotaledger:iri-$1"
+      - docker pull iotacafe/iri:$1
+      - docker tag iotacafe/iri:$1 iotaledger/iri:$1
+      - docker push iotaledger/iri:$1"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
