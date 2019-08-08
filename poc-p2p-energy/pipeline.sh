@@ -33,7 +33,7 @@ api_staging () {
           - P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=p2p-energy-demo-staging-
           - BUCKET_PREFIX=p2p-energy-demo-staging-
-          - WALLET_SEED" 
+          - WALLET_SEED_STAGING" 
   echo "    agents:
       queue: aws-nano"
 }
@@ -67,7 +67,7 @@ api_prod () {
           - P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=p2p-energy-demo-prod-
           - BUCKET_PREFIX=p2p-energy-demo-prod-
-          - WALLET_SEED" 
+          - WALLET_SEED_PROD" 
   echo "    agents:
       queue: aws-nano"
 }
