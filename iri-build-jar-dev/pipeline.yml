@@ -1,9 +1,12 @@
 steps:
   - label: "Building jar"
     commands:
-      - if [[ "$GIT_TAG" == *"RC"* ]] || [[ "$GIT_TAG" == *"RELEASE" ]]; then mvn versions:set -DnewVersion=$GIT_TAG; fi
+      - |
+        if [[ ! -z "$GIT_TAG" ]]; then 
+          mvn versions:set -DnewVersion=${IRI_VERSION_NUMBER}-${IRI_VERSION_STAGE}
+        else
+          mvn versions:set -DnewVersion=${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}; fi
       - mvn clean package
-      - mv target/iri*.jar target/iri-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}.jar
     env:
       BUILDKITE_CLEAN_CHECKOUT: true
     plugins:
@@ -27,4 +30,6 @@ steps:
         IRI_BUILD_NUMBER: ${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
         IRI_GIT_COMMIT: $GIT_COMMIT
         IRI_GIT_TAG: $GIT_TAG
-        IRI_VERSION: $IRI_VERSION
+        IRI_VERSION: ${IRI_VERSION_NUMBER}-${IRI_VERSION_STAGE}
+        IRI_VERSION_NUMBER: $IRI_VERSION_NUMBER
+        IRI_VERSION_STAGE: $IRI_VERSION_STAGE 

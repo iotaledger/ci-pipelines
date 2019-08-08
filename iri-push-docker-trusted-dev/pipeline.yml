@@ -2,27 +2,32 @@ steps:
   - label: "Pushing to docker hub"
     commands:
       - mkdir target
-      - buildkite-agent artifact download target/iri-${IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
       - sed -i '1,/# execution image/d' Dockerfile  
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
-      - sha256sum target/iri-${IRI_BUILD_NUMBER}.jar | cut -d " " -f 1 > target/SHA256SUM-${IRI_BUILD_NUMBER}
       - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
-      - docker build -t sadjy/iri-dev:$IRI_BUILD_NUMBER -t sadjy/iri-dev:latest .
-      - docker push sadjy/iri-dev:$IRI_BUILD_NUMBER
-      - docker push sadjy/iri-dev:latest
       - |
-        case ${IRI_GIT_TAG:-NULL} in
+        case ${IRI_GIT_TAG:-IRI_BUILD_NUMBER} in
           *'RELEASE' | *'RC'*)
-            docker tag sadjy/iri-dev:$IRI_BUILD_NUMBER sadjy/iri-dev:$IRI_GIT_TAG
+            buildkite-agent artifact download target/iri-$IRI_VERSION.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
+            sha256sum target/iri-$IRI_VERSION.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_VERSION
+            docker build -t sadjy/iri-dev:$IRI_GIT_TAG -t sadjy/iri-dev:latest .
             docker push sadjy/iri-dev:$IRI_GIT_TAG
-            mkdir $IRI_VERSION
-            cp target/iri-$IRI_BUILD_NUMBER.jar $IRI_VERSION/iri-$IRI_GIT_TAG.jar
-            cp target/SHA256SUM-$IRI_BUILD_NUMBER $IRI_VERSION/SHA256SUM-$IRI_GIT_TAG                        
+            mkdir $IRI_VERSION_NUMBER
+            IRI_BUILD_NUMBER=$IRI_GIT_TAG
           ;;
-          *)
+          'PR-'*)
             echo 'Nothing to do'
           ;;
+          *)
+            buildkite-agent artifact download target/iri-$IRI_BUILD_NUMBER.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
+            sha256sum target/iri-$IRI_BUILD_NUMBER.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_BUILD_NUMBER
+            docker build -t sadjy/iri-dev:$IRI_BUILD_NUMBER -t sadjy/iri-dev:latest .
+            docker push sadjy/iri-dev:$IRI_BUILD_NUMBER
+            IRI_VERSION_NUMBER=dev && mkdir $IRI_VERSION_NUMBER
+          ;;          
         esac
+      - docker push sadjy/iri-dev:latest
+
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
@@ -35,8 +40,8 @@ steps:
         - DOCKER_USERNAME
         - DOCKER_PASSWORD
     artifact_paths:
-      - "$IRI_VERSION/iri-$IRI_GIT_TAG.jar"
-      - "$IRI_VERSION/SHA256SUM-$IRI_GIT_TAG"
+      - "$IRI_VERSION_NUMBER/iri-$IRI_BUILD_NUMBER.jar"
+      - "$IRI_VERSION_NUMBER/SHA256SUM-$IRI_BUILD_NUMBER"
     agents:
       queue: aws-m5large
 
