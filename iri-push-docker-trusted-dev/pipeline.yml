@@ -6,14 +6,14 @@ steps:
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
       - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
       - |
-        case ${IRI_GIT_TAG:-IRI_BUILD_NUMBER} in
+        case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
           *'RELEASE' | *'RC'*)
             buildkite-agent artifact download target/iri-$IRI_VERSION.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
             sha256sum target/iri-$IRI_VERSION.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_VERSION
             docker build -t sadjy/iri-dev:$IRI_GIT_TAG -t sadjy/iri-dev:latest .
             docker push sadjy/iri-dev:$IRI_GIT_TAG
             mkdir $IRI_VERSION_NUMBER
-            IRI_BUILD_NUMBER=$IRI_GIT_TAG
+            export IRI_BUILD_NUMBER=$IRI_GIT_TAG
           ;;
           'PR-'*)
             echo 'Nothing to do'
@@ -23,7 +23,7 @@ steps:
             sha256sum target/iri-$IRI_BUILD_NUMBER.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_BUILD_NUMBER
             docker build -t sadjy/iri-dev:$IRI_BUILD_NUMBER -t sadjy/iri-dev:latest .
             docker push sadjy/iri-dev:$IRI_BUILD_NUMBER
-            IRI_VERSION_NUMBER=dev && mkdir $IRI_VERSION_NUMBER
+            export IRI_VERSION_NUMBER=dev && mkdir $IRI_VERSION_NUMBER
           ;;          
         esac
       - docker push sadjy/iri-dev:latest
