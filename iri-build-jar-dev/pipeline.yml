@@ -3,7 +3,7 @@ steps:
     commands:
       - |
         if [[ ! -z "$GIT_TAG" ]]; then 
-          mvn versions:set -DnewVersion=\$IRI_VERSION
+          mvn versions:set -DnewVersion=$IRI_VERSION
         else
           mvn versions:set -DnewVersion=${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}; fi
       - mvn clean package
