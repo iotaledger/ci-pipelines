@@ -30,13 +30,32 @@ release () {
         always-pull: true
         mount-buildkite-agent: false
         shell: [\"/bin/bash\", \"-e\", \"-c\"]
-        volumes:
-        - /cache-iri-docker-build-and-push-$BUILDKITE_BUILD_ID:/cache
         environment:
           - GITHUB_RELEASE_TAG=$1
           - GITHUB_RELEASE_ACCESS_TOKEN
-          - GITHUB_RELEASE_REPOSITORY=sadjy/iri
+          - GITHUB_RELEASE_REPOSITORY=iotaledger/iri
           - GITHUB_RELEASE_COMMIT"
+  echo "    agents:
+      queue: aws-m5large"
+}
+
+docker_push () {
+  echo "  - label: \"Pushing to docker hub\""
+  echo "    commands:
+      - IRI_VERSION=\$(echo $1 | tr -d 'v')
+      - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
+      - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
+      - docker pull iotacafe:iri-\\\$IRI_VERSION
+      - docker tag iotacafe:iri-\\\$IRI_VERSION iotaledger:iri-\\\$IRI_VERSION
+      - docker push iotaledger:iri-\\\$IRI_VERSION"
+  echo "    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: \"docker\"
+        always-pull: true
+        mount-buildkite-agent: false
+        environment:
+          - DOCKER_USERNAME
+          - DOCKER_PASSWORD"
   echo "    agents:
       queue: aws-m5large"
 }
@@ -45,6 +64,7 @@ echo "steps:"
 GIT_TAG=$(git describe --exact-match --tags HEAD || true)
 if [[ "$GIT_TAG" == *"RELEASE" ]]; then
   release "$GIT_TAG"
+  docker_push "$GIT_TAG"
 else
   skip_build
 fi

@@ -27,10 +27,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
         always-pull: true
-        mount-buildkite-agent: true
-        volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /conf/docker/.docker:$HOME/.docker
+        mount-buildkite-agent: false
         environment:
         - DOCKER_USERNAME
         - DOCKER_PASSWORD
