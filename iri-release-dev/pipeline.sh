@@ -53,6 +53,8 @@ docker_push () {
         image: \"docker\"
         always-pull: true
         mount-buildkite-agent: false
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
         environment:
           - DOCKER_USERNAME
           - DOCKER_PASSWORD"

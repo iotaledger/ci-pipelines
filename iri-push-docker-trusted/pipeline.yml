@@ -4,7 +4,7 @@ steps:
       - mkdir target
       - sed -i '1,/# execution image/d' Dockerfile  
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
-      - docker login -u=\$DOCKER_USERNAME_STAGING -p=\$DOCKER_PASSWORD_STAGING
+      - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
       - |
         case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
           *'RELEASE' | *'RC'*)
@@ -31,10 +31,9 @@ steps:
         mount-buildkite-agent: true
         volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - /conf/docker/.docker:$HOME/.docker
         environment:
-        - DOCKER_USERNAME_STAGING
-        - DOCKER_PASSWORD_STAGING
+        - DOCKER_USERNAME
+        - DOCKER_PASSWORD
     artifact_paths:
       - "${IRI_VERSION_NUMBER:-iri-dev}/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar"
       - "${IRI_VERSION_NUMBER:-iri-dev}/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}"
