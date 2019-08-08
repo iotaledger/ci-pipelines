@@ -14,9 +14,6 @@ steps:
             docker push sadjy/iri-dev:$IRI_GIT_TAG
             mv target $IRI_VERSION_NUMBER
           ;;
-          'PR-'*)
-            echo 'Nothing to do'
-          ;;
           *)
             buildkite-agent artifact download target/iri-$IRI_BUILD_NUMBER.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
             sha256sum target/iri-$IRI_BUILD_NUMBER.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_BUILD_NUMBER

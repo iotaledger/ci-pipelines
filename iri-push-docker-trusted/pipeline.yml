@@ -1,39 +1,49 @@
 steps:
-  - name: push-iri-oracle8
-    command: 
-      - mkdir -p target docker
-      - buildkite-agent artifact download target/iri-oracle8-${IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
-      - buildkite-agent artifact download docker/entrypoint.sh docker/ --build $ARTIFACT_BUILDKITE_BUILD_ID && chmod +x docker/entrypoint.sh
-      - buildkite-agent artifact download Dockerfile . --build $ARTIFACT_BUILDKITE_BUILD_ID      
-      - sed -i '1,/# execution image/d' Dockerfile
+  - label: "Pushing to docker hub"
+    commands:
+      - mkdir target
+      - sed -i '1,/# execution image/d' Dockerfile  
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
-      - docker build -f Dockerfile -t iotacafe/iri-dev:$IRI_BUILD_NUMBER .
-      - docker push iotacafe/iri-dev:$IRI_BUILD_NUMBER
+      - docker login -u=\$DOCKER_USERNAME_STAGING -p=\$DOCKER_PASSWORD_STAGING
       - |
-        case $IRI_BUILD_NUMBER in
-          'PR-'*)
-            echo Not pushing to docker hub
-            exit 0
+        case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
+          *'RELEASE' | *'RC'*)
+            buildkite-agent artifact download target/iri-$IRI_VERSION.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
+            sha256sum target/iri-$IRI_VERSION.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_VERSION
+            docker build -t iotacafe/iri:$IRI_GIT_TAG -t iotacafe/iri:latest .
+            docker push iotacafe/iri:$IRI_GIT_TAG
+            docker push iotacafe/iri:latest
+            mv target $IRI_VERSION_NUMBER
           ;;
           *)
-            docker tag iotacafe/iri-dev:$IRI_BUILD_NUMBER iotacafe/iri-dev:latest
+            buildkite-agent artifact download target/iri-$IRI_BUILD_NUMBER.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
+            sha256sum target/iri-$IRI_BUILD_NUMBER.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_BUILD_NUMBER
+            docker build -t iotacafe/iri-dev:$IRI_BUILD_NUMBER -t iotacafe/iri-dev:latest .
+            docker push iotacafe/iri-dev:$IRI_BUILD_NUMBER
             docker push iotacafe/iri-dev:latest
-          ;;
+            mv target iri-dev
+          ;;          
         esac
     plugins:
-       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-         image: "docker:latest"
-         shell: "/bin/sh -e -c"
-         mount-buildkite-agent: true
-         mounts:
-          - /var/run/docker.sock:/var/run/docker.sock
-          - /conf/docker/.docker:$HOME/.docker
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: "docker"
+        always-pull: true
+        mount-buildkite-agent: true
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /conf/docker/.docker:$HOME/.docker
+        environment:
+        - DOCKER_USERNAME_STAGING
+        - DOCKER_PASSWORD_STAGING
+    artifact_paths:
+      - "${IRI_VERSION_NUMBER:-iri-dev}/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar"
+      - "${IRI_VERSION_NUMBER:-iri-dev}/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}"
     agents:
-      queue: ops
+      queue: aws-m5large
 
   - wait
 
-  - trigger: iri-regression-tests
+  - trigger: iri-regression-tests-dev
     build:
       env:
         IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
