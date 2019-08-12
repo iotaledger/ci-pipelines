@@ -42,7 +42,7 @@ steps:
 
   - wait
 
-  - trigger: iri-regression-tests-dev
+  - trigger: iri-regression-tests
     build:
       env:
         IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
