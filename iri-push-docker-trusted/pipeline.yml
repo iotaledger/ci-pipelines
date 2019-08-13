@@ -10,7 +10,7 @@ steps:
           *'RELEASE' | *'RC'*)
             buildkite-agent artifact download target/iri-$IRI_VERSION.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
             sha256sum target/iri-$IRI_VERSION.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_VERSION
-            docker build -t iotacafe/iri:$IRI_GIT_TAG -t iotacafe/iri:latest .
+            docker build --no-cache -t iotacafe/iri:$IRI_GIT_TAG -t iotacafe/iri:latest .
             docker push iotacafe/iri:$IRI_GIT_TAG
             docker push iotacafe/iri:latest
             mv target $IRI_VERSION_NUMBER
@@ -18,7 +18,7 @@ steps:
           *)
             buildkite-agent artifact download target/iri-$IRI_BUILD_NUMBER.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
             sha256sum target/iri-$IRI_BUILD_NUMBER.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_BUILD_NUMBER
-            docker build -t iotacafe/iri-dev:$IRI_BUILD_NUMBER -t iotacafe/iri-dev:latest .
+            docker build --no-cache -t iotacafe/iri-dev:$IRI_BUILD_NUMBER -t iotacafe/iri-dev:latest .
             docker push iotacafe/iri-dev:$IRI_BUILD_NUMBER
             docker push iotacafe/iri-dev:latest
             mv target iri-dev
