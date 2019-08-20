@@ -27,6 +27,6 @@ steps:
          image: "node:8.12-stretch"
          environment:
           - ZEIT_TOKEN
-          - ALIAS=iota.org
+          - ALIAS=www.iota.org
     agents:
       queue: aws-m5large
