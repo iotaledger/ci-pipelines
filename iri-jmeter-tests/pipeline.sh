@@ -125,7 +125,7 @@ wait
 echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/iri-dev}\"
     command:
       - cd /cache/tiab
-      - source venv/bin/activate
+      - . venv/bin/activate
       - python create_cluster.py -i \${IRI_IMAGE:-iotacafe/iri-dev} -t \$BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -167,6 +167,7 @@ do
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
       - cd /cache
+      - . tiab/venv/bin/activate
       - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
       - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/jmeter-$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/results-$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
@@ -176,6 +177,8 @@ do
         EOF
     artifact_paths: 
         - \"jmeter/**/*\"
+    concurrency: 1
+    concurrency_group: \"jmeter-tests\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"openjdk:8\"
