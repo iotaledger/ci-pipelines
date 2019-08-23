@@ -11,8 +11,6 @@ waitf() {
     continue_on_failure: true"
 }
 
-agent_name=$(buildkite-agent meta-data get name)
-
 echo "steps:"
 
 echo "  - name: \"[TIAB] Cloning TIAB\"
@@ -26,9 +24,11 @@ echo "  - name: \"[TIAB] Cloning TIAB\"
         mount-buildkite-agent: false        
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME=$BUILDKITE_AGENT_NAME
     agents:
-      queue: aws-m5large 
-      name: $agent_name"
+      queue: aws-m5large"
+      queue: aws-m5large"
 
 wait
 
@@ -115,9 +115,11 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         mount-buildkite-agent: false
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME=$BUILDKITE_AGENT_NAME
     agents:
-      queue: aws-m5large 
-      name: $agent_name" 
+      queue: aws-m5large"
+      queue: aws-m5large" 
 
 wait
 
@@ -133,9 +135,11 @@ echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/
         mount-buildkite-agent: false
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME=$BUILDKITE_AGENT_NAME
     agents:
-      queue: aws-m5large 
-      name: $agent_name"
+      queue: aws-m5large"
+      queue: aws-m5large"
 
 wait
 
@@ -151,9 +155,11 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
         mount-buildkite-agent: false
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME=$BUILDKITE_AGENT_NAME
     agents:
-      queue: aws-m5large 
-      name: $agent_name" 
+      queue: aws-m5large"
+      queue: aws-m5large" 
 
 wait
 
@@ -180,9 +186,11 @@ do
         mount-buildkite-agent: true
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME=$BUILDKITE_AGENT_NAME
     agents:
-      queue: aws-m5large 
-      name: $agent_name"      
+      queue: aws-m5large"
+      queue: aws-m5large"      
 
   waitf
 
@@ -198,9 +206,11 @@ do
         mount-buildkite-agent: true
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME=$BUILDKITE_AGENT_NAME
     agents:
-      queue: aws-m5large 
-      name: $agent_name"      
+      queue: aws-m5large"
+      queue: aws-m5large"      
 done
 
 waitf
@@ -217,6 +227,8 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
         mount-buildkite-agent: false
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME=$BUILDKITE_AGENT_NAME
     agents:
-      queue: aws-m5large 
-      name: $agent_name"  
+      queue: aws-m5large"
+      queue: aws-m5large"  
