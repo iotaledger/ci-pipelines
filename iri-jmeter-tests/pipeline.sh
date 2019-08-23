@@ -171,7 +171,8 @@ do
       - cd /cache/tiab
       - apk add --quiet --update python3 py-pip
       - pip3 install --quiet -r requirements.txt
-      - pip3 install --quiet argparse pyyaml
+      - pip3 install --quiet argparse 
+      - pip3 install --quiet pyyaml
       - python3 nodeaddr.py -n node\\\$TESTNAME -q
       - jmeter -n -t /workdir/$testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
