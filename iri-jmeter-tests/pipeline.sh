@@ -102,6 +102,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
       - virtualenv venv
       - . venv/bin/activate
       - pip install -r requirements.txt
+      - pip install argparse
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"python:2-alpine\"
@@ -167,8 +168,6 @@ do
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
       - cd /cache/tiab
-      - apk add --update python py-pip
-      - pip install argparse
       - . venv/bin/activate
       - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
