@@ -168,6 +168,7 @@ do
     command:
       - cd /cache/tiab
       - apk add python
+      - python --version
       - . venv/bin/activate
       - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
