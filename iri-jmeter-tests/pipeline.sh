@@ -179,7 +179,7 @@ do
         - \"jmeter-$BUILDKITE_BUILD_ID/**/*\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"openjdk:8\"
+        image: \"openjdk:8-alpine\"
         always-pull: false
         mount-buildkite-agent: true
         volumes:
@@ -195,6 +195,7 @@ waitf
 echo "  - name: \"[TIAB] Tearing down cluster\"
     command:
       - cd /cache/tiab
+      - . venv/bin/activate
       - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
       - ls -al
     plugins:
