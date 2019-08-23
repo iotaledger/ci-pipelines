@@ -179,7 +179,7 @@ do
         cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
-      - ls -alR jmeter-$BUILDKITE_BUILD_ID 
+      - cp -r jmeter-$BUILDKITE_BUILD_ID /workdir 
     artifact_paths: 
       - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
     plugins:
