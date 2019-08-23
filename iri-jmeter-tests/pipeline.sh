@@ -96,7 +96,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
               if args.port:
                   print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
         EOF
-      - apt update >/dev/null && apt install python-pip -y >/dev/null && pip install virtualenv
+      - apk add gcc musl-dev libffi-dev openssl-dev
       - cd /cache/tiab
       - virtualenv venv
       - . venv/bin/activate
