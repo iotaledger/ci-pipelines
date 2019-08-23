@@ -181,7 +181,7 @@ do
         EOF
       - ls -alR jmeter-$BUILDKITE_BUILD_ID 
     artifact_paths: 
-        - \"jmeter-$BUILDKITE_BUILD_ID/**/*\"
+        - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"openjdk:8-alpine\"
