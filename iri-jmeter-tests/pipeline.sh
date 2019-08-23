@@ -76,23 +76,14 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
       - |
         cat <<EOF >> /cache/tiab/nodeaddr.py 
         from yaml import load, Loader
-        import sys
-        from getopt import getopt
+        import argparse
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-n', '--node', dest='node_name', required=True)
+        parser.add_argument('-q', '--host', dest='host', action='store_true')
+        parser.add_argument('-p', '--port', dest='port', action='store_true')
 
-        def parse_opts(opts):
-            global node_name, host, port
-            if len(opts[0]) == 0:
-                usage()
-            for (key, value) in opts:
-                if key == '-n' or key == '--node':
-                    node_name = value
-                elif key == '-q' or key == '--host':
-                    host = value
-                elif key == '-p' or key == '--port':
-                    port = value
-
-        opts = getopt(sys.argv[1:], 'n:q:p', ['node=', 'host=', 'port='])
-        parse_opts(opts[0])
+        args = parser.parse_args()
+        node_name = args.node_name
 
         yaml_path = 'output.yml'
         stream = open(yaml_path,'r')
@@ -111,10 +102,9 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
       - virtualenv venv
       - . venv/bin/activate
       - pip install -r requirements.txt
-      - pip install argparse
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:2-alpine\"
+        image: \"python:alpine\"
         environment:
           - TIAB_KUBE_CA
           - TIAB_KUBE_TOKEN
@@ -139,7 +129,7 @@ echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/
       - python create_cluster.py -i \${IRI_IMAGE:-iotacafe/iri-dev} -t \$BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:2-alpine\"
+        image: \"python:alpine\"
         always-pull: false
         mount-buildkite-agent: false
         volumes:
@@ -178,9 +168,10 @@ do
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
       - cd /cache/tiab
-      - apk add --no-cache python2
-      - . venv/bin/activate
-      - python nodeaddr.py -n node\\\$TESTNAME -q
+      - apk add --update python3 py-pip
+      - pip3 install -r requirements.txt
+      - pip3 install argparse
+      - python3 nodeaddr.py -n node\\\$TESTNAME -q
       - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
         cat << EOF | buildkite-agent annotate --style \"info\"
@@ -211,7 +202,7 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
       - ls -al
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:2-alpine\"
+        image: \"python:alpine\"
         always-pull: false
         mount-buildkite-agent: false
         volumes:
