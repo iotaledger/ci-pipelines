@@ -2,6 +2,17 @@
 
 set -eu
 
+wait() {
+  echo "  - wait"
+}
+
+waitf() {
+  echo "  - wait
+    continue_on_failure: true"
+}
+
+agent_name=$(buildkite-agent meta-data get name)
+
 echo "steps:"
 
 echo "  - name: \"[TIAB] Cloning TIAB\"
@@ -16,7 +27,10 @@ echo "  - name: \"[TIAB] Cloning TIAB\"
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
-      queue: aws-m5large" 
+      queue: aws-m5large 
+      name: $name"
+
+wait
 
 echo "  - name: \"[TIAB] Setting up dependencies\"
     command:
@@ -102,7 +116,10 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
-      queue: aws-m5large" 
+      queue: aws-m5large 
+      name: $name" 
+
+wait
 
 echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/iri-dev}\"
     command:
@@ -117,7 +134,10 @@ echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
-      queue: aws-m5large"
+      queue: aws-m5large 
+      name: $name"
+
+wait
 
 echo "  - name: \"[Jmeter] Downloading and extracting binary\"
     command:
@@ -132,7 +152,10 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
-      queue: aws-m5large" 
+      queue: aws-m5large 
+      name: $name" 
+
+wait
 
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
@@ -158,7 +181,10 @@ do
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
-      queue: aws-m5large"      
+      queue: aws-m5large 
+      name: $name"      
+
+  waitf
 
   echo "  - name: \"[Jmeter] $TESTNAME test results\"
     command:
@@ -173,8 +199,11 @@ do
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
-      queue: aws-m5large"      
+      queue: aws-m5large 
+      name: $name"      
 done
+
+waitf
 
 echo "  - name: \"[TIAB] Tearing down cluster\"
     command:
@@ -189,4 +218,5 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
-      queue: aws-m5large"  
+      queue: aws-m5large 
+      name: $name"  
