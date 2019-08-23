@@ -104,7 +104,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
       - pip install -r requirements.txt
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:3.6-alpine\"
+        image: \"python:2-alpine\"
         environment:
           - TIAB_KUBE_CA
           - TIAB_KUBE_TOKEN
@@ -129,7 +129,7 @@ echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/
       - python create_cluster.py -i \${IRI_IMAGE:-iotacafe/iri-dev} -t \$BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:3.6-alpine\"
+        image: \"python:2-alpine\"
         always-pull: false
         mount-buildkite-agent: false
         volumes:
@@ -167,8 +167,8 @@ do
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
       - cd /cache/tiab
-      - apk add python3
-      - python3 --version
+      - apk add python2
+      - python2 --version
       - . venv/bin/activate
       - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
@@ -202,7 +202,7 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
       - ls -al
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:3.6-alpine\"
+        image: \"python:2-alpine\"
         always-pull: false
         mount-buildkite-agent: false
         volumes:
