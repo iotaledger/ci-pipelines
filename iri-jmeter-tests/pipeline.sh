@@ -58,7 +58,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         for testfile in Nightly-Tests/Jmeter-Tests/*.jmx; do
           TESTNAME=\$(basename \\\$testfile .jmx)
           echo \"  node\\\$TESTNAME:
-              <<: *config\" >> tiab/node_config.yml
+              <<: *config\" >> /cache/tiab/node_config.yml
         done
       - |
         cat <<EOF >> /cache/nodeaddr.py 
