@@ -74,7 +74,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
               <<: *config\" >> /cache/tiab/node_config.yml
         done
       - |
-        cat <<EOF >> /cache/nodeaddr.py 
+        cat <<EOF >> /cache/tiab/nodeaddr.py 
         from yaml import load, Loader
         import argparse
         parser = argparse.ArgumentParser()
@@ -85,7 +85,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         args = parser.parse_args()
         node_name = args.node_name
 
-        yaml_path = './tiab/output.yml'
+        yaml_path = 'output.yml'
         stream = open(yaml_path,'r')
         yaml_file = load(stream,Loader=Loader)
 
@@ -166,19 +166,17 @@ do
   TESTNAME=${TESTPATH%.jmx}
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
-      - cd /cache
-      - . tiab/venv/bin/activate
+      - cd /cache/tiab
+      - . venv/bin/activate
       - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
-      - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/jmeter-$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/results-$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+      - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
         cat << EOF | buildkite-agent annotate --style \"info\"
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
     artifact_paths: 
         - \"jmeter-$BUILDKITE_BUILD_ID/**/*\"
-    concurrency: 2
-    concurrency_group: \"jmeter-tests\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"openjdk:8\"
