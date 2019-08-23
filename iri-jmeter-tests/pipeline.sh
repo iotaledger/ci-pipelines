@@ -25,7 +25,7 @@ echo "  - name: \"[TIAB] Cloning TIAB\"
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     env:
-      BUILDKITE_AGENT_NAME: $BUILDKITE_AGENT_NAME
+      BUILDKITE_AGENT_NAME: \$BUILDKITE_AGENT_NAME
     agents:
       queue: aws-m5large"
 
@@ -115,7 +115,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     env:
-      BUILDKITE_AGENT_NAME: $BUILDKITE_AGENT_NAME
+      BUILDKITE_AGENT_NAME: \$BUILDKITE_AGENT_NAME
     agents:
       queue: aws-m5large" 
 
@@ -134,7 +134,7 @@ echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     env:
-      BUILDKITE_AGENT_NAME: $BUILDKITE_AGENT_NAME
+      BUILDKITE_AGENT_NAME: \$BUILDKITE_AGENT_NAME
     agents:
       queue: aws-m5large"
 
@@ -153,7 +153,7 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     env:
-      BUILDKITE_AGENT_NAME: $BUILDKITE_AGENT_NAME
+      BUILDKITE_AGENT_NAME: \$BUILDKITE_AGENT_NAME
     agents:
       queue: aws-m5large" 
 
@@ -183,7 +183,7 @@ do
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     env:
-      BUILDKITE_AGENT_NAME: $BUILDKITE_AGENT_NAME
+      BUILDKITE_AGENT_NAME: \$BUILDKITE_AGENT_NAME
     agents:
       queue: aws-m5large"      
 
@@ -202,7 +202,7 @@ do
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     env:
-      BUILDKITE_AGENT_NAME: $BUILDKITE_AGENT_NAME
+      BUILDKITE_AGENT_NAME: \$BUILDKITE_AGENT_NAME
     agents:
       queue: aws-m5large"      
 done
@@ -222,6 +222,6 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     env:
-      BUILDKITE_AGENT_NAME: $BUILDKITE_AGENT_NAME
+      BUILDKITE_AGENT_NAME: \$BUILDKITE_AGENT_NAME
     agents:
       queue: aws-m5large"  
