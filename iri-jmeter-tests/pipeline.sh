@@ -169,7 +169,7 @@ do
     command:
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
       - cd /cache/tiab
-      - apk add --quiet -update python3 py-pip
+      - apk add --quiet --update python3 py-pip
       - pip3 install --quiet -r requirements.txt
       - pip3 install --quiet argparse pyyaml
       - python3 nodeaddr.py -n node\\\$TESTNAME -q
