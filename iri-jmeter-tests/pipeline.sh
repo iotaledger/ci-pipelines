@@ -179,6 +179,7 @@ do
         cat << EOF | buildkite-agent annotate --style \"info\"
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
+      - ls -alR jmeter-$BUILDKITE_BUILD_ID 
     artifact_paths: 
         - \"jmeter-$BUILDKITE_BUILD_ID/**/*\"
     plugins:
