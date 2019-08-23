@@ -192,9 +192,10 @@ do
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
       queue: aws-m5large"          
-done
 
 waitf
+
+done
 
 echo "  - name: \"[TIAB] Tearing down cluster\"
     command:
