@@ -76,14 +76,22 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
       - |
         cat <<EOF >> /cache/tiab/nodeaddr.py 
         from yaml import load, Loader
-        import argparse
-        parser = argparse.ArgumentParser()
-        parser.add_argument('-n', '--node', dest='node_name', required=True)
-        parser.add_argument('-q', '--host', dest='host', action='store_true')
-        parser.add_argument('-p', '--port', dest='port', action='store_true')
+        import sys
 
-        args = parser.parse_args()
-        node_name = args.node_name
+        def parse_opts(opts):
+            global node_name, host, port
+            if len(opts[0]) == 0:
+                usage()
+            for (key, value) in opts:
+                if key == '-n' or key == '--node':
+                    node_name = value
+                elif key == '-q' or key == '--host':
+                    host = value
+                elif key == '-p' or key == '--port':
+                    port = value
+
+        opts = getopt(sys.argv[1:], 'n:q:p', ['node=', 'host=', 'port='])
+        parse_opts(opts[0])
 
         yaml_path = 'output.yml'
         stream = open(yaml_path,'r')
