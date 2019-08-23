@@ -77,6 +77,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         cat <<EOF >> /cache/tiab/nodeaddr.py 
         from yaml import load, Loader
         import sys
+        from getopt import getopt
 
         def parse_opts(opts):
             global node_name, host, port
@@ -155,6 +156,7 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
       - cd /cache
       - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
       - tar xzf apache-jmeter-5.1.1.tgz && export PATH=\\\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin
+      - mkdir jmeter-$BUILDKITE_BUILD_ID
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"alpine\"
@@ -178,7 +180,6 @@ do
       - cd /cache/tiab
       - apk add --no-cache python2
       - . venv/bin/activate
-      - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
       - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
