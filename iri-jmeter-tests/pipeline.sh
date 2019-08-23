@@ -145,7 +145,7 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
     command:
       - cd /cache
       - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
-      - tar xzf apache-jmeter-5.1.1.tgz && export PATH=\\\$PATH:\$(pwd)/apache-jmeter-5.1.1/bin
+      - tar xzf apache-jmeter-5.1.1.tgz 
       - mkdir jmeter-$BUILDKITE_BUILD_ID
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -167,10 +167,12 @@ do
   TESTNAME=${TESTPATH%.jmx}
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
+      - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
       - cd /cache/tiab
       - apk add --update python3 py-pip
       - pip3 install -r requirements.txt
       - pip3 install argparse
+      - pip3 install pyyaml
       - python3 nodeaddr.py -n node\\\$TESTNAME -q
       - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
