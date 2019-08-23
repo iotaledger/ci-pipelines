@@ -124,7 +124,9 @@ wait
 
 echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/iri-dev}\"
     command:
+      - pip install yaml
       - cd /cache/tiab
+      - source venv/bin/activate
       - python create_cluster.py -i \${IRI_IMAGE:-iotacafe/iri-dev} -t \$BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
