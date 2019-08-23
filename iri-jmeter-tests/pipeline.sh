@@ -28,7 +28,7 @@ echo "  - name: \"[TIAB] Cloning TIAB\"
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: aws-m5large 
-      name: $name"
+      name: $agent_name"
 
 wait
 
@@ -117,7 +117,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: aws-m5large 
-      name: $name" 
+      name: $agent_name" 
 
 wait
 
@@ -135,7 +135,7 @@ echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: aws-m5large 
-      name: $name"
+      name: $agent_name"
 
 wait
 
@@ -153,7 +153,7 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: aws-m5large 
-      name: $name" 
+      name: $agent_name" 
 
 wait
 
@@ -182,7 +182,7 @@ do
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: aws-m5large 
-      name: $name"      
+      name: $agent_name"      
 
   waitf
 
@@ -200,7 +200,7 @@ do
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: aws-m5large 
-      name: $name"      
+      name: $agent_name"      
 done
 
 waitf
@@ -219,4 +219,4 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: aws-m5large 
-      name: $name"  
+      name: $agent_name"  
