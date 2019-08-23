@@ -167,7 +167,7 @@ do
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
       - cd /cache
-      - pip install pyyaml
+      - . tiab/venv/bin/activate
       - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
       - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/jmeter-$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/results-$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
@@ -176,7 +176,7 @@ do
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
     artifact_paths: 
-        - \"jmeter/**/*\"
+        - \"jmeter-$BUILDKITE_BUILD_ID/**/*\"
     concurrency: 2
     concurrency_group: \"jmeter-tests\"
     plugins:
@@ -189,26 +189,7 @@ do
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large"      
-
-  waitf
-
-  echo "  - name: \"[Jmeter] $TESTNAME test results\"
-    command:
-      - cd /cache
-      - python nodeaddr.py -n node\\\$TESTNAME -q
-      - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter/jmeter-$TESTNAME.log -l jmeter/results-$TESTNAME.jtl -e -o jmeter/results-$TESTNAME
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"alpine\"
-        always-pull: false
-        mount-buildkite-agent: true
-        volumes:
-          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-    env:
-      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-    agents:
-      queue: aws-m5large"      
+      queue: aws-m5large"          
 done
 
 waitf
