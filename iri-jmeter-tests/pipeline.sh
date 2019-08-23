@@ -167,8 +167,8 @@ do
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
       - cd /cache/tiab
-      - apk add python
-      - python --version
+      - apk add python3
+      - python3 --version
       - . venv/bin/activate
       - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
