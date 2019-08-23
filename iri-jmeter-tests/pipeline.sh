@@ -97,6 +97,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
                   print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
         EOF
       - apk add gcc musl-dev libffi-dev openssl-dev
+      - pip install virtualenv
       - cd /cache/tiab
       - virtualenv venv
       - . venv/bin/activate
