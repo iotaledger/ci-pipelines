@@ -167,7 +167,7 @@ do
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
       - cd /cache
-      - . tiab/venv/bin/activate
+      - pip install pyyaml
       - mkdir jmeter-$BUILDKITE_BUILD_ID
       - python nodeaddr.py -n node\\\$TESTNAME -q
       - jmeter -n -t $testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/jmeter-$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/results-$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
@@ -177,7 +177,7 @@ do
         EOF
     artifact_paths: 
         - \"jmeter/**/*\"
-    concurrency: 1
+    concurrency: 2
     concurrency_group: \"jmeter-tests\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
