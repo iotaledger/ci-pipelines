@@ -75,7 +75,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         done
       - |
         cat <<EOF >> /cache/tiab/nodeaddr.py 
-        from yaml import load, Loader
+        import yaml
         import argparse
         parser = argparse.ArgumentParser()
         parser.add_argument('-n', '--node', dest='node_name', required=True)
@@ -85,9 +85,8 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         args = parser.parse_args()
         node_name = args.node_name
 
-        yaml_path = 'output.yml'
-        stream = open(yaml_path,'r')
-        yaml_file = load(stream,Loader=Loader)
+        with open('output.yml', 'r') as stream:
+          yaml_file = yaml.load(stream,Loader=Loader)
 
         for key, value in yaml_file['nodes'].items():
             if key == node_name:
@@ -172,8 +171,8 @@ do
       - apk add --quiet --update python3 py-pip
       - pip3 install --upgrade pip
       - pip3 install --quiet -r requirements.txt
-      - pip3 install --quiet argparse 
-      - pip3 install --quiet pyyaml
+      - pip3 install argparse 
+      - pip3 install PyYAML
       - python3 nodeaddr.py -n node\\\$TESTNAME -q
       - jmeter -n -t /workdir/$testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
