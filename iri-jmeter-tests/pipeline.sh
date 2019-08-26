@@ -168,10 +168,10 @@ do
     command:
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
       - cd /cache/tiab
-      - apk add --quiet --update python3 py-pip
+      - apk add --quiet --no-progress --update python3 py-pip
       - pip3 install --quiet --progress-bar off --upgrade pip
       - pip3 install --quiet --progress-bar off -r requirements.txt
-      - pip3 install --quiet --progress-bar offargparse
+      - pip3 install --quiet --progress-bar off argparse
       - python3 nodeaddr.py -n node$TESTNAME -q
       - python3 nodeaddr.py -n node$TESTNAME -p
       - jmeter -n -t /workdir/$testfile -Jhost=\\\$(python3 nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python3 nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
