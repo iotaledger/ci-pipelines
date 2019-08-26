@@ -86,7 +86,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         node_name = args.node_name
 
         with open('output.yml', 'r') as stream:
-          yaml_file = yaml.load(stream)
+          yaml_file = yaml.load(stream, Loader = yaml.Loader)
 
         for key, value in yaml_file['nodes'].items():
             if key == node_name:
@@ -173,8 +173,7 @@ do
       - pip3 install --quiet -r requirements.txt
       - pip3 install argparse 
       - pip3 install PyYAML
-      - python3 nodeaddr.py -n node\\\$TESTNAME -q
-      - jmeter -n -t /workdir/$testfile -Jhost=\\\$(python nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+      - jmeter -n -t /workdir/$testfile -Jhost=\\\$(python3 nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python3 nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
         cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
