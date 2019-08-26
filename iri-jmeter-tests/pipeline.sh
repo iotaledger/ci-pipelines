@@ -86,7 +86,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
         node_name = args.node_name
 
         with open('output.yml', 'r') as stream:
-          yaml_file = yaml.load(stream,Loader=Loader)
+          yaml_file = yaml.load(stream)
 
         for key, value in yaml_file['nodes'].items():
             if key == node_name:
