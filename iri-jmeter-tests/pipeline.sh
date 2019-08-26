@@ -170,6 +170,7 @@ do
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
       - cd /cache/tiab
       - apk add --quiet --update python3 py-pip
+      - pip install --upgrade pip
       - pip3 install --quiet -r requirements.txt
       - pip3 install --quiet argparse 
       - pip3 install --quiet pyyaml
