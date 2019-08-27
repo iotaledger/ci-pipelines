@@ -8,8 +8,9 @@ steps:
       - rustup toolchain install \$RUSTUP_TOOLCHAIN
       - rustup default \$RUSTUP_TOOLCHAIN
       - rustup toolchain list
-      - rustc -Vv
-      - cargo -V
+      - cargo build
+      - cargo test
+      - cargo fmt --all -- --check
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "ubuntu:16.04"
@@ -27,8 +28,9 @@ steps:
       - rustup toolchain install \$RUSTUP_TOOLCHAIN
       - rustup default \$RUSTUP_TOOLCHAIN
       - rustup toolchain list
-      - rustc -Vv
-      - cargo -V
+      - cargo build
+      - cargo test
+      - cargo fmt --all -- --check
     env: 
       RUSTUP_TOOLCHAIN: nightly
     agents:
@@ -42,8 +44,9 @@ steps:
       - rustup toolchain install %RUSTUP_TOOLCHAIN%
       - rustup default %RUSTUP_TOOLCHAIN%
       - rustup toolchain list
-      - rustc -Vv
-      - cargo -V
+      - cargo build
+      - cargo test
+      - cargo fmt --all -- --check
     env:
       RUSTUP_TOOLCHAIN: nightly
     agents:
