@@ -11,6 +11,8 @@ steps:
       - rustup toolchain list
       - rustup component add rustfmt
       - cargo fmt --version
+    concurrency: 1
+    concurrency_group: "Linux"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "ubuntu:16.04"
@@ -30,9 +32,12 @@ steps:
   - label: ":hammer_and_wrench: Build for Linux platform - Running fmt check"
     command:
       - set -e
+      - apt -qq update && apt -qq install build-essential -y 
       - cargo build
       - cargo test
       - cargo fmt --all -- --check
+    concurrency: 1
+    concurrency_group: "Linux"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "ubuntu:16.04"
@@ -56,6 +61,8 @@ steps:
       - rustup toolchain list
       - cargo build
       - cargo test
+    concurrency: 1
+    concurrency_group: "Mac"
     env: 
       RUSTUP_TOOLCHAIN: nightly
     agents:
@@ -71,6 +78,8 @@ steps:
       - rustup toolchain list
       - cargo build
       - cargo test
+    concurrency: 1
+    concurrency_group: "Windows"
     env:
       RUSTUP_TOOLCHAIN: nightly
     agents:
