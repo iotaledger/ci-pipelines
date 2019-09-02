@@ -1,5 +1,5 @@
 steps:
-  - label: ":hammer_and_wrench: Build for Linux platform - Setting up Rust environment"
+  - label: ":linux: Build for Linux platform - Setting up Rust environment"
     command:
       - set -e
       - mkdir /cache/rust
@@ -27,7 +27,7 @@ steps:
     agents:
       queue: ops
 
-  - label: ":hammer_and_wrench: Build for Linux platform - Running fmt check"
+  - label: ":linux: Build for Linux platform - Running fmt check"
     command:
       - set -e
       - apt -qq update && apt -qq install build-essential -y 
@@ -49,7 +49,7 @@ steps:
     agents:
       queue: ops
 
-  - label: ":hammer_and_wrench: Build for macOS platform"
+  - label: ":mac: Build for macOS platform"
     command:
       - set -e
       - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain none
@@ -66,7 +66,7 @@ steps:
     agents:
       queue: mac
 
-  - label: ":hammer_and_wrench: Build for Windows platform"
+  - label: ":windows: Build for Windows platform"
     command:
       - curl -sSf -o rustup-init.exe https://win.rustup.rs
       - rustup-init.exe -y --default-toolchain none
