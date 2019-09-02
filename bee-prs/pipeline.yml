@@ -18,7 +18,7 @@ steps:
         environment:
           - CARGO_HOME=/cache/rust/.cargo
           - RUSTUP_HOME=/cache/rust/.rustup
-          - PATH=\$PATH:/cache/rust/.cargo/bin
+          - PATH=$PATH:/cache/rust/.cargo/bin
           - RUSTUP_TOOLCHAIN=nightly
         volumes:
           - /cache-bee-$BUILDKITE_BUILD_ID:/cache
@@ -38,7 +38,7 @@ steps:
         environment:
           - CARGO_HOME=/cache/rust/.cargo
           - RUSTUP_HOME=/cache/rust/.rustup
-          - PATH=\$PATH:/cache/rust/.cargo/bin
+          - PATH=$PATH:/cache/rust/.cargo/bin
         volumes:
           - /cache-bee-$BUILDKITE_BUILD_ID:/cache
     agents:
