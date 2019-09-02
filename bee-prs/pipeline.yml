@@ -25,6 +25,8 @@ steps:
     agents:
       queue: ops
 
+  - wait
+
   - label: ":hammer_and_wrench: Build for Linux platform - Running fmt check"
     command:
       - set -e
