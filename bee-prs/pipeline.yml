@@ -1,13 +1,33 @@
 steps:
-  - label: ":hammer_and_wrench: Build for Linux platform"
+  - label: ":hammer_and_wrench: Build for Linux platform - Setting up Rust environment"
     command:
       - set -e
+      - mkdir /cache/rust
       - apt -qq update && apt -qq install curl -y 
       - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain none
       - export PATH=\$PATH:\$HOME/.cargo/bin
       - rustup toolchain install \$RUSTUP_TOOLCHAIN
       - rustup default \$RUSTUP_TOOLCHAIN
       - rustup toolchain list
+      - rustup component add rustfmt
+      - cargo fmt --version
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: "ubuntu:16.04"
+        always-pull: false
+        environment:
+          - CARGO_HOME=/cache/rust/.cargo
+          - RUSTUP_HOME=/cache/rust/.rustup
+          - PATH=\$PATH:/cache/rust/.cargo/bin
+          - RUSTUP_TOOLCHAIN=nightly
+        volumes:
+          - /cache-bee-$BUILDKITE_BUILD_ID:/cache
+    agents:
+      queue: ops
+
+  - label: ":hammer_and_wrench: Build for Linux platform - Running fmt check"
+    command:
+      - set -e
       - cargo build
       - cargo test
       - cargo fmt --all -- --check
@@ -16,7 +36,11 @@ steps:
         image: "ubuntu:16.04"
         always-pull: false
         environment:
-          - RUSTUP_TOOLCHAIN=nightly
+          - CARGO_HOME=/cache/rust/.cargo
+          - RUSTUP_HOME=/cache/rust/.rustup
+          - PATH=\$PATH:/cache/rust/.cargo/bin
+        volumes:
+          - /cache-bee-$BUILDKITE_BUILD_ID:/cache
     agents:
       queue: ops
 
@@ -30,7 +54,6 @@ steps:
       - rustup toolchain list
       - cargo build
       - cargo test
-      - cargo fmt --all -- --check
     env: 
       RUSTUP_TOOLCHAIN: nightly
     agents:
@@ -46,7 +69,6 @@ steps:
       - rustup toolchain list
       - cargo build
       - cargo test
-      - cargo fmt --all -- --check
     env:
       RUSTUP_TOOLCHAIN: nightly
     agents:
