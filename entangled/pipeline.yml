@@ -217,6 +217,20 @@ steps:
           - .:/workdir
         shell: ["/bin/bash", "-e", "-c"]
 
+  - name: "CMake - CClient"
+    command: cd /workdir && mkdir build && cd $_ && cmake .. && make -j16 && make -j16 test
+    agents:
+      queue: dev
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
+        image: "iotacafe/iota-buildenv"
+        always-pull: true
+        volumes:
+          - /conf:/conf
+          - /cache:/cache
+          - .:/workdir
+        shell: ["/bin/bash", "-e", "-c"]
+
   - wait
 
   - name: "bazel test bootlin x86_64 toolchains"
