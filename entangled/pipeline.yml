@@ -218,7 +218,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "CMake - CClient"
-    command: cd /workdir && mkdir build && cd $_ && cmake .. && make -j16 && make -j16 test
+    command: cd /workdir && mkdir build && cd build && cmake .. && make -j16 && make -j16 test
     agents:
       queue: dev
     plugins:
