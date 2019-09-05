@@ -1,0 +1,18 @@
+steps:
+  - label: "Running benchmarks"
+    commands:
+      - mvn -Dtest=BenchmarkRunner clean test --log-file bench.log
+    env:
+      BUILDKITE_CLEAN_CHECKOUT: true
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: "iotacafe/maven:3.5.4.oracle8u181.1.webupd8.1.1-1"
+        always-pull: true
+        mount-buildkite-agent: false
+        shell: ["/bin/bash", "-e", "-c"]
+    artifact_paths:
+      - "target/iri-*.jar"
+      - "target/SHA256SUM-*"
+      - "build-iri.log"
+    agents:
+      queue: dev
