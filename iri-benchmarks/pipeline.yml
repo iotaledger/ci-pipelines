@@ -11,8 +11,6 @@ steps:
         mount-buildkite-agent: false
         shell: ["/bin/bash", "-e", "-c"]
     artifact_paths:
-      - "target/iri-*.jar"
-      - "target/SHA256SUM-*"
-      - "build-iri.log"
+      - "bench.log"
     agents:
       queue: dev
