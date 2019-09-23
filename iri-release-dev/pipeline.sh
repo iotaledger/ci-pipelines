@@ -22,7 +22,9 @@ release () {
       - if [[ \\\$(sha256sum target/iri-\\\$IRI_VERSION.jar | cut -d \" \" -f 1) == \\\$(cat target/SHA256SUM-\\\$IRI_VERSION) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
-      #- gpg --armor --detach-sign --clearsign --default-key email@iota.org target/SHA256SUM
+      - echo \\\$GPG_KEY | base64 -d > iri.key
+      - export \\\$GPG_CONTACT_PASSPHRASE | gpg --import <iri.key
+      - gpg --armor --detach-sign --clearsign --default-key contact@iota.org target/SHA256SUM
       - ./github-release \\\$GITHUB_RELEASE_TAG target/*"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -34,7 +36,8 @@ release () {
           - GITHUB_RELEASE_TAG=$1
           - GITHUB_RELEASE_ACCESS_TOKEN
           - GITHUB_RELEASE_REPOSITORY=sadjy/iri
-          - GITHUB_RELEASE_COMMIT"
+          - GITHUB_RELEASE_COMMIT
+          - GPG_KEY"
   echo "    agents:
       queue: aws-m5large"
 }

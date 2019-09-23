@@ -173,7 +173,7 @@ steps:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
         shell: /bin/bash -c
-        mount-buildkite-agent: true
+        mount-buildkite-agent: false
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
           - /conf:/conf:ro
