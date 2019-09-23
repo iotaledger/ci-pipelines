@@ -23,8 +23,8 @@ release () {
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release
       - echo \\\$GPG_KEY | base64 -d > iri.key
-      - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --import <iri.key
-      - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --armor --detach-sign --clearsign --default-key contact@iota.org target/SHA256SUM
+      - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --batch --yes --import <iri.key
+      - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --batch --yes --armor --detach-sign --clearsign --default-key contact@iota.org target/SHA256SUM
       - ./github-release \\\$GITHUB_RELEASE_TAG target/*"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
