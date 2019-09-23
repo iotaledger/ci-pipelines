@@ -37,6 +37,7 @@ release () {
           - GITHUB_RELEASE_ACCESS_TOKEN
           - GITHUB_RELEASE_REPOSITORY=sadjy/iri
           - GITHUB_RELEASE_COMMIT
+          - GPG_CONTACT_PASSPHRASE
           - GPG_KEY"
   echo "    agents:
       queue: aws-m5large"
