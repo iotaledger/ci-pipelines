@@ -63,6 +63,7 @@ steps:
     concurrency_group: "Mac"
     env: 
       RUSTUP_TOOLCHAIN: nightly
+      RUST_BACKTRACE: 1
     agents:
       queue: mac
 
