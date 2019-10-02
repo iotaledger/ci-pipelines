@@ -16,7 +16,7 @@ echo "steps:"
 echo "  - name: \"[TIAB] Cloning TIAB\"
     command:
       - apk add git
-      - git clone --depth 1 https://github.com/sadjy/tiab.git /cache/tiab
+      - git clone --depth 1 https://github.com/iotaledger/tiab.git /cache/tiab
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"alpine\"
