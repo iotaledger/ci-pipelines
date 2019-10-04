@@ -30,7 +30,7 @@ steps:
   - label: ":linux: Build for Linux platform - Running fmt check"
     command:
       - set -e
-      - apt -qq update && apt -qq install build-essential -y 
+      - apt -qq update && apt -qq install curl ca-certificates -y
       - cargo build
       - cargo test
       - cargo fmt --all -- --check
