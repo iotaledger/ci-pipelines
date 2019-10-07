@@ -209,7 +209,7 @@ do
             thresThru=268
           ;;          
         esac
-      - ls -al /cache/
+      - ls -al /cache/jmeter-$BUILDKITE_BUILD_ID
       - cd /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - respTime=\\\$(jq -r \".Total .meanResTime\" statistics.json)
       - throughput=\\\$(jq -r \".Total .throughput\" statistics.json)
