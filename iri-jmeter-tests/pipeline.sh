@@ -216,16 +216,12 @@ do
       - throughput=\\\$(jq -r \".Total .throughput\" statistics.json)
       - |
         if [ \\\${respTime%%.*} -gt \\\$thresResp ]; then
-          cat << EOF | buildkite-agent annotate --style \"error\" --context '$TESTNAME-check1'
-            \\\$TESTNAME mean Response Time exceeding threshold value with \\\$respTime
-        EOF
+          buildkite-agent annotate '\\\$TESTNAME mean Response Time exceeding threshold value with \\\$respTime' --style \"error\" --context '$TESTNAME-check1'
           exitflag=true
         fi
       - |
         if [ \\\${throughput%%.*} -gt \\\$thresThru ]; then
-          cat << EOF | buildkite-agent annotate --style \"error\" --context '$TESTNAME-check2'
-            \\\$TESTNAME mean Throughput exceeding threshold value with \\\$throughput
-        EOF
+          buildkite-agent annotate '\\\$TESTNAME mean Throughput exceeding threshold value with \\\$throughput' --style \"error\" --context '$TESTNAME-check2'
           exitflag=true
         fi
       - if [ \"\\\$exitflag\" = true ]; then exit 1; fi
