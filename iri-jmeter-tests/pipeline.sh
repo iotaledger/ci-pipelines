@@ -194,6 +194,8 @@ do
     agents:
       queue: aws-m5large"          
 
+  wait
+
   echo "  - name: \"[Jmeter] Checking $TESTNAME results\"
     command:
       - apk add jq
