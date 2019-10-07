@@ -198,7 +198,7 @@ do
 
   echo "  - name: \"[Jmeter] Checking $TESTNAME results\"
     command:
-      - apk add jq
+      - apk add jq ca-certificates
       - exitflag=false
       - |
         case $TESTNAME in
