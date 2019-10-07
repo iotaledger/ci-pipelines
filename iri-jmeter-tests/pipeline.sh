@@ -226,7 +226,7 @@ do
           EOF
           exitflag=true
         fi
-      - if [ $exitflag ]; then exit 1; fi
+      - if [ \"\\\$exitflag\" = true ]; then exit 1; fi
     artifact_paths: 
       - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
     plugins:
