@@ -1,16 +1,13 @@
 steps:
-  - label: ":linux: Build for Linux platform - Setting up Rust environment"
+  - label: ":linux: Setting up Rust environment and running fmt check"
     command:
       - set -e
       - mkdir /cache/rust
       - apt -qq update && apt -qq install curl ca-certificates gcc pkg-config libssl-dev -y
-      - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain none
+      - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain \$RUSTUP_TOOLCHAIN
       - export PATH=\$PATH:\$HOME/.cargo/bin
-      - rustup toolchain install \$RUSTUP_TOOLCHAIN
-      - rustup default \$RUSTUP_TOOLCHAIN
-      - rustup toolchain list
       - rustup component add rustfmt
-      - cargo fmt --version
+      - cargo fmt --all -- --check
     concurrency: 1
     concurrency_group: "Linux"
     plugins:
@@ -27,13 +24,40 @@ steps:
     agents:
       queue: ops
 
-  - label: ":linux: Build for Linux platform - Running fmt check"
+  - wait
+
+  - label: ":linux: Build for Linux platform - nightly"
     command:
       - set -e
       - apt -qq update && apt -qq install curl ca-certificates gcc pkg-config libssl-dev -y
+      - rustup toolchain install \$RUSTUP_TOOLCHAIN
+      - rustup default \$RUSTUP_TOOLCHAIN
       - cargo build
-      - cargo test
-      - cargo fmt --all -- --check
+    concurrency: 1
+    concurrency_group: "Linux"
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: "ubuntu:16.04"
+        always-pull: false
+        environment:
+          - CARGO_HOME=/cache/rust/.cargo
+          - RUSTUP_HOME=/cache/rust/.rustup
+          - PATH=$PATH:/cache/rust/.cargo/bin
+          - RUSTUP_TOOLCHAIN=nightly
+        volumes:
+          - /cache-bee-$BUILDKITE_BUILD_ID:/cache
+    agents:
+      queue: ops
+
+  - wait: ~
+    continue_on_failure: true
+
+  - label: ":linux: Build for Linux platform - stable"
+    command:
+      - set -e
+      - apt -qq update && apt -qq install curl ca-certificates gcc pkg-config libssl-dev -y
+      - rustup default \$RUSTUP_TOOLCHAIN
+      - cargo test --all
     concurrency: 1
     concurrency_group: "Linux"
     plugins:
@@ -49,16 +73,12 @@ steps:
     agents:
       queue: ops
 
-  - label: ":mac: Build for macOS platform"
+  - label: ":mac: Build for macOS platform -stable"
     command:
       - set -e
-      - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain none
+      - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain \$RUSTUP_TOOLCHAIN
       - export PATH=\$PATH:\$HOME/.cargo/bin
-      - rustup toolchain install \$RUSTUP_TOOLCHAIN
-      - rustup default \$RUSTUP_TOOLCHAIN
-      - rustup toolchain list
-      - cargo build
-      - cargo test
+      - cargo test --all
     concurrency: 1
     concurrency_group: "Mac"
     env: 
@@ -66,16 +86,12 @@ steps:
     agents:
       queue: mac
 
-  - label: ":windows: Build for Windows platform"
+  - label: ":windows: Build for Windows platform - stable"
     command:
       - curl -sSf -o rustup-init.exe https://win.rustup.rs
-      - rustup-init.exe -y --default-toolchain none
+      - rustup-init.exe -y --default-toolchain %RUSTUP_TOOLCHAIN%
       - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
-      - rustup toolchain install %RUSTUP_TOOLCHAIN%
-      - rustup default %RUSTUP_TOOLCHAIN%
-      - rustup toolchain list
-      - cargo build
-      - cargo test
+      - cargo test --all
     concurrency: 1
     concurrency_group: "Windows"
     env:
