@@ -216,7 +216,7 @@ do
       - throughput=\\\$(jq -r \".Total .throughput\" statistics.json)
       - |
         if [ \\\${respTime%%.*} -gt \\\$thresResp ]; then
-          cat << EOF | buildkite-agent annotate --style \"error\" --context '$TESTPATH'
+          cat << EOF | buildkite-agent annotate --style \"error\" --context '$TESTPATH-check'
             \$TESTNAME mean Response Time exceeding threshold value with \\\$respTime
         EOF
           exitflag=true
