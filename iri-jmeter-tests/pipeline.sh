@@ -194,7 +194,7 @@ do
     agents:
       queue: aws-m5large"          
 
-  wait
+  waitf
 
   echo "  - name: \"[Jmeter] Checking $TESTNAME results\"
     command:
