@@ -211,7 +211,6 @@ do
             thresThru=268
           ;;          
         esac
-      - ls -al /cache/jmeter-$BUILDKITE_BUILD_ID
       - cd /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - respTime=\\\$(jq -r \".Total .meanResTime\" statistics.json)
       - throughput=\\\$(jq -r \".Total .throughput\" statistics.json)
@@ -219,14 +218,14 @@ do
         if [ \\\${respTime%%.*} -gt \\\$thresResp ]; then
           cat << EOF | buildkite-agent annotate --style \"error\" --context '$TESTPATH'
             \$TESTNAME mean Response Time exceeding threshold value with \\\$respTime
-          EOF
+        EOF
           exitflag=true
         fi
       - |
         if [ \\\${throughput%%.*} -gt \\\$thresThru ]; then
           cat << EOF | buildkite-agent annotate --style \"error\" --context '$TESTPATH'
             \$TESTNAME mean Throughput exceeding threshold value with \\\$throughput
-          EOF
+        EOF
           exitflag=true
         fi
       - if [ \"\\\$exitflag\" = true ]; then exit 1; fi
