@@ -209,6 +209,7 @@ do
             thresThru=268
           ;;          
         esac
+      - ls -al /cache/
       - cd /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - respTime=\\\$(jq -r \".Total .meanResTime\" statistics.json)
       - throughput=\\\$(jq -r \".Total .throughput\" statistics.json)
@@ -227,8 +228,6 @@ do
           exitflag=true
         fi
       - if [ \"\\\$exitflag\" = true ]; then exit 1; fi
-    artifact_paths: 
-      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"alpine\"
