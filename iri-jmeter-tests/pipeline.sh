@@ -174,12 +174,12 @@ do
       - pip3 install --quiet --progress-bar off argparse
       - python3 nodeaddr.py -n node$TESTNAME -q
       - python3 nodeaddr.py -n node$TESTNAME -p
-      - jmeter -n -t /workdir/$testfile -Jhost=\\\$(python3 nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python3 nodeaddr.py -n node$TESTNAME -p) -j jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+      - jmeter -n -t /workdir/$testfile -Jhost=\\\$(python3 nodeaddr.py -n node$TESTNAME -q) -Jport=\\\$(python3 nodeaddr.py -n node$TESTNAME -p) -j /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
         cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
-      - cp -rf jmeter-$BUILDKITE_BUILD_ID /workdir 
+      - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
     artifact_paths: 
       - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
     plugins:
