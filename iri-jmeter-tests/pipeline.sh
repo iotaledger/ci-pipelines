@@ -124,7 +124,7 @@ wait
 echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/iri-dev}\"
     command:
       - cd /cache/tiab
-      - . venv/bin/activate
+      - . venv/bin/activate 
       - python create_cluster.py -i \${IRI_IMAGE:-iotacafe/iri-dev} -t \$BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -185,6 +185,53 @@ do
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"openjdk:8-alpine\"
+        always-pull: false
+        mount-buildkite-agent: true
+        volumes:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
+    agents:
+      queue: aws-m5large"          
+
+  echo "  - name: \"[Jmeter] Checking $TESTNAME results\"
+    command:
+      - apk add jq
+      - exitflag=false
+      - |
+        case $TESTNAME in
+          GetTransactionsToApprove)
+            thresResp=456
+            thresThru=186
+          ;;
+          GetTransactionsToApproveLoop)
+            thresResp=18
+            thresThru=268
+          ;;          
+        esac
+      - cd /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+      - respTime=\\\$(jq -r \".Total .meanResTime\" statistics.json)
+      - throughput=\\\$(jq -r \".Total .throughput\" statistics.json)
+      - |
+        if [ \\\${respTime%%.*} -gt \\\$thresResp ]; then
+          cat << EOF | buildkite-agent annotate --style \"error\" --context '$TESTPATH'
+            \$TESTNAME mean Response Time exceeding threshold value with \\\$respTime
+          EOF
+          exitflag=true
+        fi
+      - |
+        if [ \\\${throughput%%.*} -gt \\\$thresThru ]; then
+          cat << EOF | buildkite-agent annotate --style \"error\" --context '$TESTPATH'
+            \$TESTNAME mean Throughput exceeding threshold value with \\\$throughput
+          EOF
+          exitflag=true
+        fi
+      - if [ $exitflag ]; then exit 1; fi
+    artifact_paths: 
+      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: \"alpine\"
         always-pull: false
         mount-buildkite-agent: true
         volumes:
