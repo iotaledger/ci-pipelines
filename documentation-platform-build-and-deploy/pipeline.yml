@@ -3,7 +3,7 @@ steps:
     command:
       - |
         rm -rf ci-pipelines && git clone https://github.com/iotaledger/ci-pipelines.git
-        npm i -g --unsafe-perm now
+        npm i -g --unsafe-perm now@16.3.0
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.staging.json api/src/data/
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.staging.json api/now.json
         sed -i.bak s#DOCS-STAGING-AWS-ACCESS-KEY-ID#\$DOCS_STAGING_AWS_ACCESS_KEY_ID#g api/src/data/config.staging.json
@@ -37,7 +37,7 @@ steps:
           buildkite-agent artifact download documentation-markdown.tgz docs/ --build $DOCS_MARKDOWN_BUILDKITE_BUILD_ID
         fi
         cd docs && tar xvfz documentation-markdown.tgz && rm documentation-markdown.tgz && cd ../
-        npm i -g --unsafe-perm now
+        npm i -g --unsafe-perm now@16.3.0
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.staging.json src/config.staging.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.staging.json now.json
         rm -rf ci-pipelines
@@ -62,7 +62,7 @@ steps:
   - name: api-build-and-deploy-prod
     command:
       - |
-        npm i -g --unsafe-perm now
+        npm i -g --unsafe-perm now@16.3.0
         rm -rf ci-pipelines && git clone https://github.com/iotaledger/ci-pipelines.git
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/src/data/config.prod.json api/src/data/
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/api/now.prod.json api/now.json
@@ -98,7 +98,7 @@ steps:
         fi
         cd docs && tar xvfz documentation-markdown.tgz && rm documentation-markdown.tgz && cd ../
 
-        npm i -g --unsafe-perm now
+        npm i -g --unsafe-perm now@16.3.0
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/src/config.prod.json src/config.prod.json
         cp ci-pipelines/$BUILDKITE_PIPELINE_SLUG/web/now.prod.json now.json
         rm -rf ci-pipelines
