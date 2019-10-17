@@ -16,6 +16,8 @@ steps:
         always-pull: true
         mount-buildkite-agent: false
         shell: ["/bin/bash", "-e", "-c"]
+        volumes:
+          - /cache/.m2:/root/.m2
     artifact_paths:
       - "target/iri-*.jar"
       - "target/SHA256SUM-*"
