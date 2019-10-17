@@ -33,7 +33,7 @@ steps:
 
   - name: "Clone TIAB"
     command:
-      - clone --depth 1 https://github.com/sadjy/tiab /cache/tiab
+      - clone --depth 1 https://github.com/iotaledger/tiab /cache/tiab
     agents:
       queue: ops
     plugins:
