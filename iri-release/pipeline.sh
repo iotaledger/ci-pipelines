@@ -49,7 +49,9 @@ docker_push () {
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
       - docker pull iotacafe/iri:$1
       - docker tag iotacafe/iri:$1 iotaledger/iri:$1
-      - docker push iotaledger/iri:$1"
+      - docker push iotaledger/iri:$1
+      - docker tag iotaledger/iri:$1 iotaledger/iri:latest
+      - docker push iotaledger/iri:latest"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
