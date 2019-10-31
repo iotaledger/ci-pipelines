@@ -160,13 +160,7 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
 
 wait
 
-for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
-do
-  TESTPATH=$(basename $testfile)
-  TESTNAME=${TESTPATH%.jmx}
-done
-
-testsList=$(cd Nightly-Tests/Jmeter-Tests/*.jmx && ls *.jmx)
+testsList=$(cd Nightly-Tests/Jmeter-Tests/ && ls *.jmx)
 
 echo "  - name: \"[Jmeter] Running tests\"
   command:
