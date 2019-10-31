@@ -166,7 +166,7 @@ do
   TESTNAME=${TESTPATH%.jmx}
 done
 
-testsList=$(ls Nightly-Tests/Jmeter-Tests/*.jmx | tr '\n' ' ')
+testsList=$(cd Nightly-Tests/Jmeter-Tests/*.jmx && ls *.jmx)
 
 echo "  - name: \"[Jmeter] Running tests\"
   command:
