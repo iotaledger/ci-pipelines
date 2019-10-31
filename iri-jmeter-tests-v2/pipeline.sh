@@ -164,84 +164,86 @@ for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
   TESTPATH=$(basename $testfile)
   TESTNAME=${TESTPATH%.jmx}
-  echo "  - name: \"[Jmeter] Running $TESTNAME test\"
-    command:
-      - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
-      - cd /cache/tiab
-      - apk add --quiet --no-progress --update python3 py-pip
-      - pip3 install --quiet --progress-bar off --upgrade pip
-      - pip3 install --quiet --progress-bar off -r requirements.txt
-      - pip3 install --quiet --progress-bar off argparse
-      - hostDest=\\\$(python3 nodeaddr.py -n node$TESTNAME -q)
-      - portDest=\\\$(python3 nodeaddr.py -n node$TESTNAME -p)
-      - jmeter -n -t /workdir/$testfile -Jhost=\\\$hostDest -Jport=\\\$portDest -j /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
-      - |
-        cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
-          Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
-        EOF
-      - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%m-%d-%Y) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
-      - jq '.metadata .appVersion = $appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type: application/json' -H 'X-IOTA-API-Version: 1' -d '{\\\"command\\\":\\\"getNodeInfo\\\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
-      - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
-    artifact_paths: 
-      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"openjdk:8-alpine\"
-        always-pull: false
-        mount-buildkite-agent: true
-        volumes:
-          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-    env:
-      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-    agents:
-      queue: aws-m5large"          
+done
 
-  waitf
+testsList=$(ls Nightly-Tests/Jmeter-Tests/*.jmx | tr '\n' ' ')
 
-  echo "  - name: \"[Jmeter] Checking $TESTNAME results\"
-    command:
-      - apk add jq ca-certificates
-      - exitflag=false
-      - |
-        case $TESTNAME in
-          GetTransactionsToApprove)
-            thresResp=456
-            thresThru=186
-          ;;
-          GetTransactionsToApproveLoop)
-            thresResp=18
-            thresThru=268
-          ;;          
-        esac
-      - cd /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
-      - respTime=\\\$(jq -r \".Total .meanResTime\" statistics.json)
-      - throughput=\\\$(jq -r \".Total .throughput\" statistics.json)
-      - |
-        if [ \\\${respTime%%.*} -gt \\\$thresResp ]; then
-          buildkite-agent annotate '$TESTNAME mean Response Time value exceeding threshold value' --style \"error\" --context '$TESTNAME-check1'
-          exitflag=true
-        fi
-      - |
-        if [ \\\${throughput%%.*} -gt \\\$thresThru ]; then
-          buildkite-agent annotate '$TESTNAME mean Throughput value exceeding threshold value' --style \"error\" --context '$TESTNAME-check2'
-          exitflag=true
-        fi
-      - if [ \"\\\$exitflag\" = true ]; then exit 1; fi
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"alpine\"
-        always-pull: false
-        mount-buildkite-agent: true
-        volumes:
-          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-    env:
-      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-    agents:
-      queue: aws-m5large"          
+echo "  - name: \"[Jmeter] Running tests\"
+  command:
+    - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
+    - cd /cache/tiab
+    - apk add --quiet --no-progress --update python3 py-pip
+    - pip3 install --quiet --progress-bar off --upgrade pip
+    - pip3 install --quiet --progress-bar off -r requirements.txt
+    - pip3 install --quiet --progress-bar off argparse
+    - hostDest=\\\$(python3 nodeaddr.py -n node$TESTNAME -q)
+    - portDest=\\\$(python3 nodeaddr.py -n node$TESTNAME -p)
+    - jmeter -n -t $testsList -Jhost=\\\$hostDest -Jport=\\\$portDest -j /cache/jmeter-$BUILDKITE_BUILD_ID -l /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+    - |
+      cat << EOF | buildkite-agent annotate --style \"default\" --context 'results'
+        Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/index.html\"> $TESTNAME tests results</a>
+      EOF
+    - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%m-%d-%Y) > /cache/jmeter-$BUILDKITE_BUILD_ID/metadata.json
+    - jq '.metadata .appVersion = $appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type: application/json' -H 'X-IOTA-API-Version: 1' -d '{\\\"command\\\":\\\"getNodeInfo\\\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
+    - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
+  artifact_paths: 
+    - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
+  plugins:
+    https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+      image: \"openjdk:8-alpine\"
+      always-pull: false
+      mount-buildkite-agent: true
+      volumes:
+        - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+  env:
+    BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
+  agents:
+    queue: aws-m5large"          
 
 waitf
 
-done
+#echo "  - name: \"[Jmeter] Checking $TESTNAME results\"
+#  command:
+#    - apk add jq ca-certificates
+#    - exitflag=false
+#    - |
+#      case $TESTNAME in
+#        GetTransactionsToApprove)
+#          thresResp=456
+#          thresThru=186
+#        ;;
+#        GetTransactionsToApproveLoop)
+#          thresResp=18
+#          thresThru=268
+#        ;;          
+#      esac
+#    - cd /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+#    - respTime=\\\$(jq -r \".Total .meanResTime\" statistics.json)
+#    - throughput=\\\$(jq -r \".Total .throughput\" statistics.json)
+#    - |
+#      if [ \\\${respTime%%.*} -gt \\\$thresResp ]; then
+#        buildkite-agent annotate '$TESTNAME mean Response Time value exceeding threshold value' --style \"error\" --context '$TESTNAME-check1'
+#        exitflag=true
+#      fi
+#    - |
+#      if [ \\\${throughput%%.*} -gt \\\$thresThru ]; then
+#        buildkite-agent annotate '$TESTNAME mean Throughput value exceeding threshold value' --style \"error\" --context '$TESTNAME-check2'
+#        exitflag=true
+#      fi
+#    - if [ \"\\\$exitflag\" = true ]; then exit 1; fi
+#  plugins:
+#    https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+#      image: \"alpine\"
+#      always-pull: false
+#      mount-buildkite-agent: true
+#      volumes:
+#        - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+#  env:
+#    BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
+#  agents:
+#    queue: aws-m5large"          
+#
+#waitf
 
 echo "  - name: \"[TIAB] Tearing down cluster\"
     command:
