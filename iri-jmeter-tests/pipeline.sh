@@ -1,6 +1,4 @@
 #!/bin/bash
-export BUILDKITE_AGENT_NAME=aa
-export BUILDKITE_BUILD_ID=aa
 
 set -eu
 
