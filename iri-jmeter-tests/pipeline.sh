@@ -149,6 +149,7 @@ wait
 echo "  - name: \"[Jmeter] Downloading and extracting binary\"
     command:
       - cd /cache
+      - echo
       - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
       - tar xzf apache-jmeter-5.1.1.tgz 
       - mkdir jmeter-$BUILDKITE_BUILD_ID
@@ -172,7 +173,6 @@ do
   TESTNAME=${TESTPATH%.jmx}
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
-      - echo
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
       - cd /cache/tiab
       - apk add --quiet --no-progress --update python3 py-pip
