@@ -172,6 +172,7 @@ do
   TESTNAME=${TESTPATH%.jmx}
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
+      - echo
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
       - cd /cache/tiab
       - apk add --quiet --no-progress --update python3 py-pip
