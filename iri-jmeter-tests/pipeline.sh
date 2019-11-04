@@ -278,7 +278,7 @@ do
       command:
         - |
           cat <<EOF >> /cache/plot.py
-           EOF
+          EOF
         - pip3 install --quiet --progress-bar off --upgrade awscli
         - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} bash -c \"echo {} && DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$VER,\\\\\$RES\"
       plugins:
