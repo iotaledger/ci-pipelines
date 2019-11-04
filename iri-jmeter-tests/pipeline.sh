@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BUILDKITE_BUILD_ID=aa
+BUILDKITE_AGENT_NAME=aaa
 set -eu
 
 wait() {
@@ -11,9 +13,9 @@ waitf() {
     continue_on_failure: true"
 }
 
-block() {
-  echo "  - block: \"Display graphs\""
-}
+#block() {
+#  echo "  - block: \"Display graphs\""
+#}
 
 echo "steps:"
 
@@ -265,7 +267,7 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
     agents:
       queue: aws-m5large"  
 
-block 
+#block 
 
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
