@@ -1,4 +1,6 @@
 #!/bin/bash
+export BUILDKITE_AGENT_NAME=aa
+export BUILDKITE_BUILD_ID=aa
 
 set -eu
 
@@ -9,6 +11,10 @@ wait() {
 waitf() {
   echo "  - wait: ~
     continue_on_failure: true"
+}
+
+block() {
+  echo "  - block: \"Display graphs\""
 }
 
 echo "steps:"
@@ -180,7 +186,7 @@ do
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
       - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%m-%d-%Y) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
-      - jq '.metadata .appVersion = $appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type: application/json' -H 'X-IOTA-API-Version: 1' -d '{\\\"command\\\":\\\"getNodeInfo\\\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
+      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type: application/json' -H 'X-IOTA-API-Version: 1' -d '{\\\"command\\\":\\\"getNodeInfo\\\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
       - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
     artifact_paths: 
       - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
@@ -261,31 +267,30 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
     agents:
       queue: aws-m5large"  
 
+block 
 
-#for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
-#do
-#  TESTPATH=$(basename $testfile)
-#  TESTNAME=${TESTPATH%.jmx}
-#  echo "  - name: \"[Jmeter] Displaying graph\"
-#      command:
-#        - |
-#          cat <<EOF >> /cache/plot.py 
-#          EOF
-#        - pip3 install --quiet --progress-bar off --upgrade awscli
-#        - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}\\\$TESTNAME/statistics.json | jq -r '.\\\$TESTNAME .meanResTime'
-#      plugins:
-#        https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-#          image: \"python:alpine\"
-#          always-pull: false
-#          mount-buildkite-agent: false
-#          volumes:
-#            - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-#      env:
-#        BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-#      agents:
-#      queue: aws-m5large"  
-#done 
-
-
+for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
+do
+  TESTPATH=$(basename $testfile)
+  TESTNAME=${TESTPATH%.jmx}
+  echo "  - name: \"[Jmeter] Displaying graph\"
+      command:
+        - |
+          cat <<EOF >> /cache/plot.py
+           EOF
+        - pip3 install --quiet --progress-bar off --upgrade awscli
+        - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} bash -c \"echo {} && DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$VER,\\\\\$RES\"
+      plugins:
+        https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+          image: \"python:alpine\"
+          always-pull: false
+          mount-buildkite-agent: false
+          volumes:
+            - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+      env:
+        BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
+      agents:
+      queue: aws-m5large"  
+done 
 
 
