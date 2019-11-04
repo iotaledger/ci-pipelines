@@ -149,7 +149,6 @@ wait
 echo "  - name: \"[Jmeter] Downloading and extracting binary\"
     command:
       - cd /cache
-      - echo
       - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
       - tar xzf apache-jmeter-5.1.1.tgz 
       - mkdir jmeter-$BUILDKITE_BUILD_ID
@@ -188,6 +187,7 @@ do
         EOF
       - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%m-%d-%Y) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
       - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type: application/json' -H 'X-IOTA-API-Version: 1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
+      - echo
       - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
     artifact_paths: 
       - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/**/*\"
