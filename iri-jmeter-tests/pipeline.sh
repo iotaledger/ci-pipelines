@@ -335,7 +335,7 @@ do
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax.xaxis.set_tick_params(rotation=30, labelsize=7)
         plt.savefig('$TESTNAME.png')
-        EOF      
+        EOF
       - python3 /cache/plot.py
       - cp -rf /cache/*.{png,csv} /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/
       - ls -al 
