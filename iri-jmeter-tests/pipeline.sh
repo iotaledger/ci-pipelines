@@ -282,7 +282,7 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
       queue: aws-m5large"  
 
 waitf
-block 
+#block 
 
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
@@ -291,7 +291,9 @@ do
   echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
     command:
       - pip3 install --quiet --progress-bar off --upgrade awscli
-      - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} bash -c \"echo {} && DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .date') && VER=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .appVersion') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$VER,\\\\\$RES\"
+      - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} bash -c \"echo {} && DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .date') && VER=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .appVersion') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$RES,\\\\\$VER\" > /workdir/$TESTNAME.csv
+    artifact_paths: 
+      - \"$TESTNAME.csv\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"python:alpine\"
