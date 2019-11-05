@@ -302,6 +302,9 @@ do
         mount-buildkite-agent: false
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+        environment:
+          - AWS_ACCESS_KEY_ID
+          - AWS_SECRET_ACCESS_KEY
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
