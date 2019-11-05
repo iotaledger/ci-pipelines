@@ -1,7 +1,5 @@
 #!/bin/bash
 
-BUILDKITE_BUILD_ID=aa
-BUILDKITE_AGENT_NAME=aaa
 set -eu
 
 wait() {
@@ -13,11 +11,26 @@ waitf() {
     continue_on_failure: true"
 }
 
-#block() {
-#  echo "  - block: \"Display graphs\""
-#}
+block() {
+  echo "  - block: \"Display graphs\""
+}
 
 echo "steps:"
+
+echo "  - name: \"[TIAB] Clearing cache\"
+    command:
+      - rm -rf /cache/*
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: \"alpine\"
+        always-pull: false
+        mount-buildkite-agent: false        
+        volumes:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
+    agents:
+      queue: aws-m5large"
 
 echo "  - name: \"[TIAB] Cloning TIAB\"
     command:
@@ -268,7 +281,7 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
     agents:
       queue: aws-m5large"  
 
-#block 
+block 
 
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
