@@ -288,13 +288,12 @@ for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
   TESTPATH=$(basename $testfile)
   TESTNAME=${TESTPATH%.jmx}
-  echo '  - name: \"[Jmeter] Displaying $TESTNAME graph\"
+  echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
     command:
       - apk add jq curl
       - |
         cat <<EOF >> /cache/tiab/csv.sh
-        #!/bin/sh
-        aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} sh -c "DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .date') && VER=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .appVersion') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$RES,\\\\\$VER" > /workdir/$TESTNAME.csv
+        aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} sh -c \"DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .date') && VER=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .appVersion') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$RES,\\\\\$VER\" > /workdir/$TESTNAME.csv
         EOF
       - pip3 install --quiet --progress-bar off --upgrade awscli
       - cat /cache/tiab/csv.sh
@@ -313,7 +312,7 @@ do
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large'  
+      queue: aws-m5large"
 done 
 
 
