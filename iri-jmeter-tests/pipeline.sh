@@ -198,7 +198,7 @@ do
         cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
-      - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%m-%d-%Y) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
+      - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%Y-%m-%d) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
       - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json && rm /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
       - echo
       - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
@@ -290,13 +290,7 @@ do
   TESTNAME=${TESTPATH%.jmx}
   echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
     command:
-      - apk add jq curl
-      - |
-        cat <<EOF >> /cache/tiab/csv.sh
-        aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} sh -c \"DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .date') && VER=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .appVersion') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$RES,\\\\\$VER\" > /workdir/$TESTNAME.csv
-        EOF
-      - pip3 install --quiet --progress-bar off --upgrade awscli
-      - cat /cache/tiab/csv.sh
+      - echo
     artifact_paths: 
       - \"$TESTNAME.csv\"
     plugins:
