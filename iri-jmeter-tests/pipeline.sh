@@ -275,20 +275,20 @@ do
   TESTPATH=$(basename $testfile)
   TESTNAME=${TESTPATH%.jmx}
   echo "  - name: \"[Jmeter] Displaying graph\"
-      command:
-        - pip3 install --quiet --progress-bar off --upgrade awscli
-        - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} bash -c \"echo {} && DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$VER,\\\\\$RES\"
-      plugins:
-        https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-          image: \"python:alpine\"
-          always-pull: false
-          mount-buildkite-agent: false
-          volumes:
-            - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-      env:
-        BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-      agents:
-      queue: aws-m5large"  
+    command:
+      - pip3 install --quiet --progress-bar off --upgrade awscli
+      - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} bash -c \"echo {} && DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$VER,\\\\\$RES\"
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: \"python:alpine\"
+        always-pull: false
+        mount-buildkite-agent: false
+        volumes:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+    env:
+      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
+    agents:
+    queue: aws-m5large"  
 done 
 
 
