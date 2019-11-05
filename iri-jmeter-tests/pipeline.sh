@@ -174,7 +174,7 @@ do
     command:
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
       - cd /cache/tiab
-      - apk add --quiet --no-progress --update python3 py-pip
+      - apk add --quiet --no-progress --update python3 py-pip jq
       - pip3 install --quiet --progress-bar off --upgrade pip
       - pip3 install --quiet --progress-bar off -r requirements.txt
       - pip3 install --quiet --progress-bar off argparse
