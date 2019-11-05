@@ -198,8 +198,8 @@ do
         cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
-      - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%m-%d-%Y) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
-      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
+      - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%m-%d-%Y) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
+      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
       - echo
       - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
     artifact_paths: 
