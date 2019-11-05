@@ -199,7 +199,7 @@ do
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
       - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%m-%d-%Y) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
-      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json
+      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json && rm /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
       - echo
       - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
     artifact_paths: 
@@ -281,16 +281,17 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
     agents:
       queue: aws-m5large"  
 
+waitf
 block 
 
 for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
 do
   TESTPATH=$(basename $testfile)
   TESTNAME=${TESTPATH%.jmx}
-  echo "  - name: \"[Jmeter] Displaying graph\"
+  echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
     command:
       - pip3 install --quiet --progress-bar off --upgrade awscli
-      - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} bash -c \"echo {} && DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$VER,\\\\\$RES\"
+      - aws s3 ls s3://iotaledger-iri-jmeter-tests | cut -d ' ' -f 29 | xargs -n 1 -I {} bash -c \"echo {} && DATE=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .date') && VER=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/metadata.json | jq -r '.metadata .appVersion') && RES=\\\\\$(curl -s https://iotaledger-iri-jmeter-tests.s3.eu-central-1.amazonaws.com/{}GetTransactionsToApprove/statistics.json | jq -r '.GetTransactionsToApprove .meanResTime') && echo \\\\\$DATE,\\\\\$VER,\\\\\$RES\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"python:alpine\"
