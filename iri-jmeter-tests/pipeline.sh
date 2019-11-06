@@ -321,7 +321,7 @@ do
               stats_req = requests.get(stats_url)
               mdata_req = requests.get(mdata_url)
               date = mdata_req.json()['metadata']['date']
-              metric = stats_req.json()['$TESTNAME']['meanResTime']
+              metric = stats_req.json()['GetTransactionsToApprove']['meanResTime']
               version = mdata_req.json()['metadata']['appVersion']
               date_table.append(datetime.date.fromisoformat(date))
               metric_table.append(metric)
