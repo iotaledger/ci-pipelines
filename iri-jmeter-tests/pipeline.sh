@@ -290,10 +290,10 @@ do
   TESTNAME=${TESTPATH%.jmx}
   echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
     command:
-      - echo
+      - apk --no-cache --update-cache add gcc gfortran python3 python3-dev py3-pip build-base freetype-dev libpng-dev openblas-dev
+      - pip3 install boto requests matplotlib
       - |
-        cat <<EOF >> /cache/plot.py 
-        import yaml
+        cat <<EOF >> /cache/plot.py
         import os
         import boto
         from boto.s3.connection import S3Connection
