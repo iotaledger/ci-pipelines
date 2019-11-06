@@ -337,8 +337,8 @@ do
         plt.savefig('$TESTNAME.png')
         EOF
       - python3 /cache/plot.py
-      - cp -rf /cache/*.{png,csv} /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/
-      - ls -al 
+      - ls -al && pwd
+      - cp -rf *.{png,csv} /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/
     artifact_paths: 
       - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.csv;jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.png\"
     plugins:
