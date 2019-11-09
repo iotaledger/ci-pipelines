@@ -1,7 +1,7 @@
 steps:
   - label: "Running benchmarks"
     commands:
-      - mvn -Dtest=BenchmarkRunner clean test | tee bench.log
+      - mvn -Dtest=BenchmarkRunner clean test | tee bench.log | grep -E "(^Benchmark(.*)\(num)|^RocksDbBenchmark"
     env:
       BUILDKITE_CLEAN_CHECKOUT: true
     plugins:
