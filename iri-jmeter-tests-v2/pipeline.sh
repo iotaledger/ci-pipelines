@@ -13,8 +13,9 @@ waitf() {
 
 echo "steps:"
 
-echo "  - name: \"[TIAB] Cloning TIAB\"
+echo "  - name: \"Running performance tests\"
     command:
+      - apt update && apt install curl -y
       - cd Nightly-Tests/Performance-Tests
       - bash runNode.sh
       - ls -alR
