@@ -159,7 +159,7 @@ steps:
         for machine_dir in tests/features/machine?; do
           for pod in \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pods -o jsonpath='{.items[*].metadata.name}'); do
             echo \$pod
-            if [ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') = \$BUILDKITE_BUILD_ID ]
+            if [[ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') = \$BUILDKITE_BUILD_ID ]]
             then
               /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite logs \$pod > /workdir/\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.nodenum}').log
             fi
