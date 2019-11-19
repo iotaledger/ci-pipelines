@@ -80,6 +80,7 @@ steps:
       - set -e
       - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain \$RUSTUP_TOOLCHAIN
       - export PATH=\$PATH:\$HOME/.cargo/bin
+			- rustup update
       - rustup toolchain list
       - rustc --version
       - cargo test --all
@@ -95,7 +96,8 @@ steps:
       - curl -sSf -o rustup-init.exe https://win.rustup.rs
       - rustup-init.exe -y --default-toolchain %RUSTUP_TOOLCHAIN%
       - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
-      - rustup toolchain list
+      - rustup update
+			- rustup toolchain list
       - rustc --version
       - cargo test --all
     concurrency: 1
