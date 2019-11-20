@@ -154,7 +154,6 @@ steps:
   - name: "Fetching logs"
     command:
       - wget --quiet https://storage.googleapis.com/kubernetes-release/release/v1.14.1/bin/linux/amd64/kubectl -O /cache/kubectl && chmod +x /cache/kubectl
-      - cd /cache
       - |
         for pod in \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pods -o jsonpath='{.items[*].metadata.name}'); do
           echo \$pod
@@ -164,7 +163,8 @@ steps:
           fi
         done
       - pwd
-      - ls -al
+      - cp -f /cache/*.log /workdir
+      - ls -al /cache
       - ls -al /workdir
     agents:
       queue: ops
