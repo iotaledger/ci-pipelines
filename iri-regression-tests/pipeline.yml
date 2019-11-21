@@ -181,19 +181,19 @@ steps:
   - wait: ~
     continue_on_failure: true
 
-#  - name: "Teardown cluster"
-#    command:
-#      - cd /cache/tiab
-#      - source venv/bin/activate
-#      - if [ -z "$KEEP_CLUSTER" ]; then python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite; fi
-#    agents:
-#      queue: ops
-#    plugins:
-#      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-#        image: "python:2-alpine"
-#        shell: /bin/sh -c
-#        mounts:
-#          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
-#          - /conf:/conf:ro
+  - name: "Teardown cluster"
+    command:
+      - cd /cache/tiab
+      - source venv/bin/activate
+      - if [ -z "$KEEP_CLUSTER" ]; then python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite; fi
+    agents:
+      queue: ops
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "python:2-alpine"
+        shell: /bin/sh -c
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf:/conf:ro
 
 
