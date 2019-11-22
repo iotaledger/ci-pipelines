@@ -156,7 +156,7 @@ steps:
       - wget --quiet https://storage.googleapis.com/kubernetes-release/release/v1.14.1/bin/linux/amd64/kubectl -O /cache/kubectl && chmod +x /cache/kubectl
       - |
         for pod in \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pods -o jsonpath='{.items[*].metadata.name}'); do
-          if [[ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') == \$BUILDKITE_BUILD_ID ]]
+          if [[ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') == $BUILDKITE_BUILD_ID ]]
           then
             echo \$pod
             /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite logs \$pod > /workdir/\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.nodenum}').log
@@ -165,7 +165,6 @@ steps:
       - pwd
       - ls -al /cache
       - ls -al /workdir
-      - sleep 1h
     agents:
       queue: ops
     artifact_paths:
