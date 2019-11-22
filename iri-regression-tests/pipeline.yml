@@ -183,6 +183,7 @@ steps:
 
   - name: "Teardown cluster"
     command:
+      - sleep 1h
       - cd /cache/tiab
       - source venv/bin/activate
       - if [ -z "$KEEP_CLUSTER" ]; then python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k /conf/kube/kube.config -n buildkite; fi
