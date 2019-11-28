@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export BUILDKITE_AGENT_NAME=\$BUILDKITE_AGENT_NAME
+
 set -eu
 
 wait() {
