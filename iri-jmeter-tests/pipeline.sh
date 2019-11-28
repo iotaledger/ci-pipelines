@@ -164,7 +164,7 @@ wait
 echo "  - name: \"[Jmeter] Downloading and extracting binary\"
     command:
       - cd /cache
-      - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.1.1.tgz
+      - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.2.1.tgz
       - tar xzf apache-jmeter-5.1.1.tgz 
       - mkdir jmeter-$BUILDKITE_BUILD_ID
     plugins:
