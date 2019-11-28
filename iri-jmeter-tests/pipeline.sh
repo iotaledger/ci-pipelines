@@ -30,7 +30,7 @@ echo "  - name: \"[TIAB] Clearing cache\"
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large"
+      queue: nightly-tests"
 
 echo "  - name: \"[TIAB] Cloning TIAB\"
     command:
@@ -46,7 +46,7 @@ echo "  - name: \"[TIAB] Cloning TIAB\"
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large"
+      queue: nightly-tests"
 
 wait
 
@@ -136,7 +136,7 @@ echo "  - name: \"[TIAB] Setting up dependencies\"
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large" 
+      queue: nightly-tests" 
 
 wait
 
@@ -155,7 +155,7 @@ echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large"
+      queue: nightly-tests"
 
 wait
 
@@ -175,7 +175,7 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large" 
+      queue: nightly-tests" 
 
 wait
 
@@ -214,7 +214,7 @@ do
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large"          
+      queue: nightly-tests"          
 
   waitf
 
@@ -257,7 +257,7 @@ do
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large"          
+      queue: nightly-tests"          
 
 waitf
 
@@ -279,7 +279,7 @@ echo "  - name: \"[TIAB] Tearing down cluster\"
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large"  
+      queue: nightly-tests"  
 
 waitf
 #block 
@@ -354,7 +354,7 @@ do
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: aws-m5large"
+      queue: nightly-tests"
 done 
 
 
