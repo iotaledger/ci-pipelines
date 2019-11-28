@@ -165,7 +165,7 @@ echo "  - name: \"[Jmeter] Downloading and extracting binary\"
     command:
       - cd /cache
       - wget http://apache.mirror.cdnetworks.com//jmeter/binaries/apache-jmeter-5.2.1.tgz
-      - tar xzf apache-jmeter-5.1.1.tgz 
+      - tar xzf apache-jmeter-5.2.1.tgz 
       - mkdir jmeter-$BUILDKITE_BUILD_ID
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
@@ -187,7 +187,7 @@ do
   TESTNAME=${TESTPATH%.jmx}
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
-      - export PATH=\\\$PATH:/cache/apache-jmeter-5.1.1/bin
+      - export PATH=\\\$PATH:/cache/apache-jmeter-5.2.1/bin
       - cd /cache/tiab
       - apk add --quiet --no-progress --update python3 py-pip jq curl
       - pip3 install --quiet --progress-bar off --upgrade pip
