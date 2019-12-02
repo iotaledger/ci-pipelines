@@ -19,7 +19,7 @@ block() {
 
 echo "steps:"
 
-echo "  - name: \"[TIAB] Clearing cache\"
+echo "  - name: \"[IRI] Clearing cache\"
     command:
       - rm -rf /cache/*
     plugins:
@@ -34,10 +34,10 @@ echo "  - name: \"[TIAB] Clearing cache\"
     agents:
       queue: nightly-tests"
 
-echo "  - name: \"[TIAB] Cloning TIAB\"
+echo "  - name: \"[IRI] Cloning IRI\"
     command:
-      - apk add git
-      - git clone --depth 1 https://github.com/iotaledger/tiab.git /cache/tiab
+      - mkdir -p /cache/iri01/data
+      - git clone --branch dev git://github.com/iotaledger/iri.git /cache/iri
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"alpine\"
@@ -50,110 +50,52 @@ echo "  - name: \"[TIAB] Cloning TIAB\"
     agents:
       queue: nightly-tests"
 
-wait
-
-echo "  - name: \"[TIAB] Setting up dependencies\"
+echo "  - name: \"[IRI] Downloading and unpacking DBs\"
     command:
-      - |
-        cat <<EOF >> /cache/tiab/kube.config 
-        apiVersion: v1
-        kind: Config
-        preferences: {}
-
-        clusters:
-        - cluster:
-            certificate-authority-data: \\\$TIAB_KUBE_CA  
-            server: \\\$TIAB_KUBE_SERVER
-          name: my-cluster
-
-        users:
-        - name: buildkite-user
-          user:
-            as-user-extra: {}
-            client-key-data: \\\$TIAB_KUBE_CLIENT_KEY 
-            token: \\\$TIAB_KUBE_TOKEN 
-
-        contexts:
-        - context:
-            cluster: my-cluster
-            namespace: buildkite
-            user: buildkite-user
-          name: buildkite-namespace
-
-        current-context: buildkite-namespace
-        EOF
-      - |
-        cat <<EOF >> /cache/tiab/node_config.yml 
-        defaults: &config
-          db: https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/testnet_files.tgz
-          db_checksum: 6eaa06d5442416b7b8139e337a1598d2bae6a7f55c2d9d01f8c5dac69c004f75
-        nodes:
-        EOF
-        for testfile in Nightly-Tests/Jmeter-Tests/*.jmx; do
-          TESTNAME=\$(basename \\\$testfile .jmx)
-          echo \"  node\\\$TESTNAME:
-              <<: *config\" >> /cache/tiab/node_config.yml
-        done
-      - |
-        cat <<EOF >> /cache/tiab/nodeaddr.py 
-        import yaml
-        import argparse
-        parser = argparse.ArgumentParser()
-        parser.add_argument('-n', '--node', dest='node_name', required=True)
-        parser.add_argument('-q', '--host', dest='host', action='store_true')
-        parser.add_argument('-p', '--port', dest='port', action='store_true')
-
-        args = parser.parse_args()
-        node_name = args.node_name
-
-        with open('output.yml', 'r') as stream:
-          yaml_file = yaml.load(stream, Loader = yaml.Loader)
-
-        for key, value in yaml_file['nodes'].items():
-            if key == node_name:
-              if args.host:
-                  print(\"{}\".format(yaml_file['nodes'][node_name]['host']))
-              if args.port:
-                  print(\"{}\".format(yaml_file['nodes'][node_name]['ports']['api']))
-        EOF
-      - apk add gcc musl-dev libffi-dev openssl-dev
-      - pip install virtualenv
-      - cd /cache/tiab
-      - virtualenv venv
-      - . venv/bin/activate
-      - pip install -r requirements.txt
+      - curl -s https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/SyncTestSynced.tar.gz | tar xzf - -C /cache/iri01/data
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:alpine\"
-        environment:
-          - TIAB_KUBE_CA
-          - TIAB_KUBE_TOKEN
-          - TIAB_KUBE_SERVER
-          - TIAB_KUBE_CLIENT_KEY
-          - IRI_IMAGE
+        image: \"alpine\"
         always-pull: false
-        mount-buildkite-agent: false
+        mount-buildkite-agent: false        
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
-      queue: nightly-tests" 
+      queue: nightly-tests"
 
-wait
-
-echo "  - name: \"[TIAB] Creating IRI nodes cluster with \${IRI_IMAGE:-iotacafe/iri-dev}\"
+echo "  - name: \"[IRI] Starting nodes\"
     command:
-      - cd /cache/tiab
-      - . venv/bin/activate 
-      - python create_cluster.py -i \${IRI_IMAGE:-iotacafe/iri-dev} -t \$BUILDKITE_BUILD_ID -c node_config.yml -o output.yml -k kube.config -n buildkite -d
+      - docker network create iri
+      - |
+        docker run \
+        -d \
+        --name iri01 \
+        -v /cache/iri01/data:/iri/data \
+        -p 15600:15600 \
+        -p 14600:14600/udp  \
+        -p 14265:14265 \
+        --net=iri \
+        iotaledger/iri \
+        -p 14265 \
+        -t 15600 \
+        -u 14600 \
+        --testnet-coordinator EFPNKGPCBXXXLIBYFGIGYBYTFFPIOQVNNVVWTTIYZO9NFREQGVGDQQHUUQ9CLWAEMXVDFSSMOTGAHVIBH \
+        --mwm 1 \
+        --milestone-start 0 \
+        --testnet-no-coo-validation true \
+        --testnet true \
+        --snapshot ./snapshot.txt \
+        --zmq-enabled true
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:alpine\"
+        image: \"alpine\"
         always-pull: false
-        mount-buildkite-agent: false
+        mount-buildkite-agent: false        
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+          - /var/run/docker.sock:/var/run/docker.sock
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
@@ -190,12 +132,7 @@ do
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.2.1/bin
       - cd /cache/tiab
       - apk add --quiet --no-progress --update python3 py-pip jq curl
-      - pip3 install --quiet --progress-bar off --upgrade pip
-      - pip3 install --quiet --progress-bar off -r requirements.txt
-      - pip3 install --quiet --progress-bar off argparse
-      - hostDest=\\\$(python3 nodeaddr.py -n node$TESTNAME -q)
-      - portDest=\\\$(python3 nodeaddr.py -n node$TESTNAME -p)
-      - jmeter -n -t /workdir/$testfile -Jhost=\\\$hostDest -Jport=\\\$portDest -j /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+      - jmeter -n -t /workdir/$testfile -Jhost=localhost -Jport=14265 -j /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
         cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
@@ -265,98 +202,79 @@ waitf
 
 done
 
-echo "  - name: \"[TIAB] Tearing down cluster\"
-    command:
-      - cd /cache/tiab
-      - . venv/bin/activate
-      - python teardown_cluster.py -t $BUILDKITE_BUILD_ID -k kube.config -n buildkite
-      - ls -al
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:alpine\"
-        always-pull: false
-        mount-buildkite-agent: false
-        volumes:
-          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-    env:
-      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-    agents:
-      queue: nightly-tests"  
-
-waitf
 #block 
 
-for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
-do
-  TESTPATH=$(basename $testfile)
-  TESTNAME=${TESTPATH%.jmx}
-  echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
-    command:
-      - apk --no-cache --update-cache add gcc gfortran python3 python3-dev py3-pip build-base freetype-dev libpng-dev openblas-dev
-      - pip3 install boto requests matplotlib
-      - |
-        cat <<EOF >> /cache/plot.py
-        import os
-        import boto
-        from boto.s3.connection import S3Connection
-        import requests
-        import json
-        import csv
-        import datetime
-        import matplotlib.pyplot as plt
-        import matplotlib.dates as mdates
-
-        aws_key = os.environ['AWS_ACCESS_KEY_ID']
-        aws_secret = os.environ['AWS_SECRET_ACCESS_KEY']
-        region = 's3.eu-central-1.amazonaws.com'
-        bucket_name = 'iotaledger-iri-jmeter-tests'
-        s3 = S3Connection(aws_key, aws_secret, host=region)
-        bucket = s3.get_bucket(bucket_name)
-        date_table = []
-        metric_table = []
-        version_table = []
-        with open('$TESTNAME.csv', 'w') as csvfile:
-          filewriter = csv.writer(csvfile)
-          for o in bucket.list(delimiter='/'):
-              stats_url = 'https://{}.{}/{}$TESTNAME/statistics.json'.format(bucket_name, region, o.name)
-              mdata_url = 'https://{}.{}/{}$TESTNAME/metadata.json'.format(bucket_name, region, o.name)
-              stats_req = requests.get(stats_url)
-              mdata_req = requests.get(mdata_url)
-              date = mdata_req.json()['metadata']['date']
-              metric = stats_req.json()['GetTransactionsToApprove']['meanResTime']
-              version = mdata_req.json()['metadata']['appVersion']
-              date_table.append(datetime.date.fromisoformat(date))
-              metric_table.append(metric)
-              version_table.append(version) 
-              filewriter.writerow([date, metric, version])
-        fig, ax = plt.subplots()
-        plt.plot_date(date_table, metric_table)
-        plt.xlabel('Date')
-        plt.ylabel('Mean response time')
-        plt.title('$TESTNAME')
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        ax.xaxis.set_tick_params(rotation=30, labelsize=7)
-        plt.savefig('$TESTNAME.png')
-        EOF
-      - python3 /cache/plot.py
-      - ls -al && pwd
-      - cp -rf *.{png,csv} /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/
-    artifact_paths: 
-      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.csv;jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.png\"
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"python:alpine\"
-        always-pull: false
-        mount-buildkite-agent: false
-        volumes:
-          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-        environment:
-          - AWS_ACCESS_KEY_ID
-          - AWS_SECRET_ACCESS_KEY
-    env:
-      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-    agents:
-      queue: nightly-tests"
-done 
+#for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
+#do
+#  TESTPATH=$(basename $testfile)
+#  TESTNAME=${TESTPATH%.jmx}
+#  echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
+#    command:
+#      - apk --no-cache --update-cache add gcc gfortran python3 python3-dev py3-pip build-base freetype-dev libpng-dev openblas-dev
+#      - pip3 install boto requests matplotlib
+#      - |
+#        cat <<EOF >> /cache/plot.py
+#        import os
+#        import boto
+#        from boto.s3.connection import S3Connection
+#        import requests
+#        import json
+#        import csv
+#        import datetime
+#        import matplotlib.pyplot as plt
+#        import matplotlib.dates as mdates
+#
+#        aws_key = os.environ['AWS_ACCESS_KEY_ID']
+#        aws_secret = os.environ['AWS_SECRET_ACCESS_KEY']
+#        region = 's3.eu-central-1.amazonaws.com'
+#        bucket_name = 'iotaledger-iri-jmeter-tests'
+#        s3 = S3Connection(aws_key, aws_secret, host=region)
+#        bucket = s3.get_bucket(bucket_name)
+#        date_table = []
+#        metric_table = []
+#        version_table = []
+#        with open('$TESTNAME.csv', 'w') as csvfile:
+#          filewriter = csv.writer(csvfile)
+#          for o in bucket.list(delimiter='/'):
+#              stats_url = 'https://{}.{}/{}$TESTNAME/statistics.json'.format(bucket_name, region, o.name)
+#              mdata_url = 'https://{}.{}/{}$TESTNAME/metadata.json'.format(bucket_name, region, o.name)
+#              stats_req = requests.get(stats_url)
+#              mdata_req = requests.get(mdata_url)
+#              date = mdata_req.json()['metadata']['date']
+#              metric = stats_req.json()['GetTransactionsToApprove']['meanResTime']
+#              version = mdata_req.json()['metadata']['appVersion']
+#              date_table.append(datetime.date.fromisoformat(date))
+#              metric_table.append(metric)
+#              version_table.append(version) 
+#              filewriter.writerow([date, metric, version])
+#        fig, ax = plt.subplots()
+#        plt.plot_date(date_table, metric_table)
+#        plt.xlabel('Date')
+#        plt.ylabel('Mean response time')
+#        plt.title('$TESTNAME')
+#        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+#        ax.xaxis.set_tick_params(rotation=30, labelsize=7)
+#        plt.savefig('$TESTNAME.png')
+#        EOF
+#      - python3 /cache/plot.py
+#      - ls -al && pwd
+#      - cp -rf *.{png,csv} /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/
+#    artifact_paths: 
+#      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.csv;jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.png\"
+#    plugins:
+#      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+#        image: \"python:alpine\"
+#        always-pull: false
+#        mount-buildkite-agent: false
+#        volumes:
+#          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+#        environment:
+#          - AWS_ACCESS_KEY_ID
+#          - AWS_SECRET_ACCESS_KEY
+#    env:
+#      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
+#    agents:
+#      queue: nightly-tests"
+#done 
 
 
