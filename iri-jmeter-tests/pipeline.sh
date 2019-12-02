@@ -36,7 +36,7 @@ echo "  - name: \"[IRI] Clearing cache\"
 
 echo "  - name: \"[IRI] Downloading and unpacking DBs\"
     command:
-      - apt add curl
+      - apk add curl
       - mkdir -p /cache/iri01/data
       - curl -s https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/SyncTestSynced.tar.gz | tar xzf - -C /cache/iri01/data
     plugins:
