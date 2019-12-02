@@ -34,22 +34,6 @@ echo "  - name: \"[IRI] Clearing cache\"
     agents:
       queue: nightly-tests"
 
-echo "  - name: \"[IRI] Cloning IRI\"
-    command:
-      - mkdir -p /cache/iri01/data
-      - git clone --branch dev git://github.com/iotaledger/iri.git /cache/iri
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"alpine\"
-        always-pull: false
-        mount-buildkite-agent: false        
-        volumes:
-          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-    env:
-      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-    agents:
-      queue: nightly-tests"
-
 echo "  - name: \"[IRI] Downloading and unpacking DBs\"
     command:
       - curl -s https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/SyncTestSynced.tar.gz | tar xzf - -C /cache/iri01/data
