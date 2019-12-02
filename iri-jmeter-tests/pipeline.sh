@@ -76,9 +76,9 @@ echo "  - name: \"[IRI] Starting nodes\"
         --zmq-enabled true
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"alpine\"
+        image: \"docker\"
         always-pull: false
-        mount-buildkite-agent: false        
+        mount-buildkite-agent: true        
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
           - /var/run/docker.sock:/var/run/docker.sock
