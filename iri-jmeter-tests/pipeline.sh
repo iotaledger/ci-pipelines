@@ -123,7 +123,7 @@ do
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
       - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%Y-%m-%d) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
-      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://\\\$hostDest:\\\$portDest -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json && rm /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
+      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://localhost:14265 -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json && rm /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
       - echo
       - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
     artifact_paths: 
