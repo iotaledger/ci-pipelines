@@ -53,7 +53,7 @@ echo "  - name: \"[IRI] Downloading and unpacking DBs\"
 
 echo "  - name: \"[IRI] Starting nodes\"
     command:
-      - docker network create iri
+      - docker network create iri || true
       - |
         docker run \
         -d \
