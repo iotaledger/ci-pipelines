@@ -56,7 +56,7 @@ echo "  - name: \"[IRI] Starting nodes\"
       - docker network create iri || true
       - |
         docker run \
-        -d \
+        -d --rm\
         --name iri01 \
         -v /cache/iri01/data:/iri/data \
         -p 15600:15600 \
