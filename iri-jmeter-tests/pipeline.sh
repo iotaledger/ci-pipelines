@@ -116,8 +116,7 @@ do
   echo "  - name: \"[Jmeter] Running $TESTNAME test\"
     command:
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.2.1/bin
-      - cd /cache/tiab
-      - apk add --quiet --no-progress --update python3 py-pip jq curl
+      - apk add --quiet --no-progress --update jq curl
       - jmeter -n -t /workdir/$testfile -Jhost=localhost -Jport=14265 -j /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
         cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
