@@ -138,8 +138,7 @@ do
         mount-buildkite-agent: true
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-        network:
-          - iri
+        network: iri
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
