@@ -9,6 +9,7 @@ steps:
     agents:
       queue: dev
       name: buildkiteagent03-kite01
+  - wait
   - label: "Running benchmarks"
     commands:
       - mvn -Dtest=BenchmarkRunner clean test | tee bench.log | grep -E "(^Benchmark(.*)\(num)|^RocksDbBenchmark"
