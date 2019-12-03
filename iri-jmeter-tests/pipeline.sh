@@ -59,6 +59,7 @@ echo "  - name: \"[IRI] Starting nodes\"
         docker run \
         -d --rm \
         --name iri01 \
+        --hostname iri01 \
         -v /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID/iri01/data:/iri/data \
         -p 15600:15600 \
         -p 14600:14600/udp  \
