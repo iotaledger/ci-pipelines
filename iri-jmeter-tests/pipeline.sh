@@ -75,7 +75,7 @@ echo "  - name: \"[IRI] Starting nodes\"
         --testnet-no-coo-validation true \
         --testnet true \
         --snapshot ./snapshot.txt \
-        --zmq-enabled true
+        --zmq-enabled true || true
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
@@ -153,12 +153,12 @@ do
       - |
         case $TESTNAME in
           GetTransactionsToApprove)
-            thresResp=456
-            thresThru=186
+            thresResp=2000
+            thresThru=200
           ;;
           GetTransactionsToApproveLoop)
-            thresResp=18
-            thresThru=268
+            thresResp=50
+            thresThru=300
           ;;          
         esac
       - cd /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
@@ -191,79 +191,79 @@ waitf
 
 done
 
-#block 
+block 
 
-#for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
-#do
-#  TESTPATH=$(basename $testfile)
-#  TESTNAME=${TESTPATH%.jmx}
-#  echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
-#    command:
-#      - apk --no-cache --update-cache add gcc gfortran python3 python3-dev py3-pip build-base freetype-dev libpng-dev openblas-dev
-#      - pip3 install boto requests matplotlib
-#      - |
-#        cat <<EOF >> /cache/plot.py
-#        import os
-#        import boto
-#        from boto.s3.connection import S3Connection
-#        import requests
-#        import json
-#        import csv
-#        import datetime
-#        import matplotlib.pyplot as plt
-#        import matplotlib.dates as mdates
-#
-#        aws_key = os.environ['AWS_ACCESS_KEY_ID']
-#        aws_secret = os.environ['AWS_SECRET_ACCESS_KEY']
-#        region = 's3.eu-central-1.amazonaws.com'
-#        bucket_name = 'iotaledger-iri-jmeter-tests'
-#        s3 = S3Connection(aws_key, aws_secret, host=region)
-#        bucket = s3.get_bucket(bucket_name)
-#        date_table = []
-#        metric_table = []
-#        version_table = []
-#        with open('$TESTNAME.csv', 'w') as csvfile:
-#          filewriter = csv.writer(csvfile)
-#          for o in bucket.list(delimiter='/'):
-#              stats_url = 'https://{}.{}/{}$TESTNAME/statistics.json'.format(bucket_name, region, o.name)
-#              mdata_url = 'https://{}.{}/{}$TESTNAME/metadata.json'.format(bucket_name, region, o.name)
-#              stats_req = requests.get(stats_url)
-#              mdata_req = requests.get(mdata_url)
-#              date = mdata_req.json()['metadata']['date']
-#              metric = stats_req.json()['GetTransactionsToApprove']['meanResTime']
-#              version = mdata_req.json()['metadata']['appVersion']
-#              date_table.append(datetime.date.fromisoformat(date))
-#              metric_table.append(metric)
-#              version_table.append(version) 
-#              filewriter.writerow([date, metric, version])
-#        fig, ax = plt.subplots()
-#        plt.plot_date(date_table, metric_table)
-#        plt.xlabel('Date')
-#        plt.ylabel('Mean response time')
-#        plt.title('$TESTNAME')
-#        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-#        ax.xaxis.set_tick_params(rotation=30, labelsize=7)
-#        plt.savefig('$TESTNAME.png')
-#        EOF
-#      - python3 /cache/plot.py
-#      - ls -al && pwd
-#      - cp -rf *.{png,csv} /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/
-#    artifact_paths: 
-#      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.csv;jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.png\"
-#    plugins:
-#      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-#        image: \"python:alpine\"
-#        always-pull: false
-#        mount-buildkite-agent: false
-#        volumes:
-#          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
-#        environment:
-#          - AWS_ACCESS_KEY_ID
-#          - AWS_SECRET_ACCESS_KEY
-#    env:
-#      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
-#    agents:
-#      queue: nightly-tests"
-#done 
+for testfile in Nightly-Tests/Jmeter-Tests/*.jmx
+do
+  TESTPATH=$(basename $testfile)
+  TESTNAME=${TESTPATH%.jmx}
+  echo "  - name: \"[Jmeter] Displaying $TESTNAME graph\"
+    command:
+      - apk --no-cache --update-cache add gcc gfortran python3 python3-dev py3-pip build-base freetype-dev libpng-dev openblas-dev
+      - pip3 install boto requests matplotlib
+      - |
+        cat <<EOF >> /cache/plot.py
+        import os
+        import boto
+        from boto.s3.connection import S3Connection
+        import requests
+        import json
+        import csv
+        import datetime
+        import matplotlib.pyplot as plt
+        import matplotlib.dates as mdates
+
+        aws_key = os.environ['AWS_ACCESS_KEY_ID']
+        aws_secret = os.environ['AWS_SECRET_ACCESS_KEY']
+        region = 's3.eu-central-1.amazonaws.com'
+        bucket_name = 'iotaledger-iri-jmeter-tests'
+        s3 = S3Connection(aws_key, aws_secret, host=region)
+        bucket = s3.get_bucket(bucket_name)
+        date_table = []
+        metric_table = []
+        version_table = []
+        with open('$TESTNAME.csv', 'w') as csvfile:
+          filewriter = csv.writer(csvfile)
+          for o in bucket.list(delimiter='/'):
+              stats_url = 'https://{}.{}/{}$TESTNAME/statistics.json'.format(bucket_name, region, o.name)
+              mdata_url = 'https://{}.{}/{}$TESTNAME/metadata.json'.format(bucket_name, region, o.name)
+              stats_req = requests.get(stats_url)
+              mdata_req = requests.get(mdata_url)
+              date = mdata_req.json()['metadata']['date']
+              metric = stats_req.json()['GetTransactionsToApprove']['meanResTime']
+              version = mdata_req.json()['metadata']['appVersion']
+              date_table.append(datetime.date.fromisoformat(date))
+              metric_table.append(metric)
+              version_table.append(version) 
+              filewriter.writerow([date, metric, version])
+        fig, ax = plt.subplots()
+        plt.plot_date(date_table, metric_table)
+        plt.xlabel('Date')
+        plt.ylabel('Mean response time')
+        plt.title('$TESTNAME')
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax.xaxis.set_tick_params(rotation=30, labelsize=7)
+        plt.savefig('$TESTNAME.png')
+        EOF
+      - python3 /cache/plot.py
+      - ls -al && pwd
+      - cp -rf *.{png,csv} /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/
+    artifact_paths: 
+      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.csv;jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.png\"
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
+        image: \"python:alpine\"
+        always-pull: false
+        mount-buildkite-agent: false
+        volumes:
+          - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+        environment:
+          - AWS_ACCESS_KEY_ID
+          - AWS_SECRET_ACCESS_KEY
+    env:
+      BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
+    agents:
+      queue: nightly-tests"
+done 
 
 
