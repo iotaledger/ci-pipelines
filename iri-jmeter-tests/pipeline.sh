@@ -39,7 +39,7 @@ echo "  - name: \"[IRI] Downloading and unpacking DBs\"
       - apk add curl
       - mkdir -p /cache/iri01/data
       - curl -s https://s3.eu-central-1.amazonaws.com/iotaledger-dbfiles/dev/SyncTestSynced.tar.gz | tar xzf - -C /cache/iri01/data
-      - ls -al /cache/iri01/data2
+      - ls -al /cache/iri01/data
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"alpine\"
