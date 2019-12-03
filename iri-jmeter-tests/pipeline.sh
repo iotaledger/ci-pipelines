@@ -247,7 +247,7 @@ do
         EOF
       - python3 /cache/plot.py
     artifact_paths: 
-      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.csv;jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.png\"
+      - \"*.csv;*.png\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"python:alpine\"
