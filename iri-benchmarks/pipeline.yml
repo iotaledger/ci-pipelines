@@ -1,4 +1,7 @@
 steps:
+  - label: "Switching to PR (if any)"
+    commands:
+      - if [ ! -z "\$PR_ID" ]; then git fetch origin pull/\$PR_ID/head:pr/\$PR_ID; git checkout pr/\$PR_ID; fi
   - label: "Running benchmarks"
     commands:
       - mvn -Dtest=BenchmarkRunner clean test | tee bench.log | grep -E "(^Benchmark(.*)\(num)|^RocksDbBenchmark"
