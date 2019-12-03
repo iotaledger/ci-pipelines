@@ -118,13 +118,14 @@ do
     command:
       - export PATH=\\\$PATH:/cache/apache-jmeter-5.2.1/bin
       - apk add --quiet --no-progress --update jq curl
-      - jmeter -n -t /workdir/$testfile -Jhost=localhost -Jport=14265 -j /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+      - mkdir -p /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
+      - jmeter -n -t /workdir/$testfile -Jhost=iri01 -Jport=14265 -j /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.log -l /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME.jtl -e -o /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
       - |
         cat << EOF | buildkite-agent annotate --style \"default\" --context '$TESTPATH'
           Read the <a href=\"artifact://jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/index.html\"> $TESTNAME tests results</a>
         EOF
       - jq -n '.metadata .date = \\\$date' --arg date \\\$(date +%Y-%m-%d) > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
-      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://localhost:14265 -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json && rm /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
+      - jq '.metadata .appVersion = \\\$appVersion' --arg appVersion \\\$(curl -s http://iri01:14265 -X  POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.appVersion') /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json > /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/metadata.json && rm /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/tmp.json
       - echo
       - cp -rf /cache/jmeter-$BUILDKITE_BUILD_ID /workdir 
     artifact_paths: 
@@ -136,6 +137,8 @@ do
         mount-buildkite-agent: true
         volumes:
           - /cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID:/cache
+        network:
+          - iri
     env:
       BUILDKITE_AGENT_NAME: \"$BUILDKITE_AGENT_NAME\"
     agents:
