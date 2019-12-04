@@ -246,8 +246,9 @@ do
         plt.savefig('$TESTNAME.png')
         EOF
       - python3 /cache/plot.py
+      - mkdir -p /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/ && cp -rf $TESTNAME* /workdir/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/
     artifact_paths: 
-      - \"*.csv;*.png\"
+      - \"jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.csv;jmeter-$BUILDKITE_BUILD_ID/$TESTNAME/*.png\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"python:alpine\"
