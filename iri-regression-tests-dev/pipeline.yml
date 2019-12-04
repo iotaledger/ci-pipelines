@@ -201,6 +201,18 @@ steps:
             fi
           done
         done
+      - pwd
+      - ls -lrt
+      - ls -lrt /workdir
+      - |
+        for f in *.log
+        do
+          grep -i "error" $f | tee $f.errors
+          if [ -s $f.errors ];
+          then
+              exit -1
+          fi
+        done
     agents:
       queue: ops
     artifact_paths:
