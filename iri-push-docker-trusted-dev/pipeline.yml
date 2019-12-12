@@ -38,9 +38,7 @@ steps:
       - "${IRI_VERSION_NUMBER:-iri-dev}/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}"
     agents:
       queue: aws-m5large
-
  - wait
-
  - trigger: iri-regression-tests-dev
    build:
      env:
