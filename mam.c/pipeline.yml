@@ -1,6 +1,6 @@
 steps:
   - name: "coding style check"
-    command: cd /workdir && ./tools/ci_format_check cclient
+    command: cd /workdir && ./tools/ci_format_check mam
     agents:
       queue: dev
     plugins:
@@ -28,7 +28,7 @@ steps:
         shell: ["/bin/bash", "-e", "-c"]
 
   - name: "static analysis check"
-    command: cd /workdir && cppcheck --force --error-exitcode=1 -q cclient
+    command: cd /workdir && cppcheck --force --error-exitcode=1 -q mam
     agents:
       queue: dev
     plugins:
@@ -205,20 +205,6 @@ steps:
 
   - name: "TE=5 bazel test debug"
     command: cd /workdir && bazel test --build_tests_only -c dbg --test_output=all --define trit_encoding=5 //... 
-    agents:
-      queue: dev
-    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: "iotacafe/iota-buildenv"
-        always-pull: true
-        volumes:
-          - /conf:/conf
-          - /cache:/cache
-          - .:/workdir
-        shell: ["/bin/bash", "-e", "-c"]
-
-  - name: "CMake script"
-    command: cd /workdir && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=. -DCCLIENT_TEST=ON .. && make -j16 && make test
     agents:
       queue: dev
     plugins:
