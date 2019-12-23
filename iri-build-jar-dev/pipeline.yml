@@ -30,6 +30,7 @@ steps:
   - trigger: iri-push-docker-trusted-dev
     build:
       env:
+        BUILDKITE_BRANCH: $BUILDKITE_BRANCH
         ARTIFACT_BUILDKITE_BUILD_ID: $BUILDKITE_BUILD_ID
         IRI_BUILD_NUMBER: ${GIT_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
         IRI_GIT_COMMIT: $GIT_COMMIT
