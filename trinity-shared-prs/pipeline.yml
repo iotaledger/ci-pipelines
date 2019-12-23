@@ -9,4 +9,5 @@ steps:
       queue: dev
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: "node:8.16-stretch"
+        image: "node:8.17-stretch"
+        always-pull: true
