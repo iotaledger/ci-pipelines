@@ -40,10 +40,11 @@ steps:
       queue: aws-m5large
 
   - wait
-  
+
   - trigger: iri-regression-tests-dev
     build:
       env:
+        BUILDKITE_BRANCH: $BUILDKITE_BRANCH
         IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
         IRI_GIT_COMMIT: $IRI_GIT_COMMIT
         IRI_BUILDKITE_PULL_REQUEST_REPO: $IRI_BUILDKITE_PULL_REQUEST_REPO
