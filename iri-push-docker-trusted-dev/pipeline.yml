@@ -43,8 +43,10 @@ steps:
 
   - trigger: iri-regression-tests-dev
     build:
+      message: "${BUILDKITE_MESSAGE}"
+      commit: "${BUILDKITE_COMMIT}"
+      branch: "${BUILDKITE_BRANCH}"
       env:
-        BUILDKITE_BRANCH: $BUILDKITE_BRANCH
         IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
         IRI_GIT_COMMIT: $IRI_GIT_COMMIT
         IRI_BUILDKITE_PULL_REQUEST_REPO: $IRI_BUILDKITE_PULL_REQUEST_REPO
