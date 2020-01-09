@@ -52,7 +52,7 @@ echo "  - name: \"[IRI] Downloading and unpacking DBs\"
     agents:
       queue: nightly-tests"
 
-echo "  - name: \"[IRI] Starting nodes\"
+echo "  - name: \"[IRI] Starting nodes with IRI docker image \${IRI_IMAGE:-iotaledger/iri}\"
     command:
       - docker network create iri || true
       - |
@@ -65,7 +65,7 @@ echo "  - name: \"[IRI] Starting nodes\"
         -p 14600:14600/udp  \
         -p 14265:14265 \
         --net=iri \
-        iotaledger/iri \
+        \${IRI_IMAGE:-iotaledger/iri} \
         -p 14265 \
         -t 15600 \
         -u 14600 \
