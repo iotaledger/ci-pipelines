@@ -205,7 +205,7 @@ steps:
       - ls -lrt
       - ls -lrt /workdir
       - |
-        for f in *.log
+        for f in /workdir/*.log
         do
           grep -i "error" $f | tee $f.errors
           if [ -s $f.errors ];
