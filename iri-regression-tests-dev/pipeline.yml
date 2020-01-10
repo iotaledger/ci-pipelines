@@ -197,10 +197,14 @@ steps:
             echo \$pod
             if [ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') = \$BUILDKITE_BUILD_ID ]
             then
+              echo \$BUILDKITE_BUILD_ID
+              echo '---'
+              echo \$pod
               /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite logs \$pod > /workdir/\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.nodenum}').log
             fi
           done
         done
+      - hostname
       - pwd
       - ls -lrt
       - ls -lrt /workdir
