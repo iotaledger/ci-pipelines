@@ -11,7 +11,7 @@
       queue: ops
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
-        image: "python:2-alpine"
+        image: "python:3-alpine"
         shell: /bin/sh -c
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
