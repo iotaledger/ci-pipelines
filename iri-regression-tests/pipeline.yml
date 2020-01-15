@@ -165,6 +165,16 @@ steps:
       - pwd
       - ls -al /cache
       - ls -al /workdir
+      - |
+        for f in /workdir/*.log
+        do
+          echo \$f
+          grep -i "error" \$f | tee \$f.errors
+          if [ -s \$f.errors ];
+          then
+              exit -1
+          fi
+        done
     agents:
       queue: ops
     artifact_paths:
