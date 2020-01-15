@@ -9,5 +9,5 @@ steps:
       queue: dev
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: "node:10.18-stretch"
+        image: "iotacafe/trinity-shared-ci:latest"
         always-pull: true

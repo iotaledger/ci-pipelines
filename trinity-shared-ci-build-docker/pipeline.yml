@@ -1,0 +1,16 @@
+steps:
+  - name: build-trinity-shared-ci
+    command:
+      - 'docker build -f Dockerfile -t iotacafe/trinity-shared-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER .'
+      - 'docker push iotacafe/trinity-shared-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER'
+      - 'docker tag iotacafe/trinity-shared-ci:${GIT_COMMIT:0:7}-$BUILDKITE_BUILD_NUMBER iotacafe/trinity-shared-ci:latest'
+      - 'docker push iotacafe/trinity-shared-ci:latest'
+    plugins:
+       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+         image: "docker:latest"
+         shell: "/bin/sh -e -c"
+         mounts:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /conf/docker/.docker:$HOME/.docker
+    agents:
+      queue: ops
