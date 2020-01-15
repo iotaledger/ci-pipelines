@@ -153,12 +153,13 @@ do
       - |
         case $TESTNAME in
           GetTransactionsToApprove)
-            thresResp=2000
-            thresThru=200
+            thresResp=1858.372
+            thresThru=66.56735458
+
           ;;
           GetTransactionsToApproveLoop)
-            thresResp=50
-            thresThru=300
+            thresResp=45.42696
+            thresThru=96.79910521
           ;;          
         esac
       - cd /cache/jmeter-$BUILDKITE_BUILD_ID/$TESTNAME
