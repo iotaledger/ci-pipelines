@@ -226,6 +226,7 @@ do
         with open('$TESTNAME.csv', 'w') as csvfile:
           filewriter = csv.writer(csvfile)
           for o in bucket.list(delimiter='/'):
+              print(o.name)
               stats_url = 'https://{}.{}/{}$TESTNAME/statistics.json'.format(bucket_name, region, o.name)
               mdata_url = 'https://{}.{}/{}$TESTNAME/metadata.json'.format(bucket_name, region, o.name)
               stats_req = requests.get(stats_url)
