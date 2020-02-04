@@ -245,6 +245,7 @@ do
         plt.title('$TESTNAME')
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax.xaxis.set_tick_params(rotation=30, labelsize=7)
+        ax.set_ylim(bottom=0)
         plt.savefig('$TESTNAME.png')
         EOF
       - python3 /cache/plot.py
