@@ -26,11 +26,10 @@ echo "  - name: \"[Sync] Let's see how fast a node catches up\"
       - export PATH=\$PATH:/cache
       - export KUBECONFIG='/conf/kube/kube.config'
       - cd Nightly-Tests/Sync-Tests
-      - mkdir /cache/Sync-Tests
       - bash createCluster.sh iotacafe/iri-dev
-      - cp -arv SyncOutput/* /cache/Sync-Tests
+      - cp -afrv SyncOutput/* /workdir
     artifact_paths:
-      - \"/cache-iri-sync-tests-$BUILDKITE_BUILD_ID/Sync-Tests/**/*.log\"
+      - \"**/*\"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"debian:stable\"
