@@ -4,7 +4,7 @@ steps:
       - set -e
       - mkdir /cache/rust
       - apt -qq update && apt -qq install curl ca-certificates gcc pkg-config libssl-dev -y
-      - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain \$RUSTUP_TOOLCHAIN
+      - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain \$RUSTUP_TOOLCHAIN
       - export PATH=\$PATH:\$HOME/.cargo/bin
       - rustup component add rustfmt
       - cargo fmt --all -- --check
@@ -78,7 +78,7 @@ steps:
   - label: ":mac: Build for macOS platform -stable"
     command:
       - set -e
-      - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain \$RUSTUP_TOOLCHAIN
+      - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain \$RUSTUP_TOOLCHAIN
       - export PATH=\$PATH:\$HOME/.cargo/bin
       - rustup update
       - rustup toolchain list
