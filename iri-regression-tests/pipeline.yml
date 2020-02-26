@@ -122,7 +122,7 @@ steps:
     agents:
       queue: ops
     plugins:
-      https://github.com/iotaledger/doneocker-buildkite-plugin#release-v1.4.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "python:2-alpine"
         shell: /bin/sh -c
         mounts:
