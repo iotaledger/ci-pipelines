@@ -1,11 +1,7 @@
   - name: "Run Aloe for tests/features/machineNUM"
     command:
-      - apk add gcc musl-dev libffi-dev openssl-dev
-      - pip install virtualenv
-      - virtualenv /cache/iri-regression-venv
       - source /cache/iri-regression-venv/bin/activate
       - cd /cache/iri/python-regression
-      - pip install -e .
       - |
         cp -v /cache/tests/features/machineNUM/output.yml tests/features/machineNUM
         find tests/features/machineNUM -type f -name "*.feature" -exec basename {} \; >/cache/machineNUM.features
