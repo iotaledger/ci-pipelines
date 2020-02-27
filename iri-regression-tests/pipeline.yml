@@ -82,6 +82,7 @@ steps:
       - virtualenv /cache/iri-regression-venv 
       - source /cache/iri-regression-venv/bin/activate  
       - cd /cache/iri/python-regression 
+      - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py
       - pip install -e .  
     agents: 
       queue: ops  
