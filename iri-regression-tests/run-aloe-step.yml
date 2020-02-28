@@ -1,5 +1,6 @@
   - name: "Run Aloe for tests/features/machineNUM"
     command:
+      - apk add gcc libzmq
       - source /cache/iri-regression-venv/bin/activate
       - cd /cache/iri/python-regression
       - |
