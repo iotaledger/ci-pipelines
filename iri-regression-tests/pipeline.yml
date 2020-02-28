@@ -77,8 +77,8 @@ steps:
 
   - name: "Install iri-regression dependencies" 
     command:  
-      - apk add gcc musl-dev libffi-dev openssl-dev 
-      - pip install virtualenv  
+      - apk add gcc musl-dev libffi-dev openssl-dev libzmq
+      - pip install --force-reinstall virtualenv  
       - virtualenv /cache/iri-regression-venv 
       - source /cache/iri-regression-venv/bin/activate  
       - cd /cache/iri/python-regression 
