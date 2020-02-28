@@ -77,13 +77,11 @@ steps:
 
   - name: "Install iri-regression dependencies" 
     command:  
-      - apk add gcc musl-dev libffi-dev openssl-dev libzmq
+      - apk add gcc musl-dev libffi-dev openssl-dev zeromq-dev
       - pip install --force-reinstall virtualenv  
       - virtualenv /cache/iri-regression-venv 
       - source /cache/iri-regression-venv/bin/activate  
       - cd /cache/iri/python-regression 
-      - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py
-      - pip install pyzmq
       - pip install -e .  
     agents: 
       queue: ops  
