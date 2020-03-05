@@ -3,6 +3,7 @@ steps:
     commands:
       - mvn versions:set -DnewVersion=PR-${BUILDKITE_COMMIT:0:7}-${BUILDKITE_BUILD_ID:0:8}
       - mvn clean package | tee build-iri.log
+      - if grep -q "\[ERROR\]" build-iri.log && grep -q "BUILD FAILURE" build-iri.log; then exit 1; fi      
     env:
       BUILDKITE_CLEAN_CHECKOUT: true
     plugins:
