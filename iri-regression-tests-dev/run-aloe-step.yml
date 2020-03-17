@@ -1,6 +1,6 @@
   - name: "Run Aloe for tests/features/machineNUM"
     command:
-      - apt update && apt install -y build-essentials libffi-dev openssl-dev libzmq5-dev
+      - apt update && apt install -y build-essential libffi-dev libssl-dev libzmq5-dev
       - source /cache/iri-regression-venv/bin/activate
       - cd /cache/iri/python-regression
       - |

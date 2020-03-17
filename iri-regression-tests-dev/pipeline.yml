@@ -77,7 +77,7 @@ steps:
 
   - name: "Install iri-regression dependencies" 
     command:  
-      - apt update && apt install -y build-essentials libffi-dev openssl-dev libzmq5-dev
+      - apt update && apt install -y build-essential libffi-dev libssl-dev libzmq5-dev
       - pip install --force-reinstall virtualenv  
       - virtualenv /cache/iri-regression-venv 
       - source /cache/iri-regression-venv/bin/activate  
