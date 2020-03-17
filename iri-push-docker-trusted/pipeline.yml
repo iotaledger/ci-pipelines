@@ -5,25 +5,15 @@ steps:
       - sed -i '1,/# execution image/d' Dockerfile  
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
       - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
+      - buildkite-agent artifact download target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
+      - sha256sum target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar | cut -d " " -f 1 > target/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}
+      - docker build --no-cache -t iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} -t iotaledger/iri-dev:latest .
+      - docker push iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}  
       - |
-        case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
-          *'RELEASE' | *'RC'*)
-            buildkite-agent artifact download target/iri-$IRI_VERSION.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
-            sha256sum target/iri-$IRI_VERSION.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_VERSION
-            docker build --no-cache -t iotacafe/iri:$IRI_GIT_TAG -t iotacafe/iri:latest .
-            docker push iotacafe/iri:$IRI_GIT_TAG
-            docker push iotacafe/iri:latest
-            mv target $IRI_VERSION_NUMBER
-          ;;
-          *)
-            buildkite-agent artifact download target/iri-$IRI_BUILD_NUMBER.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
-            sha256sum target/iri-$IRI_BUILD_NUMBER.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_BUILD_NUMBER
-            docker build --no-cache -t iotacafe/iri-dev:$IRI_BUILD_NUMBER -t iotacafe/iri-dev:latest .
-            docker push iotacafe/iri-dev:$IRI_BUILD_NUMBER
-            docker push iotacafe/iri-dev:latest
-            mv target iri-dev
-          ;;          
-        esac
+        if [[ "$IRI_BUILD_NUMBER" != "PR"* ]]; then
+          docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri-dev:latest
+          docker push iotaledger/iri-dev:latest
+        fi
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
@@ -35,8 +25,8 @@ steps:
         - DOCKER_USERNAME
         - DOCKER_PASSWORD
     artifact_paths:
-      - "${IRI_VERSION_NUMBER:-iri-dev}/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar"
-      - "${IRI_VERSION_NUMBER:-iri-dev}/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}"
+      - "target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar"
+      - "target/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}"
     agents:
       queue: aws-m5large
 

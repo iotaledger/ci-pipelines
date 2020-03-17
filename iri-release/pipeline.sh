@@ -47,8 +47,8 @@ docker_push () {
   echo "  - label: \"Pushing to docker hub\""
   echo "    commands:
       - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
-      - docker pull iotacafe/iri:$1
-      - docker tag iotacafe/iri:$1 iotaledger/iri:$1
+      - docker pull iotaledger/iri-dev:$1
+      - docker tag iotaledger/iri-dev:$1 iotaledger/iri:$1
       - docker push iotaledger/iri:$1
       - docker tag iotaledger/iri:$1 iotaledger/iri:latest
       - docker push iotaledger/iri:latest"
