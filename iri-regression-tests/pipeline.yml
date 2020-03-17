@@ -77,7 +77,7 @@ steps:
 
   - name: "Install iri-regression dependencies" 
     command:  
-      - apk add gcc musl-dev libffi-dev openssl-dev libzmq zeromq-dev
+      - apt update && apt install -y build-essential libffi-dev libssl-dev libzmq5-dev
       - pip install --force-reinstall virtualenv  
       - virtualenv /cache/iri-regression-venv 
       - source /cache/iri-regression-venv/bin/activate  
@@ -87,8 +87,8 @@ steps:
       queue: ops  
     plugins:  
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0: 
-        image: "python:3-alpine"  
-        shell: /bin/sh -c 
+        image: "python:3"
+        shell: /bin/bash -c
         mounts: 
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache  
 
@@ -133,7 +133,7 @@ steps:
 
   - name: "Generate dynamic Aloe steps"
     command: 
-      - cd iri-regression-tests && ./aloe-steps-create.sh > /cache/aloe-steps.yml
+      - cd $BUILDKITE_PIPELINE_SLUG && ./aloe-steps-create.sh > /cache/aloe-steps.yml
       - buildkite-agent pipeline upload < /cache/aloe-steps.yml
     agents:
       queue: ops
