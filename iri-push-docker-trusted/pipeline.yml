@@ -7,7 +7,7 @@ steps:
       - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
       - buildkite-agent artifact download target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
       - sha256sum target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar | cut -d " " -f 1 > target/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}
-      - docker build --no-cache -t iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} -t iotaledger/iri-dev:latest .
+      - docker build --no-cache -t iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} .
       - docker push iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}  
       - |
         if [[ "$IRI_BUILD_NUMBER" != "PR"* ]]; then
