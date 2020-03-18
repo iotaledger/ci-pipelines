@@ -133,7 +133,7 @@ steps:
 
   - name: "Generate dynamic Aloe steps"
     command: 
-      - cd $BUILDKITE_PIPELINE_SLUG && ./aloe-steps-create.sh > /cache/aloe-steps.yml
+      - cd $BUILDKITE_PIPELINE_SLUG && ./aloe-steps-create.sh | tee /cache/aloe-steps.yml
       - buildkite-agent pipeline upload < /cache/aloe-steps.yml
     agents:
       queue: ops
