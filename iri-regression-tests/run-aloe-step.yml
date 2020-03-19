@@ -16,4 +16,3 @@
         shell: /bin/bash -c
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
-          
