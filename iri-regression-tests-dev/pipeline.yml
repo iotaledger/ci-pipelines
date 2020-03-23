@@ -17,11 +17,7 @@ steps:
     command:
       - |
         apk add git
-        if [ ! -z "$IRI_BUILDKITE_PULL_REQUEST_REPO" ]; then
-          git clone "$IRI_BUILDKITE_PULL_REQUEST_REPO" /cache/iri
-        else
-          git clone git@github.com:GalRogozinski/iri-private.git /cache/iri
-        fi
+        git clone git@github.com:GalRogozinski/iri-private.git /cache/iri
     agents:
       queue: ops
     plugins:
