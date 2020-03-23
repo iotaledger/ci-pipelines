@@ -99,6 +99,7 @@ steps:
       - cd /cache/tiab
       - source venv/bin/activate
       - cd /cache/iri/python-regression
+      - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
       - |
         ERROR=0
         for machine_dir in tests/features/machine?; do
@@ -121,6 +122,9 @@ steps:
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
           - /conf:/conf:ro
+        environment:
+        - DOCKER_USERNAME
+        - DOCKER_PASSWORD          
 
   - wait
 
