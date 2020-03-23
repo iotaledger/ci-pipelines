@@ -17,7 +17,7 @@ steps:
     command:
       - |
         apk add git
-        git clone git://github.com/iotaledger/iri.git /cache/iri
+        git clone git@github.com:GalRogozinski/iri-private.git /cache/iri
     agents:
       queue: ops
     plugins:
@@ -27,6 +27,7 @@ steps:
         mount-buildkite-agent: true
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf/ssh/:~/.ssh
 
   - name: "Clone TIAB"
     command:
