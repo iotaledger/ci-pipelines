@@ -14,7 +14,7 @@ release () {
   echo "  - label: \"Releasing - $1\""
   echo "    commands:
       - mkdir -p target
-      - apt -qq update && apt -qq install curl gnupg -y
+      - apt -qq update && DEBIAN_FRONTEND=noninteractive apt -qq install curl gnupg -y
       - IRI_VERSION=\$(echo $1 | tr -d 'v')
       - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
       - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/iri-\\\$IRI_VERSION.jar
