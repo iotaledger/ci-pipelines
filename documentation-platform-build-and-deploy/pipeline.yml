@@ -16,7 +16,7 @@ steps:
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota logs \$NOW_SH_DEPLOYMENT_ID
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          environment:
           - ZEIT_TOKEN
           - DOCS_STAGING_AWS_ACCESS_KEY_ID
@@ -48,7 +48,7 @@ steps:
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota logs \$NOW_SH_DEPLOYMENT_ID
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          mount-buildkite-agent: true
          environment:
           - ZEIT_TOKEN
@@ -76,7 +76,7 @@ steps:
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota logs \$NOW_SH_DEPLOYMENT_ID
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          environment:
           - ZEIT_TOKEN
           - DOCS_PROD_AWS_ACCESS_KEY_ID
@@ -109,7 +109,7 @@ steps:
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota logs \$NOW_SH_DEPLOYMENT_ID
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          mount-buildkite-agent: true
          environment:
           - ZEIT_TOKEN

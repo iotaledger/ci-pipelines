@@ -9,7 +9,7 @@ api_staging () {
   echo "    command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - cd demo/api 
+      - cd demo/api
       - jq -r '.nodes[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' src/data/config.template.json > src/data/config.staging.json
       - jq -r '.nodes[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
@@ -24,16 +24,16 @@ api_staging () {
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - ALIAS=p2p-energy-api.iota.works
           - ZEIT_TOKEN
-          - GIT_TOKEN          
+          - GIT_TOKEN
           - P2P_NRG_STAGING_AWS_ACCESS_KEY_ID
           - P2P_NRG_STAGING_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=p2p-energy-demo-staging-
           - BUCKET_PREFIX=p2p-energy-demo-staging-
-          - WALLET_SEED_STAGING" 
+          - WALLET_SEED_STAGING"
   echo "    agents:
       queue: aws-nano"
 }
@@ -43,7 +43,7 @@ api_prod () {
   echo "    command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - cd demo/api 
+      - cd demo/api
       - jq -r '.nodes[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' src/data/config.template.json > src/data/config.prod.json
       - jq -r '.nodes[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
@@ -58,7 +58,7 @@ api_prod () {
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - ALIAS=p2p-energy-api.iota.org
           - ZEIT_TOKEN
@@ -67,7 +67,7 @@ api_prod () {
           - P2P_NRG_PROD_AWS_SECRET_ACCESS_KEY
           - DB_TABLE_PREFIX=p2p-energy-demo-prod-
           - BUCKET_PREFIX=p2p-energy-demo-prod-
-          - WALLET_SEED_PROD" 
+          - WALLET_SEED_PROD"
   echo "    agents:
       queue: aws-nano"
 }
@@ -82,10 +82,10 @@ client_staging () {
       - jq -r '.nodes[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.nodes[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-9' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
-      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - API_ENDPOINT=https://p2p-energy-api.iota.works
           - ALIAS=p2p-energy.iota.works
@@ -105,10 +105,10 @@ client_prod () {
       - jq -r '.nodes[0] .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.nodes[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-9' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
-      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - API_ENDPOINT=https://p2p-energy-api.iota.org
           - ALIAS=p2p-energy.iota.org
@@ -126,9 +126,9 @@ block_prod () {
 skip_build () {
   echo "  - name: \"No folder modified, skipping build\""
   echo "    command:
-      - exit 0" 
+      - exit 0"
   echo "    agents:
-      queue: aws-nano"  
+      queue: aws-nano"
 }
 
 print_block () {
@@ -159,5 +159,5 @@ if [ -z "$FOLDERS" ]
 then
   skip_build
 else
-  print_block "$FOLDERS"  
+  print_block "$FOLDERS"
 fi

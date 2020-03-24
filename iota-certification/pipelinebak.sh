@@ -9,7 +9,7 @@ api_staging () {
   echo "    command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - cd api 
+      - cd api
       - jq -r '.provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.staging.json
       - jq -r '.mwm = \\\$mwm' --argjson mwm '9' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
@@ -26,7 +26,7 @@ api_staging () {
       - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - IRI_NODE=https://altnodes.devnet.iota.org:443
           - CERT_STAGING_AWS_ACCESS_KEY_ID
@@ -36,7 +36,7 @@ api_staging () {
           - MAIN_BUCKET=main
           - AUTH_DOMAIN=https://certification.iota.works
           - ALIAS=certification-api.iota.works
-          - ZEIT_TOKEN" 
+          - ZEIT_TOKEN"
   echo "    agents:
       queue: aws-nano"
 }
@@ -46,7 +46,7 @@ api_prod () {
   echo "    command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - cd api 
+      - cd api
       - jq -r '.provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.prod.json
       - jq -r '.dynamoDbConnection .region = \\\$region' --arg region 'eu-central-1' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$CERT_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
@@ -60,10 +60,10 @@ api_prod () {
       - jq -r '.authenticateDomain = \\\$authenticateDomain' --arg authenticateDomain \\\$AUTH_DOMAIN src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.draftCertificates = \\\$draftCertificates' --argjson draftCertificates 'false' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.name = \\\$name' --arg name 'certification-api' now.json > tmp.json && mv tmp.json now.json
-      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
+      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - IRI_NODE=https://nodes.iota.cafe:443
           - CERT_PROD_AWS_ACCESS_KEY_ID
@@ -88,17 +88,17 @@ admin_staging () {
       - jq -r '.tangleExplorer .transactions = \\\$transactions' --arg transactions 'https://devnet.thetangle.org/transaction/:transactionHash' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.tangleExplorer .bundles = \\\$bundles' --arg bundles 'https://devnet.thetangle.org/bundle/:bundleHash' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.name = \\\$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
-      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
+      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - API_ENDPOINT=https://certification-api.iota.works
           - ALIAS=certification-admin.iota.works
           - ZEIT_TOKEN
           - GIT_TOKEN"
   echo "    agents:
-      queue: aws-nano"    
+      queue: aws-nano"
 }
 
 admin_prod () {
@@ -109,10 +109,10 @@ admin_prod () {
               - cd admin
               - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
               - jq -r '.name = \\\$name' --arg name 'certification-admin' now.json > tmp.json && mv tmp.json now.json
-              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
+              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-                image: \"node:8.12-stretch\"
+                image: \"node:12.16-stretch\"
                 environment:
                   - API_ENDPOINT=https://certification-api.iota.org
                   - ALIAS=certification-admin.iota.org
@@ -130,10 +130,10 @@ client_staging () {
               - cd client
               - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
               - jq -r '.name = \\\$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
-              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
+              - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
               https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-                image: \"node:8.12-stretch\"
+                image: \"node:12.16-stretch\"
                 environment:
                   - API_ENDPOINT=https://certification-api.iota.works
                   - ALIAS=certification.iota.works
@@ -151,10 +151,10 @@ client_prod () {
       - cd client
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
       - jq -r '.name = \\\$name' --arg name 'certification-client' now.json > tmp.json && mv tmp.json now.json
-      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS" 
+      - now --token \\\$ZEIT_TOKEN --team iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --team iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - API_ENDPOINT=https://certification-api.iota.org
           - ALIAS=certification.iota.org

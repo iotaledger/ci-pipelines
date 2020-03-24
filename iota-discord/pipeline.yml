@@ -5,7 +5,7 @@ steps:
       - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy -e SITE_KEY -e SECRET_KEY -e CHANNEL_ID -e DISCORD_TOKEN -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          environment:
           - ZEIT_TOKEN
           - ALIAS=discord.iota.works
@@ -22,10 +22,10 @@ steps:
   - name: build-and-deploy-prod
     command:
       - npm i -g --unsafe-perm now
-      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy -e SITE_KEY -e SECRET_KEY -e CHANNEL_ID -e DISCORD_TOKEN -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy -e SITE_KEY -e SECRET_KEY -e CHANNEL_ID -e DISCORD_TOKEN -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          environment:
           - ZEIT_TOKEN
           - ALIAS=discord.iota.org
