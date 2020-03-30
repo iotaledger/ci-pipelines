@@ -11,15 +11,15 @@ steps:
       - docker push sadjy/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}  
       - |
         case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
-          'PR'*)
+          *'RELEASE' | *'RC'*)
             docker tag sadjy/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} sadjy/iri-dev:latest
             docker push sadjy/iri-dev:latest
-            mv target iri-dev
+            mv target $IRI_VERSION_NUMBER
           ;;
           *)
-            mv target $IRI_VERSION_NUMBER
+            mv target iri-dev
           ;;          
-        esac
+        esac        
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
@@ -35,4 +35,6 @@ steps:
       - "${IRI_VERSION_NUMBER:-iri-dev}/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}"
     agents:
       queue: aws-m5large
+
+
 
