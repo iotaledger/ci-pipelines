@@ -54,7 +54,7 @@ docker_push () {
       - docker tag sadjy/iri:$1 sadjy/iri:latest
       - docker push sadjy/iri:latest"
   echo "    plugins:
-      https://github.com/sadjy/docker-buildkite-plugin#release-v3.2.0:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
         always-pull: true
         mount-buildkite-agent: false
