@@ -47,7 +47,7 @@ release () {
 docker_push () {
   echo "  - label: \"Pushing to docker hub\""
   echo "    commands:
-      - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
+      - echo \$DOCKER_PASSWORD | docker login --username \$DOCKER_USERNAME --password-stdin
       - docker pull sadjy/iri-dev:$1
       - docker tag sadjy/iri-dev:$1 sadjy/iri:$1
       - docker push sadjy/iri:$1
