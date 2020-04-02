@@ -9,7 +9,7 @@ api_staging () {
   echo "    command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - cd api 
+      - cd api
       - jq -r '.node .provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.staging.json
       - jq -r '.node .mwm = \\\$mwm' --argjson mwm '9' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.ipfs .provider = \\\$provider' --arg provider \\\$IPFS_NODE src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
@@ -21,7 +21,7 @@ api_staging () {
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - IRI_NODE=https://altnodes.devnet.iota.org:443
           - IPFS_NODE=https://ipfs.iota.cafe:443/api/v0/
@@ -30,7 +30,7 @@ api_staging () {
           - ZEIT_TOKEN
           - IPFS_STAGING_AWS_ACCESS_KEY_ID
           - IPFS_STAGING_AWS_SECRET_ACCESS_KEY
-          - DB_TABLE_PREFIX=ipfs-staging-" 
+          - DB_TABLE_PREFIX=ipfs-staging-"
   echo "    agents:
       queue: aws-nano"
 }
@@ -42,10 +42,10 @@ client_staging () {
       - npm i -g --unsafe-perm now
       - cd client
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
-      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - API_ENDPOINT=https://ipfs-api.iota.works
           - ALIAS=ipfs.iota.works
@@ -60,7 +60,7 @@ api_prod () {
   echo "    command:
       - apt update && apt install jq -y
       - npm i -g --unsafe-perm now
-      - cd api 
+      - cd api
       - jq -r '.node .provider = \\\$provider' --arg provider \\\$IRI_NODE src/data/config.template.json > src/data/config.prod.json
       - jq -r '.node .mwm = \\\$mwm' --argjson mwm '14' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.ipfs .provider = \\\$provider' --arg provider \\\$IPFS_NODE src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
@@ -72,7 +72,7 @@ api_prod () {
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - IRI_NODE=https://nodes.iota.cafe:443
           - IPFS_NODE=https://ipfs.iota.cafe:443/api/v0/
@@ -81,7 +81,7 @@ api_prod () {
           - ZEIT_TOKEN
           - IPFS_PROD_AWS_ACCESS_KEY_ID
           - IPFS_PROD_AWS_SECRET_ACCESS_KEY
-          - DB_TABLE_PREFIX=ipfs-prod-"  
+          - DB_TABLE_PREFIX=ipfs-prod-"
   echo "    agents:
       queue: aws-nano"
 }
@@ -96,10 +96,10 @@ client_prod () {
       - jq -r '.tangleExplorer .transactions = \\\$transactions' --arg transactions 'https://thetangle.org/transaction/:transactionHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.tangleExplorer .bundles = \\\$bundles' --arg bundles 'https://thetangle.org/bundle/:bundleHash' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-3' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
-      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"  
+      - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --regions sfo --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-        image: \"node:8.12-stretch\"
+        image: \"node:12.16-stretch\"
         environment:
           - API_ENDPOINT=https://ipfs-api.iota.org
           - ALIAS=ipfs.iota.org

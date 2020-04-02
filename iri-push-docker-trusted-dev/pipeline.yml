@@ -4,25 +4,22 @@ steps:
       - mkdir target
       - sed -i '1,/# execution image/d' Dockerfile  
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
-      - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
+      - echo \$DOCKER_PASSWORD | docker login --username \$DOCKER_USERNAME --password-stdin
+      - buildkite-agent artifact download target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
+      - sha256sum target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar | cut -d " " -f 1 > target/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}
+      - docker build --no-cache -t sadjy/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} .
+      - docker push sadjy/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}  
       - |
         case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
           *'RELEASE' | *'RC'*)
-            buildkite-agent artifact download target/iri-$IRI_VERSION.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
-            sha256sum target/iri-$IRI_VERSION.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_VERSION
-            docker build -t sadjy/iri-dev:$IRI_GIT_TAG -t sadjy/iri-dev:latest .
-            docker push sadjy/iri-dev:$IRI_GIT_TAG
+            docker tag sadjy/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} sadjy/iri-dev:latest
+            docker push sadjy/iri-dev:latest
             mv target $IRI_VERSION_NUMBER
           ;;
           *)
-            buildkite-agent artifact download target/iri-$IRI_BUILD_NUMBER.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
-            sha256sum target/iri-$IRI_BUILD_NUMBER.jar | cut -d " " -f 1 > target/SHA256SUM-$IRI_BUILD_NUMBER
-            docker build -t sadjy/iri-dev:$IRI_BUILD_NUMBER -t sadjy/iri-dev:latest .
-            docker push sadjy/iri-dev:$IRI_BUILD_NUMBER
             mv target iri-dev
           ;;          
-        esac
-      - docker push sadjy/iri-dev:latest
+        esac        
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
@@ -39,15 +36,5 @@ steps:
     agents:
       queue: aws-m5large
 
-  - wait
 
-  - trigger: iri-regression-tests-dev
-    build:
-      message: "${BUILDKITE_MESSAGE}"
-      commit: "${BUILDKITE_COMMIT}"
-      branch: "${BUILDKITE_BRANCH}"
-      env:
-        IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
-        IRI_GIT_COMMIT: $IRI_GIT_COMMIT
-        IRI_BUILDKITE_PULL_REQUEST_REPO: $IRI_BUILDKITE_PULL_REQUEST_REPO
-        ARTIFACT_BUILDKITE_BUILD_ID: $ARTIFACT_BUILDKITE_BUILD_ID
+

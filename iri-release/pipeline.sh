@@ -14,11 +14,11 @@ release () {
   echo "  - label: \"Releasing - $1\""
   echo "    commands:
       - mkdir -p target
-      - apt -qq update && apt -qq install curl gnupg -y
+      - apt -qq update && DEBIAN_FRONTEND=noninteractive apt -qq install apt-utils -y && DEBIAN_FRONTEND=noninteractive apt -qq install curl gnupg -y
       - IRI_VERSION=\$(echo $1 | tr -d 'v')
       - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/iri-\\\$IRI_VERSION.jar
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-\\\$IRI_VERSION --output target/SHA256SUM-\\\$IRI_VERSION
+      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/iri-\\\$IRI_VERSION.jar --output target/iri-\\\$IRI_VERSION.jar
+      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/target/SHA256SUM-\\\$IRI_VERSION --output target/SHA256SUM-\\\$IRI_VERSION
       - if [[ \\\$(sha256sum target/iri-\\\$IRI_VERSION.jar | cut -d \" \" -f 1) == \\\$(cat target/SHA256SUM-\\\$IRI_VERSION) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release      

@@ -10,10 +10,15 @@ steps:
       - docker build --no-cache -t iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} .
       - docker push iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}  
       - |
-        if [[ "$IRI_BUILD_NUMBER" != "PR"* ]]; then
-          docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri-dev:latest
-          docker push iotaledger/iri-dev:latest
-        fi
+        case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
+          'PR'*)
+            docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri-dev:latest
+            docker push iotaledger/iri-dev:latest
+          ;;
+          *)
+            echo
+          ;;          
+        esac
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"

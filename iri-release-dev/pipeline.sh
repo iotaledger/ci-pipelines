@@ -17,11 +17,12 @@ release () {
       - apt -qq update && apt -qq install curl gnupg -y
       - IRI_VERSION=\$(echo $1 | tr -d 'v')
       - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/iri-\\\$IRI_VERSION.jar
-      - curl https://iotaledger-iri-release.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-\\\$IRI_VERSION --output target/SHA256SUM-\\\$IRI_VERSION
+      - curl https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/iri-\\\$IRI_VERSION.jar
+      - curl https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-\\\$IRI_VERSION --output target/SHA256SUM-\\\$IRI_VERSION
+      - curl https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output target/LS.tar
       - if [[ \\\$(sha256sum target/iri-\\\$IRI_VERSION.jar | cut -d \" \" -f 1) == \\\$(cat target/SHA256SUM-\\\$IRI_VERSION) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
-      - chmod +x github-release
+      - chmod +x github-release      
       - echo \\\$GPG_KEY | base64 -d > iri.key
       - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --batch --yes --import <iri.key
       - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --pinentry-mode loopback --batch --passphrase-fd 0 --armor --detach-sign --default-key contact@iota.org target/SHA256SUM-\\\$IRI_VERSION
@@ -46,10 +47,12 @@ release () {
 docker_push () {
   echo "  - label: \"Pushing to docker hub\""
   echo "    commands:
-      - docker login -u=\\\$DOCKER_USERNAME -p=\\\$DOCKER_PASSWORD
+      - echo \\\$DOCKER_PASSWORD | docker login --username \\\$$DOCKER_USERNAME --password-stdin
       - docker pull sadjy/iri-dev:$1
-      - docker tag sadjy/iri-dev:$1 sadjy/iri-offi:$1
-      - docker push sadjy/iri-offi:$1"
+      - docker tag sadjy/iri-dev:$1 sadjy/iri:$1
+      - docker push sadjy/iri:$1
+      - docker tag sadjy/iri:$1 sadjy/iri:latest
+      - docker push sadjy/iri:latest"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"

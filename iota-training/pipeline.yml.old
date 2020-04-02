@@ -11,11 +11,11 @@ steps:
       - jq -r '.dynamoDbConnection .dbTablePrefix = \$dbTablePrefix' --arg dbTablePrefix \$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '. + {"feeds":{"training":{"service":"eventbrite","config":{"oauthToken":(\$oautharg)}}}}' --arg oautharg "\$OAUTH_TOKEN" src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.name = \$name' --arg name 'training-api' now.json > tmp.json && mv tmp.json now.json
-      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS
 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          environment:
           - ZEIT_TOKEN
           - TRAIN_STAGING_AWS_ACCESS_KEY_ID
@@ -45,7 +45,7 @@ steps:
 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          mount-buildkite-agent: true
          environment:
           - ZEIT_TOKEN
@@ -74,11 +74,11 @@ steps:
       - jq -r '.dynamoDbConnection .dbTablePrefix = \$dbTablePrefix' --arg dbTablePrefix \$DB_TABLE_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '. + {"feeds":{"training":{"service":"eventbrite","config":{"oauthToken":(\$oautharg)}}}}' --arg oautharg "\$OAUTH_TOKEN" src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.name = \$name' --arg name 'training-api' now.json > tmp.json && mv tmp.json now.json
-      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS 
+      - now --token \$ZEIT_TOKEN --scope iota alias $(now --regions sfo --token \$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=$BUILDKITE_JOB_ID) \$ALIAS
 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          environment:
           - ZEIT_TOKEN
           - TRAIN_PROD_AWS_ACCESS_KEY_ID
@@ -108,7 +108,7 @@ steps:
 
     plugins:
        https://github.com/iotaledger/docker-buildkite-plugin#release-v2.0.0:
-         image: "node:8.12-stretch"
+         image: "node:12.16-stretch"
          mount-buildkite-agent: true
          environment:
           - ZEIT_TOKEN

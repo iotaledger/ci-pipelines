@@ -16,24 +16,22 @@ steps:
   - name: "Clone IRI"
     command:
       - |
-        apk add git
-        if [ ! -z "$IRI_BUILDKITE_PULL_REQUEST_REPO" ]; then
-          git clone "$IRI_BUILDKITE_PULL_REQUEST_REPO" /cache/iri
-        else
-          git clone https://github.com/iotaledger/iri.git /cache/iri
-        fi
+        apk add git openssh
+        git clone git@github.com:GalRogozinski/iri-private.git /cache/iri
     agents:
       queue: ops
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "alpine"
         shell: /bin/sh -c
+        mount-buildkite-agent: true
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf/ssh/:/root/.ssh
 
   - name: "Clone TIAB"
     command:
-      - clone --depth 1 https://github.com/iotaledger/tiab.git /cache/tiab
+      - clone --depth 1 https://github.com/sadjy/tiab.git /cache/tiab
     agents:
       queue: ops
     plugins:
@@ -99,18 +97,12 @@ steps:
       - cd /cache/tiab
       - source venv/bin/activate
       - cd /cache/iri/python-regression
+      - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
       - |
         ERROR=0
         for machine_dir in tests/features/machine?; do
           mkdir -p /cache/\$machine_dir/
-          case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
-            *'RELEASE' | *'RC'*)
-              python /cache/tiab/create_cluster.py -i iotacafe/iri:${IRI_GIT_TAG} -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -n buildkite -x /cache/iri/python-regression -e "apt update && apt install unzip && wget http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.4/jacoco-0.8.4.zip -O jacoco.zip && mkdir /opt/jacoco && unzip jacoco.zip -d /opt/jacoco" -d
-            ;;
-            *)
-             python /cache/tiab/create_cluster.py -i iotacafe/iri-dev:${IRI_BUILD_NUMBER} -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -n buildkite -x /cache/iri/python-regression -e "apt update && apt install unzip && wget http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.4/jacoco-0.8.4.zip -O jacoco.zip && mkdir /opt/jacoco && unzip jacoco.zip -d /opt/jacoco" -d
-            ;;          
-          esac
+          python /cache/tiab/create_cluster.py -i ${IRI_IMAGE:-iotaledger/iri-dev} -t $BUILDKITE_BUILD_ID -c \$machine_dir/config.yml -o /cache/\$machine_dir/output.yml -k /conf/kube/kube.config -n buildkite -x /cache/iri/python-regression -e "apt update && apt install unzip && wget http://search.maven.org/remotecontent\?filepath\=org/jacoco/jacoco/0.8.4/jacoco-0.8.4.zip -O jacoco.zip && mkdir /opt/jacoco && unzip jacoco.zip -d /opt/jacoco" -d
           if [ \$? -ne 0 ]; then
             ERROR=1
             python /workdir/iri-regression-tests/print-logs.py /cache/\$machine_dir/output.yml
@@ -128,12 +120,15 @@ steps:
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
           - /conf:/conf:ro
+        environment:
+        - DOCKER_USERNAME
+        - DOCKER_PASSWORD          
 
   - wait
 
   - name: "Generate dynamic Aloe steps"
     command: 
-      - cd $BUILDKITE_PIPELINE_SLUG && ./aloe-steps-create.sh > /cache/aloe-steps.yml
+      - cd $BUILDKITE_PIPELINE_SLUG && ./aloe-steps-create.sh | tee /cache/aloe-steps.yml
       - buildkite-agent pipeline upload < /cache/aloe-steps.yml
     agents:
       queue: ops
@@ -203,3 +198,5 @@ steps:
         mounts:
           - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
           - /conf:/conf:ro
+
+
