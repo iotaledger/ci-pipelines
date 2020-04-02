@@ -1,7 +1,7 @@
 steps:
   - label: "Running benchmarks"
     commands:
-      - apt update && apt install -y expect
+      - apt update && DEBIAN_FRONTEND=noninteractive apt install -y expect
       - unbuffer mvn -Dtest=BenchmarkRunner clean test | tee bench.log
       - grep -E "(^Benchmark(.*)\(num)|^RocksDbBenchmark" bench.log > bench.tmp.log
       - mv bench.tmp.log bench.log
