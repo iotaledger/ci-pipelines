@@ -33,8 +33,7 @@ getMilestone () {
   echo "  - label: \"Getting milestone\""
   echo "    commands:
       - rm -rf /cache/*
-      - apt -qq update && apt -qq install curl jq
-      - curl -s http://localhost:14265 -X POST -H 'Content-Type: application/json' -H 'X-IOTA-API-Version: 1' -d '' | jq -r '.latestMilestoneIndex' > /cache/milestone.txt"
+      - apt -qq update && apt -qq install curl jq"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"iotaledger/iri-dev:$1\"
