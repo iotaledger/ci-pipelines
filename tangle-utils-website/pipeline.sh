@@ -16,6 +16,9 @@ api_staging () {
       - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$TANGLE_UTILS_STAGING_AWS_ACCESS_KEY_ID src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$TANGLE_UTILS_STAGING_AWS_SECRET_ACCESS_KEY src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.nodeMainnet .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.nodeDevnet .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
+      - jq -r '.permaNodeEndpoint = \\\$permaNodeEndpoint' --arg permaNodeEndpoint 'http://chronicle01.mainnet.iota.cafe:4000/api' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.zmqMainNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmq.iota.org:5556' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - jq -r '.zmqDevNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmq.devnet.iota.org:5556' src/data/config.staging.json > tmp.json && mv tmp.json src/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
@@ -46,6 +49,9 @@ api_prod () {
       - jq -r '.dynamoDbConnection .accessKeyId = \\\$accessKeyId' --arg accessKeyId \\\$TANGLE_UTILS_PROD_AWS_ACCESS_KEY_ID src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.dynamoDbConnection .secretAccessKey = \\\$secretAccessKey' --arg secretAccessKey \\\$TANGLE_UTILS_PROD_AWS_SECRET_ACCESS_KEY src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.dynamoDbConnection .dbTablePrefix = \\\$dbTablePrefix' --arg dbTablePrefix \\\$DB_TABLE_PREFIX src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.nodeMainnet .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.nodeDevnet .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
+      - jq -r '.permaNodeEndpoint = \\\$permaNodeEndpoint' --arg permaNodeEndpoint 'http://chronicle01.mainnet.iota.cafe:4000/api' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.zmqMainNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmq.iota.org:5556' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - jq -r '.zmqDevNet .endpoint = \\\$endpoint' --arg endpoint 'tcp://zmq.devnet.iota.org:5556' src/data/config.prod.json > tmp.json && mv tmp.json src/data/config.prod.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
@@ -71,10 +77,8 @@ client_staging () {
       - npm i -g --unsafe-perm now
       - cd client
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.staging.json
-      - jq -r '.nodesMainnet[0] .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
-      - jq -r '.nodesMainnet[1] .provider = \\\$provider' --arg provider 'https://nodes.thetangle.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
-      - jq -r '.nodesDevnet[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
-      - jq -r '.nodesDevnet[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
+      - jq -r '.nodeMainnet .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
+      - jq -r '.nodeDevnet .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - jq -r '.googleMapsKey = \\\$googleMapsKey' --arg googleMapsKey \\\$GOOGLE_MAPS_KEY public/data/config.staging.json > tmp.json && mv tmp.json public/data/config.staging.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
   echo "    plugins:
@@ -97,10 +101,8 @@ client_prod () {
       - npm i -g --unsafe-perm now
       - cd client
       - jq -r '.apiEndpoint = \\\$apiEndpoint' --arg apiEndpoint \\\$API_ENDPOINT public/data/config.template.json > public/data/config.prod.json
-      - jq -r '.nodesMainnet[0] .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
-      - jq -r '.nodesMainnet[1] .provider = \\\$provider' --arg provider 'https://nodes.thetangle.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
-      - jq -r '.nodesDevnet[0] .provider = \\\$provider' --arg provider 'https://altnodes.devnet.iota.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
-      - jq -r '.nodesDevnet[1] .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.nodeMainnet .provider = \\\$provider' --arg provider 'https://nodes.iota.cafe:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
+      - jq -r '.nodeDevnet .provider = \\\$provider' --arg provider 'https://nodes.devnet.iota.org:443' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.googleAnalyticsId = \\\$googleAnalyticsId' --arg googleAnalyticsId 'UA-134592666-12' public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - jq -r '.googleMapsKey = \\\$googleMapsKey' --arg googleMapsKey \\\$GOOGLE_MAPS_KEY public/data/config.prod.json > tmp.json && mv tmp.json public/data/config.prod.json
       - now --token \\\$ZEIT_TOKEN --scope iota alias \$(now --token \\\$ZEIT_TOKEN --scope iota deploy --docker -e CONFIG_ID=prod --build-env CONFIG_ID=prod --build-env GITHUB_TOKEN=\\\$GIT_TOKEN -m BK_JOB_ID=\$BUILDKITE_JOB_ID) \\\$ALIAS"
