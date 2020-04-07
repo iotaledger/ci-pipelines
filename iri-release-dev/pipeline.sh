@@ -34,9 +34,8 @@ getMilestone () {
 
   echo "  - label: \"Getting milestone\""
   echo "    commands:
-      - rm -rf /cache/*
       - apt -qq update && apt -qq install curl jq
-      - curl -s http://localhost:14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /cache/milestone.txt"
+      - curl -s http://localhost:14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /iri/data/milestone.txt"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"sadjy/iri-dev:$1\"
@@ -44,7 +43,7 @@ getMilestone () {
         mount-buildkite-agent: false
         shell: [\"/bin/bash\", \"-e\", \"-c\"]
         volumes:
-          - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache"
+          - /cache-iri-release-$BUILDKITE_BUILD_ID:/iri/data"
   echo "    agents:
       queue: aws-m5large"
   echo "  - wait"
