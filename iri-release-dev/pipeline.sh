@@ -34,7 +34,7 @@ getMilestone () {
 
   echo "  - label: \"Getting milestone\""
   echo "    commands:
-      - apt -qq update && apt -qq install curl jq
+      - apt -qq update && apt -qq install curl jq -y
       - curl -s http://localhost:14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /iri/data/milestone.txt"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
