@@ -33,7 +33,6 @@ getMilestone () {
   echo "  - wait"
 
   echo "  - label: \"Getting milestone\""
-  echo "  - "
   echo "    commands:
       - rm -rf /cache/*
       - apt -qq update && apt -qq install curl jq
