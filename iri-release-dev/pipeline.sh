@@ -15,10 +15,10 @@ getMilestone () {
   echo "    commands:
       - rm -rf /cache/*
       - apt -qq update && apt -qq install curl
-      - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output /cache/local-snapshot.tar
-      - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output /cache/local-snapshot.tar.sum
+      - curl https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output /cache/local-snapshot.tar
+      - curl https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output /cache/local-snapshot.tar.sum
       - if [[ \\\$(sha256sum /cache/local-snapshot.tar | cut -d \" \" -f 1) == \\\$(cat /cache/local-snapshot.tar.sum) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
-      - cd /cache && tar xf local-snapshot.tar"
+      - cd /cache && tar xvf local-snapshot.tar"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"debian\"
