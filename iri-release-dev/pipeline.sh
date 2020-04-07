@@ -41,7 +41,6 @@ getMilestone () {
         image: \"sadjy/iri-dev:$1\"
         always-pull: true
         mount-buildkite-agent: false
-        shell: [\"/bin/bash\", \"-e\", \"-c\"]
         volumes:
           - /cache-iri-release-$BUILDKITE_BUILD_ID:/iri/data"
   echo "    agents:
