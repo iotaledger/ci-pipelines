@@ -115,7 +115,7 @@ docker_push () {
 echo "steps:"
 GIT_TAG=$(git describe --exact-match --tags HEAD || true)
 if [[ "$GIT_TAG" == *"RELEASE" ]]; then
-  getMilestone "$(echo $GIT_TAG | tr -d 'v')"
+  getMilestone "$GIT_TAG"
   release "$(echo $GIT_TAG | tr -d 'v')"
   docker_push "$GIT_TAG"
 else
