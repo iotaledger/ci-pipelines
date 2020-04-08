@@ -14,7 +14,7 @@ getMilestone () {
   echo "  - label: \"Preparing DB\""
   echo "    commands:
       - rm -rf /cache/*
-      - apt -qq update && apt -qq install curl -y
+      - apk add --no-cache curl -y
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output /cache/local-snapshot.tar
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output /cache/local-snapshot.tar.sum
       - cd /cache && tar xf local-snapshot.tar
