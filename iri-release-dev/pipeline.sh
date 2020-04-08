@@ -20,8 +20,8 @@ getMilestone () {
       - cd /cache && tar xf local-snapshot.tar
       - docker run --rm --name iri -d -v /cache:/iri/data -p 14265:14265 sadjy/iri-dev:$1
       - sleep 20
-      - curl -s http://\\\$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' iri):14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /iri/data/milestone.txt
-      - cat /iri/data/milestone.txt
+      - curl -s http://\\\$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' iri):14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /cache/milestone.txt
+      - cat /cache/milestone.txt
       - docker rm iri -f"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
