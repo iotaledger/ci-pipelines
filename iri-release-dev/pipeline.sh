@@ -18,9 +18,10 @@ getMilestone () {
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output /cache/local-snapshot.tar
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output /cache/local-snapshot.tar.sum
       - cd /cache && tar xf local-snapshot.tar
-      - docker run --rm -v /cache:/iri/data -p 14265:14265 sadjy/iri-dev:$1
+      - docker run --rm --name iri -d -v /cache:/iri/data -p 14265:14265 sadjy/iri-dev:$1
       - sleep 20
-      - curl -s http://localhost:14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /iri/data/milestone.txt"
+      - curl -s http://\\\$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' iri):14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /iri/data/milestone.txt
+      - cat /iri/data/milestone.txt"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
