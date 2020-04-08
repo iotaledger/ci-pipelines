@@ -25,9 +25,10 @@ getMilestone () {
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
         always-pull: true
-        mount-buildkite-agent: false
+        mount-buildkite-agent: true
         volumes:
-          - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache"
+          - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
+          - /var/run/docker.sock:/var/run/docker.sock"
   echo "    agents:
       queue: aws-m5large"
 
