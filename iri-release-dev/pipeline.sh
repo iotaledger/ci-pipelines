@@ -17,7 +17,6 @@ getMilestone () {
       - apt -qq update && apt -qq install curl -y
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output /cache/local-snapshot.tar
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output /cache/local-snapshot.tar.sum
-      - if [[ \\\$(sha256sum /cache/local-snapshot.tar | cut -d \" \" -f 1) == \\\$(cat /cache/local-snapshot.tar.sum) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
       - cd /cache && tar xf local-snapshot.tar
       - docker run --rm -v /cache:/iri/data -p 14265:14265 sadjy/iri-dev:$1
       - sleep 20
