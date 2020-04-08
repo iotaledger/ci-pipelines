@@ -22,8 +22,7 @@ getMilestone () {
       - sleep 120
       - curl http://\\\$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' iri):14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /cache/milestone.txt
       - cat /cache/milestone.txt
-      - ls -alhR /cache
-      - docker rm iri -f"
+      - ls -alhR /cache"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"docker\"
