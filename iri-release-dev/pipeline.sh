@@ -24,10 +24,9 @@ getMilestone () {
       - curl -s http://localhost:14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /iri/data/milestone.txt"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"debian\"
+        image: \"docker\"
         always-pull: true
         mount-buildkite-agent: false
-        shell: [\"/bin/bash\", \"-e\", \"-c\"]
         volumes:
           - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache"
   echo "    agents:
