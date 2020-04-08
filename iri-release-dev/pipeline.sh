@@ -18,7 +18,10 @@ getMilestone () {
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output /cache/local-snapshot.tar
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output /cache/local-snapshot.tar.sum
       - if [[ \\\$(sha256sum /cache/local-snapshot.tar | cut -d \" \" -f 1) == \\\$(cat /cache/local-snapshot.tar.sum) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
-      - cd /cache && tar xf local-snapshot.tar"
+      - cd /cache && tar xf local-snapshot.tar
+      - docker run --rm -v /cache:/iri/data -p 14265:14265 sadjy/iri-dev:$1
+      - sleep 20
+      - curl -s http://localhost:14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /iri/data/milestone.txt"
   echo "    plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: \"debian\"
@@ -30,21 +33,6 @@ getMilestone () {
   echo "    agents:
       queue: aws-m5large"
 
-  echo "  - wait"
-
-  echo "  - label: \"Getting milestone\""
-  echo "    commands:
-      - apt -qq update && apt -qq install curl jq -y
-      - curl -s http://localhost:14265 -X POST -H 'Content-Type:application/json' -H 'X-IOTA-API-Version:1' -d '{\"command\":\"getNodeInfo\"}' | jq -r '.latestMilestoneIndex' > /iri/data/milestone.txt"
-  echo "    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"sadjy/iri-dev:$1\"
-        always-pull: true
-        mount-buildkite-agent: false
-        volumes:
-          - /cache-iri-release-$BUILDKITE_BUILD_ID:/iri/data"
-  echo "    agents:
-      queue: aws-m5large"
   echo "  - wait"
 }
 
