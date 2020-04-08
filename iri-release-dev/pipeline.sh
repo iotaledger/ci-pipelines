@@ -41,8 +41,8 @@ release () {
       - mkdir -p target
       - apt -qq update && apt -qq install curl gnupg -y
       - IRI_VERSION_NUMBER=\$(echo $1 | awk -F- '{print \\\$1}')
-      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/IRI-$1.jar
-      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-\\\$IRI_VERSION --output target/IRI-$1-SHA256SUM
+      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-$1.jar --output target/IRI-$1.jar
+      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-$1 --output target/IRI-$1-SHA256SUM
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output target/LS-\\\$(cat /cache/milestone.txt).tar
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM
       - if [[ \\\$(sha256sum target/iri-$1.jar | cut -d \" \" -f 1) == \\\$(cat target/SHA256SUM-$1) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
@@ -76,7 +76,7 @@ release () {
 docker_push () {
   echo "  - label: \"Pushing to docker hub\""
   echo "    commands:
-      - echo \\\$DOCKER_PASSWORD | docker login --username \\\$$DOCKER_USERNAME --password-stdin
+      - echo \\\$DOCKER_PASSWORD | docker login --username \\\$DOCKER_USERNAME --password-stdin
       - docker pull sadjy/iri-dev:$1
       - docker tag sadjy/iri-dev:$1 sadjy/iri:$1
       - docker push sadjy/iri:$1
