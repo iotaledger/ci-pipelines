@@ -43,7 +43,7 @@ release () {
       - apt -qq update && apt -qq install curl gnupg -y
       - IRI_VERSION=\$(echo $GIT_TAG | tr -d 'v')
       - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
-      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/IRI-$1.jar
+      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/IRI-\\\$IRI_VERSION.jar
       - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-\\\$IRI_VERSION --output target/IRI-\\\$IRI_VERSION-SHA256SUM
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output target/LS-\\\$(cat /cache/milestone.txt).tar
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM
