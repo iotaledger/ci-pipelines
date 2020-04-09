@@ -41,18 +41,19 @@ release () {
   echo "    commands:
       - mkdir -p target
       - apt -qq update && apt -qq install curl gnupg -y
-      - IRI_VERSION_NUMBER=\$(echo $1 | awk -F- '{print \\\$1}')
-      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-$1.jar --output target/IRI-$1.jar
-      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-$1 --output target/IRI-$1-SHA256SUM
+      - IRI_VERSION=\$(echo $GIT_TAG | tr -d 'v')
+      - IRI_VERSION_NUMBER=\$(echo \\\$IRI_VERSION | awk -F- '{print \\\$1}')
+      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/iri-\\\$IRI_VERSION.jar --output target/IRI-$1.jar
+      - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-\\\$IRI_VERSION --output target/IRI-\\\$IRI_VERSION-SHA256SUM
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output target/LS-\\\$(cat /cache/milestone.txt).tar
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM
-      - if [[ \\\$(sha256sum target/iri-$1.jar | cut -d \" \" -f 1) == \\\$(cat target/SHA256SUM-$1) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
-      - if [[ \\\$(sha256sum target/local-snapshot.tar | cut -d \" \" -f 1) == \\\$(cat target/local-snapshot.tar.sum) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
+      - if [[ \\\$(sha256sum target/IRI-\\\$IRI_VERSION.jar | cut -d \" \" -f 1) == \\\$(cat target/IRI-\\\$IRI_VERSION-SHA256SUM) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
+      - if [[ \\\$(sha256sum target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM | cut -d \" \" -f 1) == \\\$(cat target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
       - chmod +x github-release      
       - echo \\\$GPG_KEY | base64 -d > iri.key
       - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --batch --yes --import <iri.key
-      - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --pinentry-mode loopback --batch --passphrase-fd 0 --armor --detach-sign --default-key contact@iota.org target/IRI-$1-SHA256SUM
+      - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --pinentry-mode loopback --batch --passphrase-fd 0 --armor --detach-sign --default-key contact@iota.org target/IRI-\\\$IRI_VERSION-SHA256SUM
       - echo \\\$GPG_CONTACT_PASSPHRASE | gpg --pinentry-mode loopback --batch --passphrase-fd 0 --armor --detach-sign --default-key contact@iota.org target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM
       - ./github-release \\\$GITHUB_RELEASE_TAG target/*"
   echo "    plugins:
@@ -102,7 +103,7 @@ echo "steps:"
 GIT_TAG=$(git describe --exact-match --tags HEAD || true)
 if [[ "$GIT_TAG" == *"RELEASE" ]]; then
   getMilestone "$GIT_TAG"
-  release "$(echo $GIT_TAG | tr -d 'v')"
+  release "$GIT_TAG"
   docker_push "$GIT_TAG"
 else
   skip_build
