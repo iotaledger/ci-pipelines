@@ -47,6 +47,7 @@ release () {
       - curl -s https://iri-release-dev.s3.eu-central-1.amazonaws.com/\\\$IRI_VERSION_NUMBER/SHA256SUM-\\\$IRI_VERSION --output target/IRI-\\\$IRI_VERSION-SHA256SUM
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar --output target/LS-\\\$(cat /cache/milestone.txt).tar
       - curl -s https://iotaledger-dbfiles-public.s3.eu-central-1.amazonaws.com/mainnet/iri/latest-LS.tar.sum --output target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM
+      - ls -al target
       - if [[ \\\$(sha256sum target/IRI-\\\$IRI_VERSION.jar | cut -d \" \" -f 1) == \\\$(cat target/IRI-\\\$IRI_VERSION-SHA256SUM) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
       - if [[ \\\$(sha256sum target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM | cut -d \" \" -f 1) == \\\$(cat target/LS-\\\$(cat /cache/milestone.txt)-SHA256SUM) ]]; then echo 'CHECKSUM OK'; else exit 1; fi
       - curl -L https://github.com/buildkite/github-release/releases/download/v1.0/github-release-linux-amd64 -o github-release
