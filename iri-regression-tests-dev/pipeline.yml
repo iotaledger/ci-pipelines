@@ -200,13 +200,14 @@ steps:
           /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$1 -- /bin/bash -c "tar cvf testnetdb.tar testnetdb"
           /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/\$1:testnetdb.tar data/testnetdb-\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$1 -o jsonpath='{.metadata.labels.nodenum}').tar 
         }
+      - export -f getDB
       - |
         for pod in \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pods -o jsonpath='{.items[*].metadata.name}'); do
           if [[ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') == $BUILDKITE_BUILD_ID ]]
           then
             echo \$pod
           fi
-        done | xargs -n 1 -P 10 -I{} getDB {}
+        done | xargs -n 1 -P 10 -I{} bash -c 'getDB {}'
     agents:
       queue: ops
     artifact_paths:
