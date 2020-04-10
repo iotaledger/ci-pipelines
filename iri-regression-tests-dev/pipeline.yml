@@ -200,7 +200,7 @@ steps:
           then
             echo \$pod
           fi
-        done | xargs -n 1 -P 10 -I{} bash -c "/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec {} -- /bin/bash -c 'pkill java' && /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec {} -- /bin/bash -c 'tar cvf testnetdb.tar testnetdb' && /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/{}:testnetdb.tar data/testnetdb-\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod {} -o jsonpath='{.metadata.labels.nodenum}').tar"
+        done | xargs -n 1 -P 10 -I{} bash -c "/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec {} -- /bin/bash -c 'pkill java' && /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec {} -- /bin/bash -c 'tar cvf testnetdb.tar testnetdb' && /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/{}:testnetdb.tar data/testnetdb-\\\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod {} -o jsonpath='{.metadata.labels.nodenum}').tar"
     agents:
       queue: ops
     artifact_paths:
