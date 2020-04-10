@@ -11,9 +11,16 @@ steps:
       - docker push iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}  
       - |
         case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
-          *'RELEASE' | *'RC'*)
+          *'RELEASE')
             docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri-dev:latest
             docker push iotaledger/iri-dev:latest
+            mv target $IRI_VERSION_NUMBER
+          ;;
+          *'RC'*)
+            docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri-dev:latest
+            docker push iotaledger/iri-dev:latest
+            docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}
+            docker push iotaledger/iri:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}
             mv target $IRI_VERSION_NUMBER
           ;;
           *)
