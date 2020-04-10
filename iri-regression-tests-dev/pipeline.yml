@@ -211,7 +211,7 @@ steps:
     agents:
       queue: ops
     artifact_paths:
-      - "*.log"
+      - "data/*.tar"
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
         image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
