@@ -4,21 +4,22 @@ steps:
       - mkdir target
       - sed -i '1,/# execution image/d' Dockerfile  
       - sed -i 's#--from=local_stage_build /iri/##g' Dockerfile
-      - docker login -u=\$DOCKER_USERNAME -p=\$DOCKER_PASSWORD
+      - echo \$DOCKER_PASSWORD | docker login --username \$DOCKER_USERNAME --password-stdin
       - buildkite-agent artifact download target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar target/ --build $ARTIFACT_BUILDKITE_BUILD_ID
       - sha256sum target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar | cut -d " " -f 1 > target/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}
       - docker build --no-cache -t iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} .
       - docker push iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER}  
       - |
         case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
-          'PR'*)
+          *'RELEASE' | *'RC'*)
             docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri-dev:latest
             docker push iotaledger/iri-dev:latest
+            mv target $IRI_VERSION_NUMBER
           ;;
           *)
-            echo
+            mv target iri-dev
           ;;          
-        esac
+        esac        
     plugins:
       https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
         image: "docker"
@@ -30,8 +31,8 @@ steps:
         - DOCKER_USERNAME
         - DOCKER_PASSWORD
     artifact_paths:
-      - "target/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar"
-      - "target/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}"
+      - "${IRI_VERSION_NUMBER:-iri-dev}/iri-${IRI_VERSION:-$IRI_BUILD_NUMBER}.jar"
+      - "${IRI_VERSION_NUMBER:-iri-dev}/SHA256SUM-${IRI_VERSION:-$IRI_BUILD_NUMBER}"
     agents:
       queue: aws-m5large
 
