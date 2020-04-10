@@ -36,5 +36,13 @@ steps:
     agents:
       queue: aws-m5large
 
+  - wait
 
-
+  - trigger: iri-regression-tests-dev
+    build:
+      env:
+        IRI_BUILD_NUMBER: $IRI_BUILD_NUMBER
+        IRI_GIT_COMMIT: $IRI_GIT_COMMIT
+        IRI_BUILDKITE_PULL_REQUEST_REPO: $IRI_BUILDKITE_PULL_REQUEST_REPO
+        ARTIFACT_BUILDKITE_BUILD_ID: $ARTIFACT_BUILDKITE_BUILD_ID
+        IRI_GIT_TAG: $IRI_GIT_TAG      

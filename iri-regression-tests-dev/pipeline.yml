@@ -199,11 +199,8 @@ steps:
           if [[ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') == $BUILDKITE_BUILD_ID ]]
           then
             echo \$pod
-            /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "pkill java"
-            /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "tar cvf testnetdb.tar testnetdb"
-            /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/\$pod:testnetdb.tar data/testnetdb-\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.nodenum}').tar
           fi
-        done
+        done | xargs -n 1 -P 10 -I{} bash -c "/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "pkill java && /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$pod -- /bin/bash -c "tar cvf testnetdb.tar testnetdb && /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/\$pod:testnetdb.tar data/testnetdb-\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.nodenum}').tar"
     agents:
       queue: ops
     artifact_paths:
