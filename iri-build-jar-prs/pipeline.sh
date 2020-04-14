@@ -43,7 +43,7 @@ trigger_docker_push () {
 }
 
 echo "steps:"
-if [[ "$BUILDKITE_BUILD_CREATOR_TEAMS" == *"iri"* ]]; then
+if [[ "$BUILDKITE_BUILD_CREATOR_TEAMS" != *"iri"* ]]; then
   block
 fi
 build
