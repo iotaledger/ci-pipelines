@@ -3,21 +3,7 @@
 set -eux
 
 block () {
-  echo "  - label: \"Preparing DB\""
-  echo "    commands:
-      - rm -rf /cache/*"
-  echo "    plugins:
-      https://github.com/iotaledger/docker-buildkite-plugin#release-v3.2.0:
-        image: \"docker\"
-        always-pull: true
-        mount-buildkite-agent: true
-        volumes:
-          - /cache-iri-release-$BUILDKITE_BUILD_ID:/cache
-          - /var/run/docker.sock:/var/run/docker.sock"
-  echo "    agents:
-      queue: aws-m5large"
-
-  echo "  - wait"
+  echo "  - block: \"Unlock build\""
 }
 
 build () {
