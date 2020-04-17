@@ -93,6 +93,14 @@ block_prod () {
   echo "    prompt: \"Deploy this build to production?\""
 }
 
+skip_build () {
+  echo "  - name: \"No folder modified, skipping build\""
+  echo "    command:
+      - exit 0"
+  echo "    agents:
+      queue: aws-nano"
+}
+
 print_block () {
   case $1 in
     'api client')
@@ -115,4 +123,11 @@ print_block () {
   esac
 }
 
-print_block "$(git diff-tree --no-commit-id --name-only -r $BUILDKITE_COMMIT | grep '/' | cut -d / -f 1 | sort | uniq | tr '\n' ' ' | awk '{$1=$1};1')"
+FOLDERS=$(git diff-tree --no-commit-id --name-only -r $BUILDKITE_COMMIT | grep '/' | cut -d / -f 1 | sort | uniq | tr '\n' ' ' | awk '{$1=$1};1')
+
+if [ -z "$FOLDERS" ]
+then
+  skip_build
+else
+  print_block "$FOLDERS"
+fi
