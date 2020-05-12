@@ -189,6 +189,41 @@ steps:
   - wait: ~
     continue_on_failure: true
 
+  - name: "Fetching DBs"
+    command:
+      - wget --quiet https://storage.googleapis.com/kubernetes-release/release/v1.14.1/bin/linux/amd64/kubectl -O /cache/kubectl && chmod +x /cache/kubectl
+      - mkdir data
+      - |
+        function getDB() {
+          /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$1 -- /bin/bash -c "pkill java"
+          /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$1 -- /bin/bash -c "tar cvf testnetdb.tar testnetdb"
+          /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/\$1:testnetdb.tar data/testnetdb-\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$1 -o jsonpath='{.metadata.labels.nodenum}').tar 
+        }
+      - export -f getDB
+      - |
+        for pod in \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pods -o jsonpath='{.items[*].metadata.name}'); do
+          if [[ \$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$pod -o jsonpath='{.metadata.labels.tag}') == $BUILDKITE_BUILD_ID ]]
+          then
+            echo \$pod
+          fi
+        done | xargs -n 1 -P 10 -I{} bash -c 'getDB {}'
+      - ls -alh data
+    agents:
+      queue: ops
+    artifact_paths:
+      - "data/*.tar"
+    plugins:
+      https://github.com/iotaledger/docker-buildkite-plugin#release-v1.4.0:
+        image: "iotacafe/iri-build-env:oracle8u171-1-maven3.5.3-1"
+        shell: /bin/bash -c
+        mount-buildkite-agent: false
+        mounts:
+          - /cache-iri-regression-tests-$BUILDKITE_BUILD_ID:/cache
+          - /conf:/conf:ro
+
+  - wait: ~
+    continue_on_failure: true
+
   - name: "Teardown cluster"
     command:
       - cd /cache/tiab
