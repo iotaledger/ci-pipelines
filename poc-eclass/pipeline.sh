@@ -123,7 +123,7 @@ print_block () {
   esac
 }
 
-FOLDERS=$(git diff-tree --no-commit-id --name-only -r $BUILDKITE_COMMIT | grep '/' | cut -d / -f 1 | sort | uniq | tr '\n' ' ' | awk '{$1=$1};1')
+FOLDERS=$(git diff-tree --no-commit-id --name-only -r $BUILDKITE_COMMIT | grep '/' | cut -d / -f 1 | sort | uniq | grep "api\|client" | tr '\n' ' ' | awk '{$1=$1};1')
 
 if [ -z "$FOLDERS" ]
 then
