@@ -4,5 +4,10 @@
         "accessKeyId": "DOCS-PROD-AWS-ACCESS-KEY-ID",
         "secretAccessKey": "DOCS-PROD-AWS-SECRET-ACCESS-KEY",
         "dbTablePrefix": "docs-prod-"
+    },
+    "search": {
+        "endpoint": "DOCS-PROD-SOLR-ENDPOINT",
+        "core": "DOCS-PROD-SOLR-CORE",
+        "authorization": "DOCS-PROD-SOLR-AUTHORIZATION"
     }
 }

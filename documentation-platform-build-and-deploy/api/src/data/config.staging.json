@@ -4,5 +4,10 @@
         "accessKeyId": "DOCS-STAGING-AWS-ACCESS-KEY-ID",
         "secretAccessKey": "DOCS-STAGING-AWS-SECRET-ACCESS-KEY",
         "dbTablePrefix": "docs-staging-"
+    },
+    "search": {
+        "endpoint": "DOCS-STAGING-SOLR-ENDPOINT",
+        "core": "DOCS-STAGING-SOLR-CORE",
+        "authorization": "DOCS-STAGING-SOLR-AUTHORIZATION"
     }
 }
