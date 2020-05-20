@@ -13,10 +13,6 @@ steps:
         sed -i.bak s#DOCS-STAGING-SOLR-AUTHORIZATION#\$DOCS_STAGING_SOLR_AUTHORIZATION#g api/src/data/config.staging.json
         rm -rf ci-pipelines
         cd api
-        echo "------DEBUG------"
-        cat src/data/config.staging.json
-        printenv
-        echo "------DEBUG------"
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota deploy -e CONFIG_ID=staging --build-env CONFIG_ID=staging --build-env SEARCH_ENDPOINT=\$DOCS_STAGING_SOLR_ENDPOINT --build-env SEARCH_CORE=document-core-staging --build-env SEARCH_AUTHORIZATION=\$DOCS_STAGING_SOLR_AUTHORIZATION --force --docker -n documentation-api -m BK_JOB_ID=$BUILDKITE_JOB_ID
         NOW_SH_DEPLOYMENT_ID=$(now --platform-version 1 --token \$ZEIT_TOKEN --team iota ls -m BK_JOB_ID=$BUILDKITE_JOB_ID | grep documentation-api | awk {'print \$2'})
         now --platform-version 1 --token \$ZEIT_TOKEN --team iota alias \$NOW_SH_DEPLOYMENT_ID docs-api.iota.works
@@ -28,6 +24,9 @@ steps:
           - ZEIT_TOKEN
           - DOCS_STAGING_AWS_ACCESS_KEY_ID
           - DOCS_STAGING_AWS_SECRET_ACCESS_KEY
+          - DOCS_STAGING_SOLR_ENDPOINT
+          - DOCS_STAGING_SOLR_CORE
+          - DOCS_STAGING_SOLR_AUTHORIZATION
     agents:
       queue: ops
 
@@ -91,6 +90,9 @@ steps:
           - ZEIT_TOKEN
           - DOCS_PROD_AWS_ACCESS_KEY_ID
           - DOCS_PROD_AWS_SECRET_ACCESS_KEY
+          - DOCS_PROD_SOLR_ENDPOINT
+          - DOCS_PROD_SOLR_CORE
+          - DOCS_PROD_SOLR_AUTHORIZATION
     agents:
       queue: ops
 
