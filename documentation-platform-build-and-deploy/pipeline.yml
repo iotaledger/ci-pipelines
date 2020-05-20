@@ -129,5 +129,8 @@ steps:
          environment:
           - ZEIT_TOKEN
           - DOCS_MARKDOWN_BUILDKITE_BUILD_ID
+          - DOCS_PROD_SOLR_ENDPOINT
+          - DOCS_PROD_SOLR_CORE
+          - DOCS_PROD_SOLR_AUTHORIZATION
     agents:
       queue: ops
