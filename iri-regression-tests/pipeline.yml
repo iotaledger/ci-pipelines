@@ -196,6 +196,7 @@ steps:
       - |
         function getDB() {
           /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$1 -- /bin/bash -c "pkill java"
+          tail --pid=$pid -f /dev/null
           /cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite exec \$1 -- /bin/bash -c "tar cvf testnetdb.tar testnetdb"
           /cache/kubectl --kubeconfig=/conf/kube/kube.config cp buildkite/\$1:testnetdb.tar data/testnetdb-\$(/cache/kubectl --kubeconfig=/conf/kube/kube.config --namespace=buildkite get pod \$1 -o jsonpath='{.metadata.labels.nodenum}').tar 
         }
