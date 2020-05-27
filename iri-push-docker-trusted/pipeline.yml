@@ -15,7 +15,7 @@ steps:
       - |
         case ${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} in
           *'RELEASE' | *'RC'*)
-            docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri-dev:latest
+            DOCKER_API_VERSION=1.39 docker tag iotaledger/iri-dev:${IRI_GIT_TAG:-$IRI_BUILD_NUMBER} iotaledger/iri-dev:latest
             DOCKER_API_VERSION=1.39 docker push iotaledger/iri-dev:latest
             mv target $IRI_VERSION_NUMBER
           ;;
